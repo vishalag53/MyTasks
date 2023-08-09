@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyTasks</string>
+    <string name="backBtn">Back Btn</string>
+    <string name="welcome">WELCOME \nBACK!</string>
+    <string name="logIn">Log In</string>
+    <string name="signUp">Sign Up</string>]
 </resources>
