@@ -3,5 +3,15 @@
     <string name="backBtn">Back Btn</string>
     <string name="welcome">WELCOME \nBACK!</string>
     <string name="logIn">Log In</string>
-    <string name="signUp">Sign Up</string>]
+    <string name="signUp">Sign Up</string>
+    <string name="email_or_user_name">Email or User Name</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="write_the_password">write the password</string>
+    <string name="or">OR</string>
+    <string name="log_in_twitter">Log In or Sign Up by using Twitter</string>
+    <string name="log_in_google">Log In or Sign Up by using Google</string>
+    <string name="log_in_facebook">Log In or Sign Up by using Facebook</string>
+    <string name="got_to_log_in_layout_button">got to Log In Layout</string>]
 </resources>
