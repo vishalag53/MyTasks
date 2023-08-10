@@ -1,6 +1,7 @@
 package com.vishalag53.mytasks.login
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
+import com.vishalag53.mytasks.MainActivity
 import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.databinding.ActivityLogInBinding
 
@@ -39,7 +41,7 @@ class LogInActivity : AppCompatActivity() {
             .setTitle("Not Sign In")
             .setMessage("Are you sure, don't want to log in or sign in")
             .setPositiveButton("YES"){ dialog, _ ->
-                dialog.dismiss()
+                startActivity(Intent(this@LogInActivity,MainActivity::class.java))
             }
             .setNegativeButton("No"){ dialog, _ ->
                 dialog.dismiss()

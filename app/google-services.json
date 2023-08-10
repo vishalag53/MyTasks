@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "470842873942",
+    "project_id": "mytasks53",
+    "storage_bucket": "mytasks53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470842873942:android:71c25f9d16ccc276d203f7",
+        "android_client_info": {
+          "package_name": "com.vishalag53.mytasks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470842873942-0570fg2k9diqkuub2f5rfo4f4360gfmh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vishalag53.mytasks",
+            "certificate_hash": "1a430268bd7c9653d68b02dfb5a97d1ea05647ff"
+          }
+        },
+        {
+          "client_id": "470842873942-cddi8munpa6kugnggdptfkn23qtl99gl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRGyRFvwoTgEM3H4a5tTVtLJbEQOw6to8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470842873942-cddi8munpa6kugnggdptfkn23qtl99gl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

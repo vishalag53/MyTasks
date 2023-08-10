@@ -4,6 +4,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -45,8 +46,6 @@ android {
 
 dependencies {
 
-
-
     // Core with Ktx
     implementation("androidx.core:core-ktx:1.10.1")
 
@@ -81,5 +80,10 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-common:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
+
+    // Import the Firebase BoM
+    //implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
 }
