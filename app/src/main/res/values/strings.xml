@@ -13,5 +13,19 @@
     <string name="log_in_twitter">Log In or Sign Up by using Twitter</string>
     <string name="log_in_google">Log In or Sign Up by using Google</string>
     <string name="log_in_facebook">Log In or Sign Up by using Facebook</string>
-    <string name="got_to_log_in_layout_button">got to Log In Layout</string>]
+    <string name="got_to_log_in_layout_button">got to Log In Layout</string>
+    <string name="important">Important</string>
+    <string name="all_tasks">All Tasks</string>
+    <string name="add_new_list">Create New List</string>
+    <string name="complete_tasks">Complete Tasks</string>
+    <string name="delete_tasks">Delete Tasks</string>
+    <string name="delete_complete_tasks">Delete Complete Tasks</string>
+    <string name="rename">Rename</string>
+    <string name="create_list">Create List</string>
+    <string name="search">Search</string>
+    <string name="sort_by">Sort By</string>
+    <string name="date_ascending">Date Ascending</string>
+    <string name="date_descending">Date Descending</string>
+    <string name="name_ascending">Name Ascending</string>
+    <string name="name_descending">Name Descending</string>]
 </resources>

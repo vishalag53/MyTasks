@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clImport3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clImport4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/clImport3"
+            app:layout_constraintEnd_toStartOf="@id/menuBtn3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/clImport3"
+            app:layout_constraintTop_toTopOf="@id/clImport4">
+
+            <ImageView
+                android:id="@+id/imgViewIcon3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/baseline_format_list_bulleted_24"
+                app:layout_constraintBottom_toBottomOf="@id/clImport4"
+                app:layout_constraintStart_toStartOf="@id/clImport4"
+                app:layout_constraintTop_toTopOf="@id/clImport4" />
+
+            <TextView
+                android:id="@+id/textViewTitle3"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="List Name"
+                android:textSize="20sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgViewIcon3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewTotalNumber3"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/clImport4"
+                app:layout_constraintEnd_toEndOf="@id/clImport4"
+                app:layout_constraintTop_toTopOf="@id/clImport4"
+                android:text="8" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/menuBtn3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/baseline_more_vert_24"
+            android:backgroundTint="@color/white"
+            android:contentDescription="Click to use function"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

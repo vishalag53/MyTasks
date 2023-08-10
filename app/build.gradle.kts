@@ -84,6 +84,6 @@ dependencies {
     // Import the Firebase BoM
     //implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
 
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx:21.3.0")
 
 }

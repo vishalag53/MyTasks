@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/renameListName"
+        android:enabled="true"
+        android:icon="@drawable/baseline_drive_file_rename_outline_24"
+        android:title="@string/rename" />
+
+    <item
+        android:id="@+id/deleteAllTasks"
+        android:enabled="true"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="@string/delete_tasks" />
+
+    <item
+        android:id="@+id/deleteAllCompleteTasks"
+        android:enabled="true"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="@string/delete_complete_tasks" />
+
+</menu>

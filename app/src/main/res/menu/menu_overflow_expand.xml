@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/createList"
+        android:title="@string/create_list" />
+
+    <item
+        android:id="@+id/search"
+        android:title="@string/search" />
+
+    <item
+        android:id="@+id/sortBy"
+        android:title="@string/sort_by" >
+
+        <menu>
+
+            <item
+                android:id="@+id/dateAsc"
+                android:title="@string/date_ascending" />
+
+            <item
+                android:id="@+id/dateDesc"
+                android:title="@string/date_descending" />
+
+            <item
+                android:id="@+id/nameAsc"
+                android:title="@string/name_ascending" />
+
+            <item
+                android:id="@+id/nameDesc"
+                android:title="@string/name_descending" />
+
+        </menu>
+
+    </item>
+
+
+</menu>

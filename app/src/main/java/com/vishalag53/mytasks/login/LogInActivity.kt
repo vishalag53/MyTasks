@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
@@ -33,6 +34,27 @@ class LogInActivity : AppCompatActivity() {
         binding.SignUp.setOnClickListener {
             signUpAction()
         }
+
+        binding.forgetPasswordBtn.setOnClickListener {
+            Toast.makeText(this,"Forget Password", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.logInBtn.setOnClickListener {
+            Toast.makeText(this,"Log In",Toast.LENGTH_SHORT).show()
+        }
+
+        binding.logInGoogle.setOnClickListener {
+            Toast.makeText(this,"Log In Google",Toast.LENGTH_SHORT).show()
+        }
+
+        binding.logInFacebook.setOnClickListener {
+            Toast.makeText(this,"Log In Facebook",Toast.LENGTH_SHORT).show()
+        }
+
+        binding.logInTwitter.setOnClickListener {
+            Toast.makeText(this,"Log In Twitter",Toast.LENGTH_SHORT).show()
+        }
+
 
     }
 
