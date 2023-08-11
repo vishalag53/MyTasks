@@ -3,11 +3,7 @@ package com.vishalag53.mytasks.Tasks.TasksFragment
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.vishalag53.mytasks.R
@@ -33,18 +29,11 @@ class CreateNewListDialogBox: DialogFragment() {
             binding.createBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.createBtn1))
         }
 
-        binding.cancleBtn.visibility = View.VISIBLE
-
-        binding.cancleBtn.setOnClickListener {
-            dismiss()
-            Toast.makeText(requireContext(),"Cancel",Toast.LENGTH_SHORT).show()
-        }
-
         binding.createBtn.setOnClickListener {
             val listName = binding.getListName
             val enteredListName = listName.text.toString()
 
-            (requireParentFragment() as TasksFragment).onNameEntered(enteredListName)
+            (requireParentFragment() as TasksFragment).onNameEntered(enteredListName,binding.getListName)
 
             dismiss()
         }

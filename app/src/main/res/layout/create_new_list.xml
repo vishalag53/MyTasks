@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/purple_700">
 
         <TextView
             android:id="@+id/tvNewList"
@@ -40,23 +40,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvNewList" />
 
-        <TextView
-            android:id="@+id/cancleBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="188dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="20dp"
-            android:text="@string/cancel"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold|normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/createBtn"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/getListName" />
 
         <TextView
             android:id="@+id/createBtn"
@@ -64,14 +47,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:layout_marginEnd="16dp"
             android:text="@string/create_list_cap"
-            android:textColor="@color/createBtn"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold|normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/getListName" />
+            app:layout_constraintHorizontal_bias="0.89"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/getListName"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

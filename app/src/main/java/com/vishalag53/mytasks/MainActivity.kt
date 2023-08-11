@@ -11,6 +11,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val userName = intent.getStringExtra("name")
+        val userEmail = intent.getStringExtra("email")
+        val userDisplayPhoto = intent.getStringExtra("displayImage")
     }
 
 }

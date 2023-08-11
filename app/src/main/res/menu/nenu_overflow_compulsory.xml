@@ -8,6 +8,10 @@
         android:title="@string/rename" />
 
     <item
+        android:id="@+id/deleteList"
+        android:title="@string/delete_list"/>
+
+    <item
         android:id="@+id/deleteAllTasks"
         android:enabled="true"
         android:icon="@drawable/baseline_delete_24"

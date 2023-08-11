@@ -14,20 +14,6 @@
         android:background="@color/white"
         tools:context=".login.LogInActivity">
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/rounded_bg"
-            android:contentDescription="@string/backBtn"
-            android:src="@drawable/baseline_arrow_back_new_24"
-            app:backgroundTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/textViewWelcome"
             android:layout_width="wrap_content"
@@ -37,16 +23,15 @@
             android:textSize="40sp"
             app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-            app:layout_constraintHorizontal_bias="0.489"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".20"
+            app:layout_constraintGuide_percent=".15"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -54,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".95" />
+            app:layout_constraintGuide_percent=".90" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineLeft"
@@ -181,7 +166,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:hint="@string/email_or_user_name"
+                            android:hint="@string/email"
                             android:inputType="textPersonName|textEmailAddress"
                             android:textColor="@color/black"
                             android:textSize="24sp"
@@ -200,6 +185,7 @@
                         android:layout_marginRight="12dp"
                         app:boxStrokeColor="#4E4A4A"
                         app:boxStrokeWidth="1dp"
+                        app:passwordToggleEnabled="true"
                         app:endIconMode="password_toggle"
                         app:endIconTint="@color/black"
                         app:layout_constraintEnd_toEndOf="@id/logInLayout"
@@ -270,7 +256,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:hint="@string/email_or_user_name"
+                            android:hint="@string/email"
                             android:inputType="textPersonName|textEmailAddress"
                             android:textColor="@color/black"
                             android:textSize="24sp"
@@ -289,6 +275,7 @@
                         android:layout_marginRight="12dp"
                         app:boxStrokeColor="#4E4A4A"
                         app:boxStrokeWidth="1dp"
+                        app:passwordToggleEnabled="true"
                         app:endIconMode="password_toggle"
                         app:endIconTint="@color/black"
                         app:layout_constraintEnd_toEndOf="@id/singUpLayout"
@@ -318,6 +305,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginRight="12dp"
                         app:boxStrokeColor="#4E4A4A"
+                        app:passwordToggleEnabled="true"
                         app:boxStrokeWidth="1dp"
                         app:endIconMode="password_toggle"
                         app:endIconTint="@color/black"

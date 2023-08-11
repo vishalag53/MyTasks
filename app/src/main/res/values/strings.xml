@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">MyTasks</string>
     <string name="backBtn">Back Btn</string>
-    <string name="welcome">WELCOME \nBACK!</string>
+    <string name="welcome">WELCOME!</string>
     <string name="logIn">Log In</string>
     <string name="signUp">Sign Up</string>
-    <string name="email_or_user_name">Email or User Name</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="forget_password">Forget Password?</string>
     <string name="confirm_password">Confirm Password</string>
@@ -32,5 +32,6 @@
     <string name="name_this_list">Name this list</string>
     <string name="cancel">CANCEL</string>
     <string name="create_list_cap">CREATE LIST</string>
-    <string name="sign_out">Sign Out</string>]
+    <string name="sign_out">Sign Out</string>
+    <string name="delete_list">Delete List</string>]
 </resources>

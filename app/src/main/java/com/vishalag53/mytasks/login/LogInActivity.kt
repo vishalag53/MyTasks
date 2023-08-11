@@ -1,7 +1,6 @@
 package com.vishalag53.mytasks.login
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -34,8 +33,6 @@ class LogInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
-
-        binding.backBtn.setOnClickListener { backBtnAction() }
 
         binding.LogIn.setOnClickListener { logInAction() }
 
@@ -72,6 +69,7 @@ class LogInActivity : AppCompatActivity() {
 
     }
 
+
     private fun logInGoogleBtn() {
         val logInIntent = googleSignInClient.signInIntent
         launcher.launch(logInIntent)
@@ -103,6 +101,7 @@ class LogInActivity : AppCompatActivity() {
                 val  intent: Intent = Intent(this,MainActivity::class.java)
                 intent.putExtra("email",account.email)
                 intent.putExtra("name",account.displayName)
+                intent.putExtra("displayImage",account.photoUrl)
                 startActivity(intent)
             }
             else{
@@ -115,8 +114,8 @@ class LogInActivity : AppCompatActivity() {
     private fun logInBtn() {
         when (binding.logInBtn.text){
             "Log In" -> {
-                val email = binding.eMail.text.toString()
-                val password = binding.passwords.text.toString()
+                val email = binding.eMail.text.toString().trim()
+                val password = binding.passwords.text.toString().trim()
 
                 if (email.isNotEmpty() && password.isNotEmpty()){
                     firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
@@ -135,8 +134,8 @@ class LogInActivity : AppCompatActivity() {
 
             }
             "Sign Up" ->{
-                val email = binding.eMails.text.toString()
-                val password = binding.passwordss.text.toString()
+                val email = binding.eMails.text.toString().trim()
+                val password = binding.passwordss.text.toString().trim()
                 val confirmPassword = binding.passwords01.text.toString()
 
                 if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()){
@@ -160,21 +159,6 @@ class LogInActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun backBtnAction() {
-        val alertDialogBuilder = AlertDialog.Builder(this)
-            .setTitle("Not Sign In")
-            .setMessage("Are you sure, don't want to log in or sign in")
-            .setPositiveButton("YES") { dialog, _ ->
-                startActivity(Intent(this@LogInActivity, MainActivity::class.java))
-            }
-            .setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setCancelable(false)
-
-        alertDialogBuilder.create().show()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

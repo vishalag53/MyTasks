@@ -9,5 +9,14 @@
         android:id="@+id/tasksFragment"
         android:name="com.vishalag53.mytasks.Tasks.TasksFragment.TasksFragment"
         android:label="TasksFragment"
-        tools:layout="@layout/fragment_tasks"/>
+        tools:layout="@layout/fragment_tasks">
+        <action
+            android:id="@+id/action_tasksFragment_to_tasksListsFragment"
+            app:destination="@id/tasksListsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tasksListsFragment"
+        android:name="com.vishalag53.mytasks.Tasks.TasksListsFragment.TasksListsFragment"
+        android:label="TasksListsFragment"
+        tools:layout="@layout/fragment_tasks_lists"/>
 </navigation>
