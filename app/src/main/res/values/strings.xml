@@ -27,5 +27,10 @@
     <string name="date_ascending">Date Ascending</string>
     <string name="date_descending">Date Descending</string>
     <string name="name_ascending">Name Ascending</string>
-    <string name="name_descending">Name Descending</string>]
+    <string name="name_descending">Name Descending</string>
+    <string name="create_new_list">Create New List</string>
+    <string name="name_this_list">Name this list</string>
+    <string name="cancel">CANCEL</string>
+    <string name="create_list_cap">CREATE LIST</string>
+    <string name="sign_out">Sign Out</string>]
 </resources>

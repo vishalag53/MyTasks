@@ -15,4 +15,7 @@
     <color name="textColor">#ECE5EC</color>
     <color name="pinkColor">#FF003B</color>
     <color name="tansparentColor">#00FFFFFF</color>
+
+    <color name="createBtn">#F9F9F9</color>
+    <color name="createBtn1">#DAEDFA</color>
 </resources>

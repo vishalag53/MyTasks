@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".Tasks.TasksFragment" >
+        tools:context=".Tasks.TasksFragment.TasksFragment" >
 
         <ScrollView
             android:layout_width="match_parent"
@@ -260,8 +260,8 @@
                     android:id="@+id/clAddNewList"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/cl"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@id/cl"
                     app:layout_constraintTop_toBottomOf="@id/rvTasks">
 
@@ -287,6 +287,33 @@
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imgViewIcon2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/signOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/cl"
+                    app:layout_constraintStart_toStartOf="@id/cl"
+                    app:layout_constraintTop_toBottomOf="@id/clAddNewList">
+
+                    <TextView
+                        android:id="@+id/signOut1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="8dp"
+                        android:paddingStart="4dp"
+                        android:paddingBottom="2dp"
+                        android:text="@string/sign_out"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/signOut"
                         app:layout_constraintTop_toTopOf="parent" />
 
 

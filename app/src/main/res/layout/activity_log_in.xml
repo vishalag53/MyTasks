@@ -386,13 +386,13 @@
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        app:layout_constraintBottom_toTopOf="@+id/logInOtherMethod"
+                        app:layout_constraintBottom_toTopOf="@+id/logInByGoogle"
                         app:layout_constraintEnd_toEndOf="@id/cl1"
                         app:layout_constraintStart_toStartOf="@id/cl1"
                         app:layout_constraintTop_toBottomOf="@id/logInBtn" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/logInOtherMethod"
+                        android:id="@+id/logInByGoogle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
@@ -400,45 +400,33 @@
                         app:layout_constraintEnd_toEndOf="@+id/cl1"
                         app:layout_constraintStart_toStartOf="@id/cl1">
 
-                        <ImageButton
-                            android:id="@+id/logInFacebook"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_margin="10dp"
-                            android:contentDescription="@string/log_in_facebook"
-                            android:src="@drawable/ic_facebook"
-                            app:layout_constraintBottom_toBottomOf="@id/logInOtherMethod"
-                            android:backgroundTint="#AF9516"
-                            app:layout_constraintEnd_toStartOf="@+id/logInGoogle"
-                            app:layout_constraintStart_toStartOf="@id/logInOtherMethod"
-                            app:layout_constraintTop_toTopOf="@id/logInOtherMethod" />
-
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/logInGoogle"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center"
-                            android:layout_margin="10dp"
+                            android:layout_marginStart="52dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:backgroundTint="#AF9516"
                             android:contentDescription="@string/log_in_google"
                             android:src="@drawable/ic_google"
-                            android:backgroundTint="#AF9516"
-                            app:layout_constraintBottom_toBottomOf="@id/logInOtherMethod"
-                            app:layout_constraintEnd_toEndOf="@id/logInOtherMethod"
-                            app:layout_constraintStart_toStartOf="@id/logInOtherMethod"
-                            app:layout_constraintTop_toTopOf="@id/logInOtherMethod" />
+                            app:layout_constraintBottom_toBottomOf="@id/logInByGoogle"
+                            app:layout_constraintStart_toStartOf="@id/logInByGoogle"
+                            app:layout_constraintTop_toTopOf="@id/logInByGoogle"
+                            app:layout_constraintVertical_bias="0.0" />
 
-                        <ImageButton
-                            android:id="@+id/logInTwitter"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_margin="10dp"
-                            android:contentDescription="@string/log_in_twitter"
-                            android:src="@drawable/ic_twitter"
-                            android:backgroundTint="#AF9516"
-                            app:layout_constraintBottom_toBottomOf="@id/logInOtherMethod"
-                            app:layout_constraintEnd_toEndOf="@id/logInOtherMethod"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="Log In by Google"
+                            android:textColor="@color/black"
+                            android:textSize="20dp"
+                            app:layout_constraintBottom_toBottomOf="@id/logInByGoogle"
+                            app:layout_constraintEnd_toEndOf="@id/logInByGoogle"
                             app:layout_constraintStart_toEndOf="@+id/logInGoogle"
-                            app:layout_constraintTop_toTopOf="@id/logInOtherMethod" />
+                            app:layout_constraintTop_toTopOf="@id/logInByGoogle" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

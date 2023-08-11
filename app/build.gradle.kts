@@ -53,6 +53,8 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.firebase:firebase-auth-ktx:22.1.1")
+    implementation("com.google.android.gms:play-services-auth:20.6.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -82,8 +84,15 @@ dependencies {
     implementation("androidx.room:room-ktx:2.5.2")
 
     // Import the Firebase BoM
-    //implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
 
     implementation("com.google.firebase:firebase-analytics-ktx:21.3.0")
+
+    // Firebase RealTime Database
+    implementation("com.google.firebase:firebase-database-ktx")
+
+    // firebase authencication
+    implementation("com.google.firebase:firebase-auth")
+
 
 }
