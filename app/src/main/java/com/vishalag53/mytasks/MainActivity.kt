@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
         val userName = intent.getStringExtra("name")
         val userEmail = intent.getStringExtra("email")
         val userDisplayPhoto = intent.getStringExtra("displayImage")
+
+
     }
 
 }

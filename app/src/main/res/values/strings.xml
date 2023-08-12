@@ -33,5 +33,6 @@
     <string name="cancel">CANCEL</string>
     <string name="create_list_cap">CREATE LIST</string>
     <string name="sign_out">Sign Out</string>
-    <string name="delete_list">Delete List</string>]
+    <string name="delete_list">Delete List</string>
+    <string name="log_in_by_google">Log In by Google</string>]
 </resources>
