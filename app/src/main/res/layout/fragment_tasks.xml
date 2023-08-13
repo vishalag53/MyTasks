@@ -3,246 +3,246 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".Tasks.TasksFragment.TasksFragment" >
+        tools:context=".Tasks.TasksFragment.TasksFragment">
 
-        <ScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clImport"
-                    android:layout_width="match_parent"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvImportant"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
-                    app:layout_constraintEnd_toEndOf="@id/cl"
-                    app:layout_constraintStart_toStartOf="@id/cl"
-                    app:layout_constraintTop_toTopOf="@id/cl">
-
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="2dp"
+                    android:backgroundTint="#9F9696"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clImport1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@id/clImport"
-                        app:layout_constraintEnd_toStartOf="@id/menuBtn1"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@id/clImport"
-                        app:layout_constraintTop_toTopOf="@id/clImport">
-
-                        <ImageView
-                            android:id="@+id/imgViewIcon"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/baseline_format_list_bulleted_24"
-                            app:layout_constraintBottom_toBottomOf="@id/clImport1"
-                            app:layout_constraintStart_toStartOf="@id/clImport1"
-                            app:layout_constraintTop_toTopOf="@id/clImport1" />
+                        android:id="@+id/clImportance"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
 
                         <TextView
-                            android:id="@+id/textViewTitle"
+                            android:id="@+id/tvImportance"
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:paddingStart="4dp"
-                            android:paddingBottom="2dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center"
                             android:text="@string/important"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/imgViewIcon"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:textSize="24sp"
+                            android:textStyle="bold|normal"
+                            app:layout_constraintBottom_toBottomOf="@id/clImportance"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@id/clImportance"
+                            app:layout_constraintTop_toTopOf="@id/clImportance" />
 
-                        <TextView
-                            android:id="@+id/textViewTotalNumber"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:gravity="center"
-                            android:text="8"
-                            android:textAlignment="center"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="@id/clImport1"
-                            app:layout_constraintEnd_toEndOf="@id/clImport1"
-                            app:layout_constraintTop_toTopOf="@id/clImport1" />
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <Button
-                        android:id="@+id/menuBtn1"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/baseline_more_vert_24"
-                        android:backgroundTint="@color/white"
-                        android:contentDescription="Click to use function"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clAlltasks"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:layout_constraintEnd_toEndOf="@id/cl"
-                    app:layout_constraintStart_toStartOf="@id/cl"
-                    app:layout_constraintTop_toBottomOf="@id/clImport">
-
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clAlltasks1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@id/clAlltasks"
-                        app:layout_constraintEnd_toStartOf="@id/menuBtn2"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@id/clAlltasks"
-                        app:layout_constraintTop_toTopOf="@id/clAlltasks">
-
-                        <ImageView
-                            android:id="@+id/imgViewIcon1"
+                        <ImageButton
+                            android:id="@+id/menuBtn1"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_margin="8dp"
-                            android:src="@drawable/baseline_format_list_bulleted_24"
-                            app:layout_constraintBottom_toBottomOf="@id/clAlltasks1"
-                            app:layout_constraintStart_toStartOf="@id/clAlltasks1"
-                            app:layout_constraintTop_toTopOf="@id/clAlltasks1" />
+                            android:backgroundTint="#9F9696"
+                            android:src="@drawable/baseline_more_vert_24"
+                            android:contentDescription="Click to use function"
+                            app:layout_constraintBottom_toBottomOf="@id/clImportance"
+                            app:layout_constraintEnd_toEndOf="@id/clImportance"
+                            app:layout_constraintTop_toTopOf="@id/clImportance"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvAllTasks"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="2dp"
+                    android:backgroundTint="#9F9696"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clAllTasks"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
 
                         <TextView
-                            android:id="@+id/textViewTitle1"
+                            android:id="@+id/tvAllTasks"
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:paddingStart="4dp"
-                            android:paddingBottom="2dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center"
                             android:text="@string/all_tasks"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/imgViewIcon1"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:textSize="24sp"
+                            android:textStyle="bold|normal"
+                            app:layout_constraintBottom_toBottomOf="@id/clAllTasks"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@id/clAllTasks"
+                            app:layout_constraintTop_toTopOf="@id/clAllTasks" />
 
-                        <TextView
-                            android:id="@+id/textViewTotalNumber1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:gravity="center"
-                            android:text="8"
-                            android:textAlignment="center"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="@id/clAlltasks1"
-                            app:layout_constraintEnd_toEndOf="@id/clAlltasks1"
-                            app:layout_constraintTop_toTopOf="@id/clAlltasks1" />
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <Button
-                        android:id="@+id/menuBtn2"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/baseline_more_vert_24"
-                        android:backgroundTint="@color/white"
-                        android:contentDescription="Click to use function"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clCompleteTasks"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:layout_constraintEnd_toEndOf="@id/cl"
-                    app:layout_constraintStart_toStartOf="@id/cl"
-                    app:layout_constraintTop_toBottomOf="@id/clAlltasks">
-
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clCompleteTasks1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@id/clCompleteTasks"
-                        app:layout_constraintEnd_toStartOf="@id/menuBtn4"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@id/clCompleteTasks"
-                        app:layout_constraintTop_toTopOf="@id/clCompleteTasks">
-
-                        <ImageView
-                            android:id="@+id/imgViewIcon4"
+                        <ImageButton
+                            android:id="@+id/menuBtn2"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_margin="8dp"
-                            android:src="@drawable/baseline_format_list_bulleted_24"
-                            app:layout_constraintBottom_toBottomOf="@id/clCompleteTasks1"
-                            app:layout_constraintStart_toStartOf="@id/clCompleteTasks1"
-                            app:layout_constraintTop_toTopOf="@id/clCompleteTasks1" />
-
-                        <TextView
-                            android:id="@+id/textViewTitle4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="8dp"
-                            android:paddingStart="4dp"
-                            android:paddingBottom="2dp"
-                            android:text="@string/complete_tasks"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/imgViewIcon4"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textViewTotalNumber4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:gravity="center"
-                            android:text="8"
-                            android:textAlignment="center"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="@id/clCompleteTasks1"
-                            app:layout_constraintEnd_toEndOf="@id/clCompleteTasks1"
-                            app:layout_constraintTop_toTopOf="@id/clCompleteTasks1" />
-
+                            android:src="@drawable/baseline_more_vert_24"
+                            android:backgroundTint="#9F9696"
+                            android:contentDescription="Click to use function"
+                            app:layout_constraintBottom_toBottomOf="@id/clAllTasks"
+                            app:layout_constraintEnd_toEndOf="@id/clAllTasks"
+                            app:layout_constraintTop_toTopOf="@id/clAllTasks"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <Button
-                        android:id="@+id/menuBtn4"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/baseline_more_vert_24"
-                        android:backgroundTint="@color/white"
-                        android:contentDescription="Click to use function"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TouchTargetSizeCheck" />
+                </androidx.cardview.widget.CardView>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvCompleteTasks"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="2dp"
+                    android:backgroundTint="#9F9696"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cvImportant">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clCompleteTasks"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+
+                        <TextView
+                            android:id="@+id/tvCompleteTasks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center"
+                            android:text="@string/complete"
+                            android:textSize="24sp"
+                            android:textStyle="bold|normal"
+                            app:layout_constraintBottom_toBottomOf="@id/clCompleteTasks"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@id/clCompleteTasks"
+                            app:layout_constraintTop_toTopOf="@id/clCompleteTasks" />
+
+                        <ImageButton
+                            android:id="@+id/menuBtn3"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/baseline_more_vert_24"
+                            android:backgroundTint="#9F9696"
+                            android:contentDescription="Click to use function"
+                            app:layout_constraintBottom_toBottomOf="@id/clCompleteTasks"
+                            app:layout_constraintEnd_toEndOf="@id/clCompleteTasks"
+                            app:layout_constraintTop_toTopOf="@id/clCompleteTasks"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvPlannedTasks"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="2dp"
+                    android:backgroundTint="#9F9696"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toBottomOf="@id/cvAllTasks">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clPlannedTasks"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+
+                        <TextView
+                            android:id="@+id/tvPlannedTasks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center"
+                            android:text="Planned"
+                            android:textSize="24sp"
+                            android:textStyle="bold|normal"
+                            app:layout_constraintBottom_toBottomOf="@id/clPlannedTasks"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@id/clPlannedTasks"
+                            app:layout_constraintTop_toTopOf="@id/clPlannedTasks" />
+
+                        <ImageButton
+                            android:id="@+id/menuBtn4"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/baseline_more_vert_24"
+                            android:backgroundTint="#9F9696"
+                            android:contentDescription="Click to use function"
+                            app:layout_constraintBottom_toBottomOf="@id/clPlannedTasks"
+                            app:layout_constraintEnd_toEndOf="@id/clPlannedTasks"
+                            app:layout_constraintTop_toTopOf="@id/clPlannedTasks"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/cl2"
+                app:layout_constraintEnd_toEndOf="@id/cl2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTasks"
@@ -250,90 +250,95 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="true"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="@id/cl"
-                    app:layout_constraintStart_toStartOf="@id/cl"
-                    app:layout_constraintTop_toBottomOf="@id/clCompleteTasks"
+                    app:layout_constraintEnd_toEndOf="@id/cl1"
+                    app:layout_constraintStart_toStartOf="@id/cl1"
+                    app:layout_constraintTop_toTopOf="@id/cl1"
                     tools:itemCount="2"
                     tools:listitem="@layout/task_list" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clAddNewList"
-                    android:layout_width="match_parent"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvCreateTasks"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
-                    app:layout_constraintEnd_toEndOf="@id/cl"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@id/cl"
-                    app:layout_constraintTop_toBottomOf="@id/rvTasks">
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="2dp"
+                    android:padding="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline1"
+                    app:layout_constraintStart_toStartOf="@id/cl2"
+                    app:layout_constraintTop_toTopOf="@id/cl2"
+                    app:layout_constraintBottom_toBottomOf="@id/cl2">
 
-                    <ImageView
-                        android:id="@+id/imgViewIcon2"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_margin="8dp"
-                        android:src="@drawable/baseline_add_24"
-                        app:layout_constraintBottom_toBottomOf="@id/clAddNewList"
-                        app:layout_constraintStart_toStartOf="@id/clAddNewList"
-                        app:layout_constraintTop_toTopOf="@id/clAddNewList" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clCreateTasks"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@color/white">
 
-                    <TextView
-                        android:id="@+id/textViewTitle2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="8dp"
-                        android:paddingStart="4dp"
-                        android:paddingBottom="2dp"
-                        android:text="@string/add_new_list"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imgViewIcon2"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <ImageView
+                            android:id="@+id/ivCreateBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/baseline_add_24_blue"
+                            app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
+                            app:layout_constraintStart_toStartOf="@id/clCreateTasks"
+                            app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
 
+                        <TextView
+                            android:id="@+id/tvCreateTasks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center"
+                            android:text="New List"
+                            android:textSize="24sp"
+                            android:textColor="@color/bkg_blue"
+                            android:textStyle="bold|normal"
+                            app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
+                            app:layout_constraintStart_toEndOf="@+id/ivCreateBtn"
+                            app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/signOut"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                </androidx.cardview.widget.CardView>
+
+                <ImageButton
+                    android:id="@+id/expendBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/expand_all48"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/click_for_more_features"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/cl"
-                    app:layout_constraintStart_toStartOf="@id/cl"
-                    app:layout_constraintTop_toBottomOf="@id/clAddNewList">
+                    app:layout_constraintStart_toEndOf="@id/guideline1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/signOut1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="8dp"
-                        android:paddingStart="4dp"
-                        android:paddingBottom="2dp"
-                        android:text="@string/sign_out"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/signOut"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.838" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ScrollView>
-
-        <Button
-            android:id="@+id/expendBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/expand_all48"
-            android:backgroundTint="@color/white"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="16dp"
-            android:contentDescription="Click for More Features"
-            android:layout_marginBottom="16dp"/>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

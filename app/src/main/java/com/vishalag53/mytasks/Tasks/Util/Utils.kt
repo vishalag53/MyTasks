@@ -23,10 +23,6 @@ fun setExpandBtnFunction(
 
     popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
         when (menuItem.itemId){
-            R.id.createList -> {
-                Toast.makeText(requireContext,"Create List",Toast.LENGTH_SHORT).show()
-                true
-            }
             R.id.search -> {
                 Toast.makeText(requireContext,"Search",Toast.LENGTH_SHORT).show()
                 true

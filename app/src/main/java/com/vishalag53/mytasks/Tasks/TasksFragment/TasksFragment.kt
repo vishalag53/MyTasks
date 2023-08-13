@@ -10,14 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.Tasks.Util.menuDelete
 import com.vishalag53.mytasks.Tasks.Util.menuDoubleDelete
 import com.vishalag53.mytasks.Tasks.Util.setExpandBtnFunction
@@ -40,7 +43,12 @@ class TasksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTasksBinding.inflate(inflater)
+        setActionBarTitle()
         return binding.root
+    }
+
+    private fun setActionBarTitle() {
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.myTasks)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +67,7 @@ class TasksFragment : Fragment() {
             menuDoubleDelete(it, requireContext())
         }
 
-        binding.menuBtn4.setOnClickListener {
+        binding.menuBtn3.setOnClickListener {
             // single
             menuDelete(it,requireContext())
         }
@@ -68,15 +76,24 @@ class TasksFragment : Fragment() {
             setExpandBtnFunction(binding,resources,it,requireContext())
         }
 
-        binding.signOut1.setOnClickListener {
-            firebaseAuth.signOut()
-            startActivity(Intent(requireContext() , LogInActivity::class.java))
-        }
 
-        binding.clAddNewList.setOnClickListener {
+        binding.cvCreateTasks.setOnClickListener {
             val createNewListDialogBox = CreateNewListDialogBox()
             createNewListDialogBox.show(childFragmentManager,"CustomDialog")
         }
+
+        binding.cvImportant.setOnClickListener {
+            findNavController().navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment())
+        }
+
+        binding.cvAllTasks.setOnClickListener {
+            findNavController().navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment())
+        }
+
+        binding.cvCompleteTasks.setOnClickListener {
+            findNavController().navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment())
+        }
+
     }
 
     private fun getDataFromFirebase() {

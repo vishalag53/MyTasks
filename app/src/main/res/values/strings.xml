@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MyTasks</string>
+    <string name="myTasks">My Tasks</string>
     <string name="backBtn">Back Btn</string>
     <string name="welcome">WELCOME!</string>
     <string name="logIn">Log In</string>
@@ -34,5 +35,7 @@
     <string name="create_list_cap">CREATE LIST</string>
     <string name="sign_out">Sign Out</string>
     <string name="delete_list">Delete List</string>
-    <string name="log_in_by_google">Log In by Google</string>]
+    <string name="log_in_by_google">Log In by Google</string>
+    <string name="complete">Complete</string>
+    <string name="click_for_more_features">Click for More Features</string>]
 </resources>

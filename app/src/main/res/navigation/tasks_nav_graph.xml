@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/tasksFragment"
         android:name="com.vishalag53.mytasks.Tasks.TasksFragment.TasksFragment"
-        android:label="TasksFragment"
+        android:label="Tasks"
         tools:layout="@layout/fragment_tasks">
         <action
             android:id="@+id/action_tasksFragment_to_tasksListsFragment"
@@ -17,6 +17,15 @@
     <fragment
         android:id="@+id/tasksListsFragment"
         android:name="com.vishalag53.mytasks.Tasks.TasksListsFragment.TasksListsFragment"
-        android:label="TasksListsFragment"
-        tools:layout="@layout/fragment_tasks_lists"/>
+        android:label="Tasks Lists"
+        tools:layout="@layout/fragment_tasks_lists">
+        <action
+            android:id="@+id/action_tasksListsFragment_to_tasksListDetailsFragment"
+            app:destination="@id/tasksListDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tasksListDetailsFragment"
+        android:name="com.vishalag53.mytasks.Tasks.TasksListsDetailsFragment.TasksListsDetailsFragment"
+        android:label="Tasks List Details"
+        tools:layout="@layout/fragment_tasks_lists_details" />
 </navigation>
