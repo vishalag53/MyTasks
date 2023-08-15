@@ -1,30 +1,31 @@
 package com.vishalag53.mytasks.Tasks.TasksFragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.vishalag53.mytasks.R
+import com.vishalag53.mytasks.Tasks.Adapters.TasksFragmentAdapter
 import com.vishalag53.mytasks.Tasks.Repository.TasksRepository
+import com.vishalag53.mytasks.Tasks.Util.TasksItemTouchHelper
 import com.vishalag53.mytasks.Tasks.Util.setSortBtnFunction
 import com.vishalag53.mytasks.Tasks.data.NameList
 import com.vishalag53.mytasks.databinding.FragmentTasksBinding
-import java.util.Collections
 import java.util.Locale
 
 class TasksFragment : Fragment() {
@@ -79,25 +80,10 @@ class TasksFragment : Fragment() {
         tasksAdapter = TasksFragmentAdapter(::taskClickListener, ::renameClickListener)
         binding.rvTasks.adapter = tasksAdapter
 
-        itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
-            override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-                val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                return makeMovementFlags(dragFlags,0)
-            }
+        val deleteIcon = ContextCompat.getDrawable(requireContext(),R.drawable.baseline_delete_24)!!
+        val tasksItemTouchHelper = TasksItemTouchHelper(requireContext(),tasksAdapter,tasksViewModel,deleteIcon,viewLifecycleOwner)
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                val fromPosition = viewHolder.adapterPosition
-                val toPosition = target.adapterPosition
-
-                Collections.swap(mutableNameList,fromPosition,toPosition)
-                tasksAdapter.notifyItemMoved(fromPosition,toPosition)
-                return true
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-            }
-        })
+        itemTouchHelper = ItemTouchHelper(tasksItemTouchHelper)
 
         itemTouchHelper.attachToRecyclerView(binding.rvTasks)
 
@@ -116,6 +102,11 @@ class TasksFragment : Fragment() {
         binding.sortBtn.setOnClickListener { setSortBtnFunction(binding,resources,it,requireContext()) }
 
         binding.cvCreateTasks.setOnClickListener { tasksViewModel.getCreate() }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
+            navController.popBackStack(R.id.logInActivity,false)
+            goToHomeScreenOfMobile()
+        }
 
     }
 
@@ -143,5 +134,12 @@ class TasksFragment : Fragment() {
                 tasksAdapter.setFilteredList(filteredList)
             }
         }
+    }
+
+    private fun goToHomeScreenOfMobile() {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 }

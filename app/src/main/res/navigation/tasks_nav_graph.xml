@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_tasks">
         <action
             android:id="@+id/action_tasksFragment_to_tasksListsFragment"
-            app:destination="@id/tasksListsFragment" />
+            app:destination="@id/tasksListsFragment"
+            app:popUpTo="@id/tasksFragment"/>
     </fragment>
     <fragment
         android:id="@+id/tasksListsFragment"
@@ -24,7 +25,8 @@
             app:argType="com.vishalag53.mytasks.Tasks.data.NameList"/>
         <action
             android:id="@+id/action_tasksListsFragment_to_tasksListDetailsFragment"
-            app:destination="@id/tasksListDetailsFragment" />
+            app:destination="@id/tasksListDetailsFragment"
+            app:popUpTo="@id/tasksListsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/tasksListDetailsFragment"

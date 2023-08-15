@@ -1,7 +1,6 @@
-package com.vishalag53.mytasks.Tasks.TasksFragment
+package com.vishalag53.mytasks.Tasks.Adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -127,7 +126,7 @@ class TextViewHolder(val binding: HeaderTasksBinding): RecyclerView.ViewHolder(b
         binding.executePendingBindings()
     }
     companion object{
-        fun from(parent: ViewGroup): TextViewHolder{
+        fun from(parent: ViewGroup): TextViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)!!
             val binding = HeaderTasksBinding.inflate(layoutInflater,parent,false)
             return TextViewHolder(binding)
