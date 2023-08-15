@@ -19,7 +19,7 @@
     <string name="all_tasks">All Tasks</string>
     <string name="add_new_list">Create New List</string>
     <string name="complete_tasks">Complete Tasks</string>
-    <string name="delete_tasks">Delete Tasks</string>
+    <string name="delete_all_tasks">Delete All Tasks</string>
     <string name="delete_complete_tasks">Delete Complete Tasks</string>
     <string name="rename">Rename</string>
     <string name="create_list">Create List</string>
@@ -37,5 +37,7 @@
     <string name="delete_list">Delete List</string>
     <string name="log_in_by_google">Log In by Google</string>
     <string name="complete">Complete</string>
-    <string name="click_for_more_features">Click for More Features</string>]
+    <string name="click_for_more_features">Click for More Features</string>
+    <string name="task_lists">Task Lists</string>
+    <string name="click_for_sort_the_list">Click for Sort the List</string>]
 </resources>

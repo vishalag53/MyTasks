@@ -19,6 +19,9 @@
         android:name="com.vishalag53.mytasks.Tasks.TasksListsFragment.TasksListsFragment"
         android:label="Tasks Lists"
         tools:layout="@layout/fragment_tasks_lists">
+        <argument
+            android:name="tasks"
+            app:argType="com.vishalag53.mytasks.Tasks.data.NameList"/>
         <action
             android:id="@+id/action_tasksListsFragment_to_tasksListDetailsFragment"
             app:destination="@id/tasksListDetailsFragment" />

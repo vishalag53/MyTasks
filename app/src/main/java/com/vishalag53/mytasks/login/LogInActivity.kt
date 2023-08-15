@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.vishalag53.mytasks.MainActivity
+import com.vishalag53.mytasks.Tasks.TasksActivity
 import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.databinding.ActivityLogInBinding
 import java.lang.Exception
@@ -88,7 +87,7 @@ class LogInActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account.idToken,null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful){
-                val  intent: Intent = Intent(this, MainActivity::class.java)
+                val  intent: Intent = Intent(this, TasksActivity::class.java)
                 intent.putExtra("email",account.email)
                 intent.putExtra("name",account.displayName)
                 intent.putExtra("displayImage",account.photoUrl)
@@ -160,7 +159,7 @@ class LogInActivity : AppCompatActivity() {
     private fun isEmailVerified() {
         val verification = firebaseAuth.currentUser?.isEmailVerified
         if(verification == true){
-            startActivity(Intent(this@LogInActivity, MainActivity::class.java))
+            startActivity(Intent(this@LogInActivity, TasksActivity::class.java))
         }
         else{
             Toast.makeText(this, "Verify a Email Id", Toast.LENGTH_SHORT).show()

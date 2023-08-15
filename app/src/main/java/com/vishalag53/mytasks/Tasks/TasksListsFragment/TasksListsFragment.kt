@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.vishalag53.mytasks.R
+import androidx.appcompat.app.AppCompatActivity
 import com.vishalag53.mytasks.databinding.FragmentTasksListsBinding
 
 
@@ -28,6 +28,12 @@ class TasksListsFragment : Fragment() {
 
     private fun init() {
         binding.lifecycleOwner = viewLifecycleOwner
+        val arguments = TasksListsFragmentArgs.fromBundle(requireArguments()).tasks
+        setActionBarTitle(arguments.listNameName)
+    }
+
+    private fun setActionBarTitle(listNameName: String) {
+        (activity as AppCompatActivity).supportActionBar?.title = listNameName
     }
 
 

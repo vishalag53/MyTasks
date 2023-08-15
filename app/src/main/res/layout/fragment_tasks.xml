@@ -10,333 +10,123 @@
         tools:context=".Tasks.TasksFragment.TasksFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvImportant"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:backgroundTint="#9F9696"
-                    app:cardCornerRadius="20dp"
-                    app:layout_constraintEnd_toEndOf="@id/guideline"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clImportance"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp">
-
-                        <TextView
-                            android:id="@+id/tvImportance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:gravity="center"
-                            android:text="@string/important"
-                            android:textSize="24sp"
-                            android:textStyle="bold|normal"
-                            app:layout_constraintBottom_toBottomOf="@id/clImportance"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@id/clImportance"
-                            app:layout_constraintTop_toTopOf="@id/clImportance" />
-
-                        <ImageButton
-                            android:id="@+id/menuBtn1"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_margin="8dp"
-                            android:backgroundTint="#9F9696"
-                            android:src="@drawable/baseline_more_vert_24"
-                            android:contentDescription="Click to use function"
-                            app:layout_constraintBottom_toBottomOf="@id/clImportance"
-                            app:layout_constraintEnd_toEndOf="@id/clImportance"
-                            app:layout_constraintTop_toTopOf="@id/clImportance"
-                            tools:ignore="TouchTargetSizeCheck" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvAllTasks"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:backgroundTint="#9F9696"
-                    app:cardCornerRadius="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/guideline"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clAllTasks"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp">
-
-                        <TextView
-                            android:id="@+id/tvAllTasks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:gravity="center"
-                            android:text="@string/all_tasks"
-                            android:textSize="24sp"
-                            android:textStyle="bold|normal"
-                            app:layout_constraintBottom_toBottomOf="@id/clAllTasks"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@id/clAllTasks"
-                            app:layout_constraintTop_toTopOf="@id/clAllTasks" />
-
-                        <ImageButton
-                            android:id="@+id/menuBtn2"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/baseline_more_vert_24"
-                            android:backgroundTint="#9F9696"
-                            android:contentDescription="Click to use function"
-                            app:layout_constraintBottom_toBottomOf="@id/clAllTasks"
-                            app:layout_constraintEnd_toEndOf="@id/clAllTasks"
-                            app:layout_constraintTop_toTopOf="@id/clAllTasks"
-                            tools:ignore="TouchTargetSizeCheck" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvCompleteTasks"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:backgroundTint="#9F9696"
-                    app:cardCornerRadius="20dp"
-                    app:layout_constraintEnd_toEndOf="@id/guideline"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cvImportant">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clCompleteTasks"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp">
-
-                        <TextView
-                            android:id="@+id/tvCompleteTasks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:gravity="center"
-                            android:text="@string/complete"
-                            android:textSize="24sp"
-                            android:textStyle="bold|normal"
-                            app:layout_constraintBottom_toBottomOf="@id/clCompleteTasks"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@id/clCompleteTasks"
-                            app:layout_constraintTop_toTopOf="@id/clCompleteTasks" />
-
-                        <ImageButton
-                            android:id="@+id/menuBtn3"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/baseline_more_vert_24"
-                            android:backgroundTint="#9F9696"
-                            android:contentDescription="Click to use function"
-                            app:layout_constraintBottom_toBottomOf="@id/clCompleteTasks"
-                            app:layout_constraintEnd_toEndOf="@id/clCompleteTasks"
-                            app:layout_constraintTop_toTopOf="@id/clCompleteTasks"
-                            tools:ignore="TouchTargetSizeCheck" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvPlannedTasks"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:backgroundTint="#9F9696"
-                    app:cardCornerRadius="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/guideline"
-                    app:layout_constraintTop_toBottomOf="@id/cvAllTasks">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clPlannedTasks"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp">
-
-                        <TextView
-                            android:id="@+id/tvPlannedTasks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:gravity="center"
-                            android:text="Planned"
-                            android:textSize="24sp"
-                            android:textStyle="bold|normal"
-                            app:layout_constraintBottom_toBottomOf="@id/clPlannedTasks"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@id/clPlannedTasks"
-                            app:layout_constraintTop_toTopOf="@id/clPlannedTasks" />
-
-                        <ImageButton
-                            android:id="@+id/menuBtn4"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/baseline_more_vert_24"
-                            android:backgroundTint="#9F9696"
-                            android:contentDescription="Click to use function"
-                            app:layout_constraintBottom_toBottomOf="@id/clPlannedTasks"
-                            app:layout_constraintEnd_toEndOf="@id/clPlannedTasks"
-                            app:layout_constraintTop_toTopOf="@id/clPlannedTasks"
-                            tools:ignore="TouchTargetSizeCheck" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/cl2"
-                app:layout_constraintEnd_toEndOf="@id/cl2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl">
+                app:layout_constraintBottom_toTopOf="@+id/cvCreateTasks"
+                app:layout_constraintEnd_toEndOf="@id/cl"
+                app:layout_constraintStart_toStartOf="@id/cl"
+                app:layout_constraintTop_toTopOf="@id/cl">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvSearchView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="@id/cl1"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@id/cl1"
+                    app:layout_constraintTop_toTopOf="@id/cl1">
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:iconifiedByDefault="false"
+                        app:queryBackground="@android:color/transparent"
+                        app:queryHint="Search here ..." />
+
+                </com.google.android.material.card.MaterialCardView>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTasks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="true"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="@id/cl1"
                     app:layout_constraintEnd_toEndOf="@id/cl1"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@id/cl1"
-                    app:layout_constraintTop_toTopOf="@id/cl1"
-                    tools:itemCount="2"
+                    app:layout_constraintTop_toBottomOf="@id/cvSearchView"
+                    tools:itemCount="12"
                     tools:listitem="@layout/task_list" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl2"
-                android:layout_width="match_parent"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvCreateTasks"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="2dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="24dp"
+                android:padding="8dp"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintBottom_toBottomOf="@id/cl"
+                app:layout_constraintEnd_toStartOf="@id/sortBtn"
+                app:layout_constraintStart_toStartOf="@id/cl">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvCreateTasks"
-                    android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clCreateTasks"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:padding="8dp"
-                    app:layout_constraintEnd_toEndOf="@id/guideline1"
-                    app:layout_constraintStart_toStartOf="@id/cl2"
-                    app:layout_constraintTop_toTopOf="@id/cl2"
-                    app:layout_constraintBottom_toBottomOf="@id/cl2">
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/cl"
+                    app:layout_constraintEnd_toStartOf="@+id/sortBtn"
+                    app:layout_constraintStart_toStartOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clCreateTasks"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@color/white">
+                    <ImageView
+                        android:id="@+id/ivCreateBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/list_alt_add_48px"
+                        app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
+                        app:layout_constraintStart_toStartOf="@id/clCreateTasks"
+                        app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
 
-                        <ImageView
-                            android:id="@+id/ivCreateBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/baseline_add_24_blue"
-                            app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
-                            app:layout_constraintStart_toStartOf="@id/clCreateTasks"
-                            app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
+                    <TextView
+                        android:id="@+id/tvCreateTasks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="New List"
+                        android:textColor="@color/bkg_blue"
+                        android:textSize="24sp"
+                        android:textStyle="bold|normal"
+                        app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
+                        app:layout_constraintStart_toEndOf="@+id/ivCreateBtn"
+                        app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
 
-                        <TextView
-                            android:id="@+id/tvCreateTasks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:gravity="center"
-                            android:text="New List"
-                            android:textSize="24sp"
-                            android:textColor="@color/bkg_blue"
-                            android:textStyle="bold|normal"
-                            app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
-                            app:layout_constraintStart_toEndOf="@+id/ivCreateBtn"
-                            app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
-                </androidx.cardview.widget.CardView>
-
-                <ImageButton
-                    android:id="@+id/expendBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/expand_all48"
-                    android:backgroundTint="@color/white"
-                    android:contentDescription="@string/click_for_more_features"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/guideline1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.838" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/sortBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="end"
+                android:contentDescription="@string/click_for_sort_the_list"
+                style="@style/CustomFloatingActionButton"
+                android:src="@drawable/sort"
+                app:layout_constraintBottom_toBottomOf="@id/cl"
+                app:layout_constraintEnd_toEndOf="@id/cl" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

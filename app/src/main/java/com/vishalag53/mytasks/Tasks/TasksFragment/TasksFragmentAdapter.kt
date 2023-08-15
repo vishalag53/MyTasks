@@ -1,97 +1,136 @@
 package com.vishalag53.mytasks.Tasks.TasksFragment
 
-import android.app.AlertDialog
-import android.view.ContextMenu
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.PopupMenu
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.vishalag53.mytasks.R
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.vishalag53.mytasks.Tasks.data.NameList
+import com.vishalag53.mytasks.databinding.HeaderTasksBinding
 import com.vishalag53.mytasks.databinding.TaskListBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.ClassCastException
 
-class TasksFragmentAdapter(private val nameList: MutableList<NameList>,
-    private val deleteCallback: (NameList) -> Unit,
-    private val renameCallback: (NameList,String) -> Unit): RecyclerView.Adapter<TasksFragmentAdapter.TasksListViewHolder>() {
+private const val ITEM_VIEW_TYPE_HEADER = 0
+private const val ITEM_VIEW_TYPE_ITEM = 1
+private var size: Int = 0
 
-    class TasksListViewHolder(val binding: TaskListBinding): RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener{
+@Suppress("DEPRECATION")
+class TasksFragmentAdapter(
+    private val taskClickListener: (NameList) -> Unit,
+    private val renameClickListener: (NameList) -> Unit
+): ListAdapter<DataItem,RecyclerView.ViewHolder>(NameListDiffCallback()) {
 
-        init {
-            binding.root.setOnCreateContextMenuListener(this)
+    private val adapterScope = CoroutineScope(Dispatchers.Default)
+    class TasksListViewHolder(val binding: TaskListBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(){
+            binding.executePendingBindings()
         }
-
-        override fun onCreateContextMenu(
-            menu: ContextMenu?,
-            v: View?,
-            menuInfo: ContextMenu.ContextMenuInfo?
-        ) {
-            val inflater: MenuInflater = MenuInflater(v?.context)
-            inflater.inflate(R.menu.nenu_overflow_compulsory,menu)
+        companion object {
+            fun from(parent: ViewGroup): TasksListViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = TaskListBinding.inflate(layoutInflater, parent, false)
+                return TasksListViewHolder(binding)
+            }
         }
-
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksListViewHolder {
-        return TasksListViewHolder(TaskListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+    fun setFilteredList(filteredList: ArrayList<NameList>) {
+        addHeaderAndSubmitList(filteredList)
     }
 
-    override fun getItemCount(): Int {
-        return nameList.size
+    fun addHeaderAndSubmitList(nameList: List<NameList>?){
+        adapterScope.launch {
+            if (nameList != null){
+                size = nameList.size
+            }
+            val items = when (nameList){
+                null -> listOf(DataItem.Header)
+                else -> listOf(DataItem.Header) + nameList.map { DataItem.NameListItem(it) }
+            }
+            withContext(Dispatchers.Main){
+                submitList(items)
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: TasksListViewHolder, position: Int) {
-        val item = nameList[position]
-        holder.binding.textViewTitle3.text = item.listNameName
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)){
+            is DataItem.Header -> ITEM_VIEW_TYPE_HEADER
+            is DataItem.NameListItem -> ITEM_VIEW_TYPE_ITEM
+        }
+    }
 
-        holder.binding.menuBtn3.setOnClickListener {
-            val popUp = PopupMenu(holder.itemView.context,it)
-            val inflater: MenuInflater = popUp.menuInflater
-            inflater.inflate(R.menu.nenu_overflow_compulsory,popUp.menu)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when(viewType){
+            ITEM_VIEW_TYPE_HEADER -> TextViewHolder.from(parent)
+            ITEM_VIEW_TYPE_ITEM -> TasksListViewHolder.from(parent)
+            else -> throw ClassCastException("Unknown viewType $viewType")
+        }
+    }
 
-            popUp.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId){
-                    R.id.renameListName -> {
-                        showRenameDialog(nameList[position],holder.binding)
-                        true
-                    }
-                    R.id.deleteList -> {
-                        val deleteList = nameList[position]
-                        deleteCallback(deleteList)
-                        true
-                    }
-                    R.id.deleteAllTasks -> {
-                        TODO("Delete All Tasks")
-                        true
-                    }
-                    R.id.deleteAllCompleteTasks -> {
-                        TODO("Delete All Complete Tasks")
-                        true
-                    }
-                    else -> false
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        when (holder){
+            is TasksListViewHolder -> {
+                val nameList = getItem(position) as DataItem.NameListItem
+                holder.bind()
+
+                holder.binding.textViewTitle3.text = nameList.nameList.listNameName
+
+                holder.binding.clImport4.setOnClickListener {
+                    taskClickListener(nameList.nameList)
+                }
+
+                holder.binding.renameBtn.setOnClickListener {
+                    renameClickListener(nameList.nameList)
                 }
             }
-
-            popUp.show()
-
+            is TextViewHolder -> {
+                holder.bind()
+                holder.binding.size.text = size.toString()
+            }
         }
     }
+}
 
-    private fun showRenameDialog(nameList: NameList, binding: TaskListBinding) {
-        val dialogBox = AlertDialog.Builder(binding.root.context)
-        val editText = EditText(binding.root.context)
-        editText.setText(nameList.listNameName)
-
-        dialogBox.setView(editText)
-            .setTitle("Rename List")
-            .setPositiveButton("Rename"){ _, _ ->
-                val newName = editText.text.toString()
-                renameCallback(nameList,newName)
-            }
-            .setNegativeButton("Cancel",null)
-            .show()
+class NameListDiffCallback: DiffUtil.ItemCallback<DataItem>() {
+    override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+        return oldItem.id == newItem.id
     }
 
+    override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+        return oldItem == newItem
+    }
+
+}
+
+sealed class  DataItem{
+    data class NameListItem(val nameList: NameList) : DataItem(){
+        override val id = nameList.listNameId
+    }
+    object Header: DataItem(){
+        override val id = ""
+    }
+
+    abstract val id : String
+
+}
+
+class TextViewHolder(val binding: HeaderTasksBinding): RecyclerView.ViewHolder(binding.root){
+
+    fun bind(){
+        binding.executePendingBindings()
+    }
+    companion object{
+        fun from(parent: ViewGroup): TextViewHolder{
+            val layoutInflater = LayoutInflater.from(parent.context)!!
+            val binding = HeaderTasksBinding.inflate(layoutInflater,parent,false)
+            return TextViewHolder(binding)
+        }
+    }
 }

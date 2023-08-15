@@ -5,7 +5,7 @@
         android:id="@+id/deleteAllTasks"
         android:enabled="true"
         android:icon="@drawable/baseline_delete_24"
-        android:title="@string/delete_tasks" />
+        android:title="@string/delete_all_tasks" />
 
     <item
         android:id="@+id/deleteAllCompleteTasks"
