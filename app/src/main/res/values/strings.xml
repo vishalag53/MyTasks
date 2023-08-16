@@ -44,5 +44,6 @@
     <string name="add_details">Add Details</string>
     <string name="open_calendar">open calendar for set date and time for your task</string>
     <string name="add_this_task_for_important">Add this task for important</string>
-    <string name="save">Save</string>]
+    <string name="save">Save</string>
+    <string name="Default">Default</string>
 </resources>

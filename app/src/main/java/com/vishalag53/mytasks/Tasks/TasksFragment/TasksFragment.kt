@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +25,6 @@ import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.Tasks.Adapters.TasksFragmentAdapter
 import com.vishalag53.mytasks.Tasks.Repository.TasksRepository
 import com.vishalag53.mytasks.Tasks.Util.TasksItemTouchHelper
-import com.vishalag53.mytasks.Tasks.Util.setSortBtnFunction
 import com.vishalag53.mytasks.Tasks.data.NameList
 import com.vishalag53.mytasks.databinding.FragmentTasksBinding
 import java.util.Locale
@@ -99,7 +100,21 @@ class TasksFragment : Fragment() {
 
         })
 
-        binding.sortBtn.setOnClickListener { setSortBtnFunction(binding,resources,it,requireContext()) }
+        binding.sortBtn.setOnClickListener { setSortBtnFunction(it) }
+
+        tasksViewModel.sortType.observe(viewLifecycleOwner, Observer { type ->
+            if(type == "Name ASC"){
+                val tmpMutableNameList = mutableNameList.sortedBy {list -> list.listNameName }
+                tasksAdapter.addHeaderAndSubmitList(tmpMutableNameList)
+            }
+            else if( type == "Name DESC"){
+                val tmpMutableNameList = mutableNameList.sortedByDescending {list -> list.listNameName }
+                tasksAdapter.addHeaderAndSubmitList(tmpMutableNameList)
+            }
+            else if(type == "Default"){
+                tasksAdapter.addHeaderAndSubmitList(mutableNameList)
+            }
+        })
 
         binding.cvCreateTasks.setOnClickListener { tasksViewModel.getCreate() }
 
@@ -108,6 +123,31 @@ class TasksFragment : Fragment() {
             goToHomeScreenOfMobile()
         }
 
+    }
+
+    private fun setSortBtnFunction(view: View) {
+        val popupMenu = PopupMenu(requireContext(),view)
+        popupMenu.inflate(R.menu.menu_overflow_sort)
+
+        popupMenu.setOnMenuItemClickListener { menuItem : MenuItem->
+            when (menuItem.itemId){
+                R.id.defaultSort -> {
+                    tasksViewModel.getSortType("Default")
+                    true
+                }
+                R.id.nameAsc -> {
+                    tasksViewModel.getSortType("Name ASC")
+                    true
+                }
+                R.id.nameDesc -> {
+                    tasksViewModel.getSortType("Name DESC")
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.show()
     }
 
     private fun taskClickListener(nameList: NameList){
