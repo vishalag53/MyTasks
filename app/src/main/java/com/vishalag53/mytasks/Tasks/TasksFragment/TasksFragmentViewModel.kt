@@ -12,18 +12,6 @@ class TasksFragmentViewModel(
 
     var data: LiveData<List<NameList>> = tasksRepository.data
 
-    fun getCreate(){
-        tasksRepository.createTask()
-    }
-
-    fun getDelete(itemToDelete: NameList) {
-        tasksRepository.deleteTask(itemToDelete)
-    }
-
-    fun getRename(nameList: NameList) {
-        tasksRepository.renameTask(nameList)
-    }
-
     private val _sortType = MutableLiveData<String>()
     val sortType: LiveData<String>
         get() = _sortType
@@ -31,4 +19,16 @@ class TasksFragmentViewModel(
     fun getSortType(sortType: String){
         _sortType.value = sortType
     }
+
+    fun getNameList(): LiveData<List<NameList>>{
+        val cacheNameList = CacheManager.get("nameListCacheKey") as? List<NameList>
+        return if(cacheNameList != null){
+            MutableLiveData(cacheNameList)
+        }
+        else{
+            val newData = tasksRepository. getNameList()
+            MutableLiveData(newData)
+        }
+    }
+
 }

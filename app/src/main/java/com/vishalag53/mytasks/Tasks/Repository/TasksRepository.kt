@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.vishalag53.mytasks.R
+import com.vishalag53.mytasks.Tasks.TasksFragment.CacheManager
 import com.vishalag53.mytasks.Tasks.data.NameList
 
 class TasksRepository(
@@ -108,6 +109,7 @@ class TasksRepository(
 
         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
         addTitle.text = Editable.Factory.getInstance().newEditable(nameList.listNameName)
+        addTitle.hint = "Rename Task List"
 
         val save = dialog.findViewById<TextView>(R.id.save)
         save.setTextColor(ContextCompat.getColor(requireContext,R.color.bkg_blue))
@@ -149,4 +151,47 @@ class TasksRepository(
         dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
         dialog.window!!.setGravity(Gravity.BOTTOM)
     }
+
+    // item position changed in firebase
+
+    fun itemPositionChangedInFirebase(fromPosition: Int, toPosition: Int) {
+        val itemToPosition = data.value!![toPosition].listNameName
+        val idToPosition = data.value!![toPosition].listNameId
+        val itemFromPosition = data.value!![fromPosition].listNameName
+        val idFromPosition = data.value!![fromPosition].listNameId
+
+        databaseReference.child(idToPosition).setValue(itemFromPosition)
+        databaseReference.child(idFromPosition).setValue(itemToPosition)
+    }
+
+    // Cache
+
+    fun getNameList(): List<NameList>{
+        val cacheNameList = CacheManager.get("nameListCacheKey") as? List<NameList>
+        return if(cacheNameList != null){
+            cacheNameList
+        } else{
+            val newData = fetchData()
+            CacheManager.put("nameListCacheKey",newData)
+            newData
+        }
+    }
+
+    fun fetchData(): List<NameList>{
+        var mutableNameList1: MutableList<NameList> = mutableListOf()
+
+        if(mutableNameList.size > 15){
+            var cnt = 0
+            for (nameList in mutableNameList){
+                mutableNameList1.add(nameList)
+                cnt++
+                if(cnt >= 15)   break
+            }
+            return mutableNameList1
+        }
+        else{
+            return mutableNameList
+        }
+    }
+
 }

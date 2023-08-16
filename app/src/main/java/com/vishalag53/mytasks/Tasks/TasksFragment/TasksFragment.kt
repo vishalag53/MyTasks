@@ -2,6 +2,7 @@ package com.vishalag53.mytasks.Tasks.TasksFragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -82,7 +83,7 @@ class TasksFragment : Fragment() {
         binding.rvTasks.adapter = tasksAdapter
 
         val deleteIcon = ContextCompat.getDrawable(requireContext(),R.drawable.baseline_delete_24)!!
-        val tasksItemTouchHelper = TasksItemTouchHelper(requireContext(),tasksAdapter,tasksViewModel,deleteIcon,viewLifecycleOwner)
+        val tasksItemTouchHelper = TasksItemTouchHelper(requireContext(),tasksAdapter,tasksViewModel,deleteIcon,viewLifecycleOwner,tasksRepository)
 
         itemTouchHelper = ItemTouchHelper(tasksItemTouchHelper)
 
@@ -116,12 +117,18 @@ class TasksFragment : Fragment() {
             }
         })
 
-        binding.cvCreateTasks.setOnClickListener { tasksViewModel.getCreate() }
+        binding.cvCreateTasks.setOnClickListener { tasksRepository.createTask() }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
             navController.popBackStack(R.id.logInActivity,false)
             goToHomeScreenOfMobile()
         }
+
+        tasksViewModel.getNameList().observe(viewLifecycleOwner, Observer {
+            it?.let{
+                tasksAdapter.addHeaderAndSubmitList(it)
+            }
+        })
 
     }
 
@@ -155,7 +162,7 @@ class TasksFragment : Fragment() {
     }
 
     private fun renameClickListener(nameList: NameList){
-        tasksViewModel.getRename(nameList)
+        tasksRepository.renameTask(nameList)
     }
 
     private fun filterList(query: String?){
@@ -181,5 +188,25 @@ class TasksFragment : Fragment() {
         intent.addCategory(Intent.CATEGORY_HOME)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
+    }
+}
+
+object CacheManager {
+    private val cacheMap: MutableMap<String, List<NameList>?> = mutableMapOf()
+
+    fun put(key: String, value: List<NameList>?) {
+        cacheMap[key] = value
+    }
+
+    fun get(key: String): List<NameList>? {
+        return cacheMap[key]
+    }
+
+    fun containsKey(key: String): Boolean {
+        return cacheMap.containsKey(key)
+    }
+
+    fun clearCache() {
+        cacheMap.clear()
     }
 }
