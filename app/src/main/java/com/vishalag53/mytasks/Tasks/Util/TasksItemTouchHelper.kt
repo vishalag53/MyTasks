@@ -5,16 +5,19 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.icu.text.Transliterator.Position
 import android.util.Log
+import android.view.View
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.vishalag53.mytasks.Tasks.Adapters.TasksFragmentAdapter
 import com.vishalag53.mytasks.Tasks.Repository.TasksRepository
 import com.vishalag53.mytasks.Tasks.TasksFragment.TasksFragmentViewModel
 import com.vishalag53.mytasks.Tasks.data.NameList
-import java.util.Collections
 
 @Suppress("DEPRECATION")
 class TasksItemTouchHelper(
@@ -23,17 +26,16 @@ class TasksItemTouchHelper(
     private val tasksViewModel: TasksFragmentViewModel,
     private val deleteIcon: Drawable,
     viewLifecycleOwner: LifecycleOwner,
-    private val tasksRepository: TasksRepository
+    private val tasksRepository: TasksRepository,
+    private val requireActivity: FragmentActivity
 ) : ItemTouchHelper.Callback() {
 
     private lateinit var mutableNameList: List<NameList>
-    private lateinit var removedItem: String
-    private var removedPosition: Int = -1
 
     init {
         tasksViewModel.data.observe(viewLifecycleOwner, Observer {
             it?.let {
-                mutableNameList = it
+                mutableNameList = it.reversed()
             }
         })
     }
@@ -50,7 +52,7 @@ class TasksItemTouchHelper(
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
 //        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-        val swipeFlags = ItemTouchHelper.LEFT
+        val swipeFlags = if(tasksAdapter.isHeaderPosition(viewHolder.adapterPosition)) 0 else  ItemTouchHelper.LEFT
         return makeMovementFlags(0,swipeFlags)
     }
 
@@ -68,10 +70,17 @@ class TasksItemTouchHelper(
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
         val position = viewHolder.adapterPosition
-        removedItem = mutableNameList[position-1].listNameName
-        removedPosition = position - 1
+        val removedItem = mutableNameList[position-1].listNameName
         tasksRepository.deleteTask(mutableNameList[position-1])
+        val rootView = requireActivity.findViewById<View>(android.R.id.content)
+        val snackbar = Snackbar.make(rootView,"Do you want to Undo?",Snackbar.LENGTH_LONG)
+        snackbar.setAction("Undo"){
+            tasksRepository.addInFirebase(removedItem)
+        }
+        snackbar.show()
+
     }
 
     override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean

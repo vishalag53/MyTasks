@@ -92,14 +92,7 @@ class TasksRepository(
     // delete task from firebase
 
     fun deleteTask(itemToDelete: NameList) {
-        databaseReference.child(itemToDelete.listNameId).removeValue().addOnCompleteListener {
-            if (it.isSuccessful){
-                Toast.makeText(requireContext, "Deleted Successfully", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                Log.d("VISHAL AGRAWAL","Delete ${it.exception.toString()}")
-            }
-        }
+        databaseReference.child(itemToDelete.listNameId).removeValue()
     }
 
     // rename task in firebase
@@ -177,7 +170,7 @@ class TasksRepository(
         }
     }
 
-    fun fetchData(): List<NameList>{
+    private fun fetchData(): List<NameList>{
         var mutableNameList1: MutableList<NameList> = mutableListOf()
 
         if(mutableNameList.size > 15){
@@ -191,6 +184,19 @@ class TasksRepository(
         }
         else{
             return mutableNameList
+        }
+    }
+
+    // again added in the firebase after the deleted
+
+    fun addInFirebase(removedItem: String){
+        databaseReference.push().setValue(removedItem).addOnCompleteListener {
+            if(it.isSuccessful){
+                Toast.makeText(requireContext,"Delete item again added",Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Log.d("VISHAL AGRAWAL","Added Again ${it.exception.toString()}")
+            }
         }
     }
 

@@ -2,7 +2,6 @@ package com.vishalag53.mytasks.Tasks.TasksFragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -75,6 +74,7 @@ class TasksFragment : Fragment() {
         tasksViewModel.data.observe(viewLifecycleOwner, Observer {
             it?.let {
                 mutableNameList = it
+                mutableNameList = mutableNameList.reversed()
                 tasksAdapter.addHeaderAndSubmitList(mutableNameList)
             }
         })
@@ -83,7 +83,7 @@ class TasksFragment : Fragment() {
         binding.rvTasks.adapter = tasksAdapter
 
         val deleteIcon = ContextCompat.getDrawable(requireContext(),R.drawable.baseline_delete_24)!!
-        val tasksItemTouchHelper = TasksItemTouchHelper(requireContext(),tasksAdapter,tasksViewModel,deleteIcon,viewLifecycleOwner,tasksRepository)
+        val tasksItemTouchHelper = TasksItemTouchHelper(requireContext(),tasksAdapter,tasksViewModel,deleteIcon,viewLifecycleOwner,tasksRepository,requireActivity())
 
         itemTouchHelper = ItemTouchHelper(tasksItemTouchHelper)
 
@@ -126,7 +126,7 @@ class TasksFragment : Fragment() {
 
         tasksViewModel.getNameList().observe(viewLifecycleOwner, Observer {
             it?.let{
-                tasksAdapter.addHeaderAndSubmitList(it)
+                tasksAdapter.addHeaderAndSubmitList(it.reversed())
             }
         })
 

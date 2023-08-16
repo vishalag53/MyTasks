@@ -95,6 +95,10 @@ class TasksFragmentAdapter(
             }
         }
     }
+
+    fun isHeaderPosition(position: Int) : Boolean{
+        return getItemViewType(position) == ITEM_VIEW_TYPE_HEADER
+    }
 }
 
 class NameListDiffCallback: DiffUtil.ItemCallback<DataItem>() {
