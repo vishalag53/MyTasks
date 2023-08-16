@@ -16,14 +16,6 @@ fun setSortBtnFunction(binding: FragmentTasksBinding, resources: Resources, view
 
     popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
         when (menuItem.itemId){
-            R.id.dateAsc -> {
-                TODO("DATE ASC")
-                true
-            }
-            R.id.dateDesc -> {
-                TODO("DATE DESC")
-                true
-            }
             R.id.nameAsc -> {
                 TODO("NAME ASC")
                 true

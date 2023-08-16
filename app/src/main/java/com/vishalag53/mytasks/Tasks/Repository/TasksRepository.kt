@@ -1,10 +1,20 @@
 package com.vishalag53.mytasks.Tasks.Repository
 
-import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.text.Editable
 import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
@@ -51,25 +61,31 @@ class TasksRepository(
     // create new task and add in firebase
 
      fun createTask() {
-        val dialogBox = AlertDialog.Builder(requireContext)
-        val editText = EditText(requireContext)
-        dialogBox.setView(editText)
-            .setIcon(R.drawable.baseline_add_task_24)
-            .setTitle("Create New List")
-            .setPositiveButton("CREATE LIST"){ _, _ ->
-                val name = editText.text.toString()
-                databaseReference.push().setValue(name).addOnCompleteListener {
-                    if (it.isSuccessful){
-                        Toast.makeText(requireContext,"Created  $name",Toast.LENGTH_SHORT).show()
-                        editText.text = null
-                    }
-                    else{
-                        Log.d("VISHAL AGRAWAL","${it.exception?.message}")
-                    }
-                }
-            }
-            .setNegativeButton("Cancel",null)
-            .show()
+         val dialog = dialog()
+
+         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
+         addTitle.hint = "New Task List"
+
+         val save = dialog.findViewById<TextView>(R.id.save)
+         save.setTextColor(ContextCompat.getColor(requireContext,R.color.bkg_blue))
+         save.setOnClickListener {
+             val listName = addTitle.text.toString()
+             if(listName.isNotEmpty()){
+                 databaseReference.push().setValue(listName).addOnCompleteListener {
+                     if (it.isSuccessful){
+                         Toast.makeText(requireContext,"Created  $listName",Toast.LENGTH_SHORT).show()
+                         addTitle.text = null
+                     }
+                     else{
+                         Log.d("VISHAL AGRAWAL","${it.exception?.message}")
+                     }
+                 }
+             }
+             else{
+                 Toast.makeText(requireContext,"Enter the list name",Toast.LENGTH_SHORT).show()
+             }
+         }
+         dialogExtracted(dialog)
      }
 
     // delete task from firebase
@@ -88,15 +104,17 @@ class TasksRepository(
     // rename task in firebase
 
     fun renameTask(nameList: NameList) {
-        val dialogBox = AlertDialog.Builder(requireContext)
-        val editText = EditText(requireContext)
-        editText.setText(nameList.listNameName)
-        dialogBox.setView(editText)
-            .setIcon(R.drawable.edit_48px)
-            .setTitle("Rename List")
-            .setPositiveButton("Rename"){ _, _ ->
-                val newName = editText.text.toString()
-                databaseReference.child(nameList.listNameId).setValue(newName).addOnCompleteListener {
+        val dialog = dialog()
+
+        val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
+        addTitle.text = Editable.Factory.getInstance().newEditable(nameList.listNameName)
+
+        val save = dialog.findViewById<TextView>(R.id.save)
+        save.setTextColor(ContextCompat.getColor(requireContext,R.color.bkg_blue))
+        save.setOnClickListener {
+            val renameListName: String = addTitle.text.toString()
+            if(renameListName.isNotEmpty()){
+                databaseReference.child(nameList.listNameId).setValue(renameListName).addOnCompleteListener {
                     if (it.isSuccessful){
                         Toast.makeText(requireContext, "Rename Successfully", Toast.LENGTH_SHORT).show()
                     }
@@ -105,7 +123,30 @@ class TasksRepository(
                     }
                 }
             }
-            .setNegativeButton("Cancel",null)
-            .show()
+            else{
+                Toast.makeText(requireContext,"Enter the list name",Toast.LENGTH_SHORT).show()
+            }
+        }
+        dialogExtracted(dialog)
+    }
+
+    private fun dialog(): Dialog {
+        val dialog = Dialog(requireContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_box_layout)
+
+        dialog.findViewById<EditText>(R.id.addDetails).visibility = View.GONE
+        dialog.findViewById<Button>(R.id.showDetailEditText).visibility = View.GONE
+        dialog.findViewById<Button>(R.id.showCalendarTime).visibility = View.GONE
+        dialog.findViewById<Button>(R.id.addImportant).visibility = View.GONE
+        return dialog
+    }
+
+    private fun dialogExtracted(dialog: Dialog) {
+        dialog.show()
+        dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+        dialog.window!!.setGravity(Gravity.BOTTOM)
     }
 }

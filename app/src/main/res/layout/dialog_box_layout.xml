@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_box_bg">
+
+    <EditText
+        android:id="@+id/addTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        style="@style/NoEditTextBorder"
+        android:textColor="@color/black"
+        android:textColorHint="#858587"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:hint="@string/new_list"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <EditText
+        android:id="@+id/addDetails"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        style="@style/NoEditTextBorder"
+        android:textColor="@color/black"
+        android:hint="@string/add_details"
+        android:textColorHint="#858587"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addTitle"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/showDetailEditText"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:background="@drawable/grip_lines"
+        android:contentDescription="@string/add_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addDetails" />
+
+    <Button
+        android:id="@+id/showCalendarTime"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/time"
+        android:contentDescription="@string/open_calendar"
+        app:layout_constraintStart_toEndOf="@id/showDetailEditText"
+        app:layout_constraintTop_toBottomOf="@id/addDetails" />
+
+    <Button
+        android:id="@+id/addImportant"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/baseline_star_outline_24"
+        android:contentDescription="@string/add_this_task_for_important"
+        app:layout_constraintStart_toEndOf="@id/showCalendarTime"
+        app:layout_constraintTop_toBottomOf="@id/addDetails" />
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="12dp"
+        android:text="@string/save"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="#A6A6A6"
+        android:contentDescription="@string/open_calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addDetails" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,4 +32,13 @@
         <item name="strokeWidth">0dp</item>
     </style>
 
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
+    <style name="NoEditTextBorder" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@null</item>
+    </style>
+
 </resources>

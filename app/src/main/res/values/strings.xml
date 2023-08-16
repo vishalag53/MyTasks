@@ -39,5 +39,10 @@
     <string name="complete">Complete</string>
     <string name="click_for_more_features">Click for More Features</string>
     <string name="task_lists">Task Lists</string>
-    <string name="click_for_sort_the_list">Click for Sort the List</string>]
+    <string name="click_for_sort_the_list">Click for Sort the List</string>
+    <string name="new_list">New List</string>
+    <string name="add_details">Add Details</string>
+    <string name="open_calendar">open calendar for set date and time for your task</string>
+    <string name="add_this_task_for_important">Add this task for important</string>
+    <string name="save">Save</string>]
 </resources>
