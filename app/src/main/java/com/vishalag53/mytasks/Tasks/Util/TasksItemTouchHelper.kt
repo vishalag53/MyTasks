@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.vishalag53.mytasks.Tasks.Adapters.TasksFragmentAdapter
 import com.vishalag53.mytasks.Tasks.Repository.TasksRepository
-import com.vishalag53.mytasks.Tasks.TasksFragment.TasksFragmentViewModel
+import com.vishalag53.mytasks.Tasks.TasksFragment.TasksViewModel
 import com.vishalag53.mytasks.Tasks.data.NameList
 
 @Suppress("DEPRECATION")
 class TasksItemTouchHelper(
     private val requireContext: Context,
     private val tasksAdapter: TasksFragmentAdapter,
-    private val tasksViewModel: TasksFragmentViewModel,
+    private val tasksViewModel: TasksViewModel,
     private val deleteIcon: Drawable,
     viewLifecycleOwner: LifecycleOwner,
     private val tasksRepository: TasksRepository,

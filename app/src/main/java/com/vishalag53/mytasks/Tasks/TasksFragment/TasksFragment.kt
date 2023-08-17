@@ -9,7 +9,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +39,7 @@ class TasksFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var tasksAdapter: TasksFragmentAdapter
     private lateinit var mutableNameList: List<NameList>
-    private lateinit var tasksViewModel: TasksFragmentViewModel
+    private lateinit var tasksViewModel: TasksViewModel
     private lateinit var tasksRepository: TasksRepository
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var searchView: SearchView
@@ -73,7 +72,7 @@ class TasksFragment : Fragment() {
             .child((firebaseAuth.currentUser?.uid.toString()))
 
         tasksRepository = TasksRepository(databaseReference,requireContext())
-        tasksViewModel = ViewModelProvider(this,TasksFragmentViewModelFactory(tasksRepository))[TasksFragmentViewModel::class.java]
+        tasksViewModel = ViewModelProvider(this,TasksViewModelFactory(tasksRepository))[TasksViewModel::class.java]
 
         tasksViewModel.data.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -137,8 +136,6 @@ class TasksFragment : Fragment() {
     private fun taskClickListener(nameList: NameList){
         navController.navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment(nameList))
     }
-
-
 
     private fun filterList(query: String?){
         if(query != null){

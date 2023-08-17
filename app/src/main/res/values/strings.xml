@@ -47,4 +47,7 @@
     <string name="save">Save</string>
     <string name="Default">Default</string>
     <string name="click_for_create_new_task_list">click for create new task list</string>
+    <string name="open_time">Open Time</string>
+    <string name="open_for_repeat">Open For Repeat</string>
+    <string name="cancel_button">Cancel button</string>
 </resources>

@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -132,8 +133,12 @@ class TasksRepository(
 
         dialog.findViewById<EditText>(R.id.addDetails).visibility = View.GONE
         dialog.findViewById<Button>(R.id.showDetailEditText).visibility = View.GONE
-        dialog.findViewById<Button>(R.id.showCalendarTime).visibility = View.GONE
+        dialog.findViewById<Button>(R.id.showCalendar).visibility = View.GONE
+        dialog.findViewById<Button>(R.id.showTime).visibility = View.GONE
+        dialog.findViewById<Button>(R.id.showRepeat).visibility = View.GONE
         dialog.findViewById<Button>(R.id.addImportant).visibility = View.GONE
+        dialog.findViewById<ConstraintLayout>(R.id.showDateTimeRepeatDetail).visibility = View.GONE
+
         return dialog
     }
 

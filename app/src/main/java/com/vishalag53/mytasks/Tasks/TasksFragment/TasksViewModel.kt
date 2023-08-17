@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.vishalag53.mytasks.Tasks.Repository.TasksRepository
 import com.vishalag53.mytasks.Tasks.data.NameList
 
-class TasksFragmentViewModel(
+class TasksViewModel(
     private val tasksRepository: TasksRepository,
 ) : ViewModel() {
 
