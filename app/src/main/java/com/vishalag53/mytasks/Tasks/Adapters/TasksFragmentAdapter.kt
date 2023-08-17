@@ -21,8 +21,7 @@ private var size: Int = 0
 
 @Suppress("DEPRECATION")
 class TasksFragmentAdapter(
-    private val taskClickListener: (NameList) -> Unit,
-    private val renameClickListener: (NameList) -> Unit
+    private val taskClickListener: (NameList) -> Unit
 ): ListAdapter<DataItem,RecyclerView.ViewHolder>(NameListDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -85,13 +84,10 @@ class TasksFragmentAdapter(
                     taskClickListener(nameList.nameList)
                 }
 
-                holder.binding.renameBtn.setOnClickListener {
-                    renameClickListener(nameList.nameList)
-                }
             }
             is TextViewHolder -> {
                 holder.bind()
-                holder.binding.size.text = size.toString()
+                holder.binding.text.text = "Task Lists($size)"
             }
         }
     }

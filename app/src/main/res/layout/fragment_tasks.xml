@@ -18,7 +18,7 @@
                 android:id="@+id/cl1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/cvCreateTasks"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/cl"
                 app:layout_constraintStart_toStartOf="@id/cl"
                 app:layout_constraintTop_toTopOf="@id/cl">
@@ -53,82 +53,27 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="@id/cl1"
                     app:layout_constraintEnd_toEndOf="@id/cl1"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="@id/cl1"
                     app:layout_constraintTop_toBottomOf="@id/cvSearchView"
-                    tools:itemCount="12"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:itemCount="14"
                     tools:listitem="@layout/task_list" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvCreateTasks"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="2dp"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="24dp"
-                android:padding="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="@id/cl"
-                app:layout_constraintEnd_toStartOf="@id/sortBtn"
-                app:layout_constraintStart_toStartOf="@id/cl">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clCreateTasks"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="@id/cl"
-                    app:layout_constraintEnd_toStartOf="@+id/sortBtn"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <ImageView
-                        android:id="@+id/ivCreateBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="8dp"
-                        android:src="@drawable/list_alt_add_48px"
-                        app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
-                        app:layout_constraintStart_toStartOf="@id/clCreateTasks"
-                        app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
-
-                    <TextView
-                        android:id="@+id/tvCreateTasks"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center"
-                        android:text="New List"
-                        android:textColor="@color/bkg_blue"
-                        android:textSize="24sp"
-                        android:textStyle="bold|normal"
-                        app:layout_constraintBottom_toBottomOf="@id/clCreateTasks"
-                        app:layout_constraintStart_toEndOf="@+id/ivCreateBtn"
-                        app:layout_constraintTop_toTopOf="@id/clCreateTasks" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/sortBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_gravity="end"
-                android:contentDescription="@string/click_for_sort_the_list"
-                style="@style/CustomFloatingActionButton"
-                android:src="@drawable/sort"
-                app:layout_constraintBottom_toBottomOf="@id/cl"
-                app:layout_constraintEnd_toEndOf="@id/cl" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/createBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/rounded_rect"
+            android:contentDescription="@string/click_for_create_new_task_list"
+            android:src="@drawable/baseline_add_24" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

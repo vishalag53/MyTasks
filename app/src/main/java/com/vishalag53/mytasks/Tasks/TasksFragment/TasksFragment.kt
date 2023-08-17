@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +31,7 @@ import com.vishalag53.mytasks.Tasks.data.NameList
 import com.vishalag53.mytasks.databinding.FragmentTasksBinding
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class TasksFragment : Fragment() {
 
     private lateinit var binding: FragmentTasksBinding
@@ -48,6 +51,7 @@ class TasksFragment : Fragment() {
     ): View? {
         binding = FragmentTasksBinding.inflate(inflater)
         setActionBarTitle()
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -79,7 +83,7 @@ class TasksFragment : Fragment() {
             }
         })
 
-        tasksAdapter = TasksFragmentAdapter(::taskClickListener, ::renameClickListener)
+        tasksAdapter = TasksFragmentAdapter(::taskClickListener)
         binding.rvTasks.adapter = tasksAdapter
 
         val deleteIcon = ContextCompat.getDrawable(requireContext(),R.drawable.baseline_delete_24)!!
@@ -101,8 +105,6 @@ class TasksFragment : Fragment() {
 
         })
 
-        binding.sortBtn.setOnClickListener { setSortBtnFunction(it) }
-
         tasksViewModel.sortType.observe(viewLifecycleOwner, Observer { type ->
             if(type == "Name ASC"){
                 val tmpMutableNameList = mutableNameList.sortedBy {list -> list.listNameName }
@@ -117,7 +119,7 @@ class TasksFragment : Fragment() {
             }
         })
 
-        binding.cvCreateTasks.setOnClickListener { tasksRepository.createTask() }
+        binding.createBtn.setOnClickListener { tasksRepository.createTask() }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
             navController.popBackStack(R.id.logInActivity,false)
@@ -132,38 +134,11 @@ class TasksFragment : Fragment() {
 
     }
 
-    private fun setSortBtnFunction(view: View) {
-        val popupMenu = PopupMenu(requireContext(),view)
-        popupMenu.inflate(R.menu.menu_overflow_sort)
-
-        popupMenu.setOnMenuItemClickListener { menuItem : MenuItem->
-            when (menuItem.itemId){
-                R.id.defaultSort -> {
-                    tasksViewModel.getSortType("Default")
-                    true
-                }
-                R.id.nameAsc -> {
-                    tasksViewModel.getSortType("Name ASC")
-                    true
-                }
-                R.id.nameDesc -> {
-                    tasksViewModel.getSortType("Name DESC")
-                    true
-                }
-                else -> false
-            }
-        }
-
-        popupMenu.show()
-    }
-
     private fun taskClickListener(nameList: NameList){
         navController.navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment(nameList))
     }
 
-    private fun renameClickListener(nameList: NameList){
-        tasksRepository.renameTask(nameList)
-    }
+
 
     private fun filterList(query: String?){
         if(query != null){
@@ -188,6 +163,29 @@ class TasksFragment : Fragment() {
         intent.addCategory(Intent.CATEGORY_HOME)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_overflow_tasks,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.defaultSort -> {
+                tasksViewModel.getSortType("Default")
+                true
+            }
+            R.id.nameAsc -> {
+                tasksViewModel.getSortType("Name ASC")
+                true
+            }
+            R.id.nameDesc -> {
+                tasksViewModel.getSortType("Name DESC")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
 

@@ -5,8 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.icu.text.Transliterator.Position
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner

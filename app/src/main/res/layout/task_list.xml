@@ -14,7 +14,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/clImport3"
-            app:layout_constraintEnd_toStartOf="@id/renameBtn"
+            app:layout_constraintEnd_toEndOf="@id/clImport3"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/clImport3"
             app:layout_constraintTop_toTopOf="@id/clImport4">
@@ -59,22 +59,7 @@
                 app:layout_constraintEnd_toEndOf="@id/clImport4"
                 app:layout_constraintTop_toTopOf="@id/clImport4" />
 
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/renameBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/edit_48px"
-            android:backgroundTint="@color/white"
-            android:contentDescription="Click to use function"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TouchTargetSizeCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
