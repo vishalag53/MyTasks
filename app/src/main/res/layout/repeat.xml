@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/white_black"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/every"
+        style="@style/textRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/repeat_every"
+        app:layout_constraintStart_toStartOf="@id/cl"
+        app:layout_constraintTop_toTopOf="@id/cl" />
+
+    <EditText
+        android:id="@+id/number"
+        style="@style/textRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:inputType="number"
+        android:layout_marginStart="30dp"
+        android:maxLength="2"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/cl"
+        app:layout_constraintTop_toBottomOf="@id/every"
+        tools:ignore="TouchTargetSizeCheck"
+        tools:text="99"
+        android:autofillHints="number"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/select"
+        style="@style/white_black"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toEndOf="@id/number"
+        app:layout_constraintTop_toBottomOf="@id/every">
+
+        <TextView
+            android:id="@+id/selectTimeIntervals"
+            style="@style/textRepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/weeks" />
+
+        <ImageView
+            style="@style/arrowDrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/selectTimeIntervals"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/select_time_intervals" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/weeks"
+        style="@style/white_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintStart_toStartOf="@id/cl"
+        app:layout_constraintTop_toBottomOf="@id/select"
+        app:layout_constraintEnd_toEndOf="@id/cl">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/sunday"
+            style="@style/weeks"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/sun"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/monday"
+            style="@style/weeks"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/mon"
+            app:layout_constraintStart_toEndOf="@id/sunday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tuesday"
+            style="@style/weeks"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/tue"
+            android:layout_marginTop="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/monday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/wednesday"
+            style="@style/weeks"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="@string/wed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sunday" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/thursday"
+            style="@style/weeks"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="@string/thu"
+            app:layout_constraintStart_toEndOf="@id/wednesday"
+            app:layout_constraintTop_toBottomOf="@id/monday" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/friday"
+            style="@style/weeks"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="@string/fri"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/thursday"
+            app:layout_constraintTop_toBottomOf="@id/tuesday" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saturday"
+            style="@style/weeks"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="@string/sat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wednesday" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/cancel"
+        style="@style/textRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/cancel"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintEnd_toStartOf="@id/done"
+        app:layout_constraintTop_toBottomOf="@id/weeks"
+        app:layout_constraintBottom_toBottomOf="@id/cl" />
+
+    <TextView
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/done"
+        android:layout_marginBottom="12dp"
+        android:textColor="@color/bkg_blue"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/cl"
+        app:layout_constraintBottom_toBottomOf="@id/cl"
+        app:layout_constraintTop_toBottomOf="@id/weeks" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

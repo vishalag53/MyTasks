@@ -39,9 +39,10 @@ class TasksRepository(
     private val valueEventListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             mutableNameList.clear()
-            for (taskSnapshot in snapshot.children) {
+            for (taskSnapshot   in snapshot.children) {
                 val taskList = taskSnapshot.key?.let {
-                    NameList(it, taskSnapshot.value.toString())
+                    val name = taskSnapshot.child("Tasks Name").value.toString()
+                    NameList(it, name)
                 }
 
                 if (taskList != null) {
@@ -73,7 +74,7 @@ class TasksRepository(
          save.setOnClickListener {
              val listName = addTitle.text.toString()
              if(listName.isNotEmpty()){
-                 databaseReference.push().setValue(listName).addOnCompleteListener {
+                 databaseReference.push().child("Tasks Name").setValue(listName).addOnCompleteListener {
                      if (it.isSuccessful){
                          Toast.makeText(requireContext,"Created  $listName",Toast.LENGTH_SHORT).show()
                          addTitle.text = null
@@ -129,7 +130,7 @@ class TasksRepository(
     private fun dialog(): Dialog {
         val dialog = Dialog(requireContext)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_box_layout)
+        dialog.setContentView(R.layout.create_dialog_box)
 
         dialog.findViewById<EditText>(R.id.addDetails).visibility = View.GONE
         dialog.findViewById<Button>(R.id.showDetailEditText).visibility = View.GONE
@@ -138,6 +139,7 @@ class TasksRepository(
         dialog.findViewById<Button>(R.id.showRepeat).visibility = View.GONE
         dialog.findViewById<Button>(R.id.addImportant).visibility = View.GONE
         dialog.findViewById<ConstraintLayout>(R.id.showDateTimeRepeatDetail).visibility = View.GONE
+        dialog.findViewById<ConstraintLayout>(R.id.clRemind).visibility = View.GONE
 
         return dialog
     }
@@ -176,19 +178,18 @@ class TasksRepository(
     }
 
     private fun fetchData(): List<NameList>{
-        var mutableNameList1: MutableList<NameList> = mutableListOf()
+        val mutableNameList1: MutableList<NameList> = mutableListOf()
 
-        if(mutableNameList.size > 15){
+        return if(mutableNameList.size > 15){
             var cnt = 0
             for (nameList in mutableNameList){
                 mutableNameList1.add(nameList)
                 cnt++
                 if(cnt >= 15)   break
             }
-            return mutableNameList1
-        }
-        else{
-            return mutableNameList
+            mutableNameList1
+        } else{
+            mutableNameList
         }
     }
 
