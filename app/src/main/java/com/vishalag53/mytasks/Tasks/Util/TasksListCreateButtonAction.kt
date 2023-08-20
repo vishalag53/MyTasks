@@ -139,7 +139,9 @@ class TasksListCreateButtonAction(
         }
 
         showRepeat.setOnClickListener { showRepeatDialog() }
-        insideRepeat.setOnClickListener { showRepeatDialog() }
+        insideRepeat.setOnClickListener {
+            showRepeatDialog()
+        }
         cancelRepeatBtn.setOnClickListener {
             showRepeatDetail.text = null
             insideRepeat.visibility = View.GONE
@@ -179,6 +181,12 @@ class TasksListCreateButtonAction(
                 showDateDetail.text = null
                 showTimeDetail.text = null
                 showRepeatDetail.text = null
+                title = ""
+                details = ""
+                date = ""
+                time = ""
+                repeat = ""
+                isImportant = "false"
                 addImportant.background = ContextCompat.getDrawable(requireContext, R.drawable.baseline_star_outline_24)
 
                 insideDate.visibility = View.GONE
@@ -276,13 +284,13 @@ class TasksListCreateButtonAction(
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun showDatePickerAtSpecificDate(days: Int, month: Int, year: Int) {
+    private fun showDatePickerAtSpecificDate(days: Int, month: Int, years: Int) {
         val datePicker = DatePickerDialog(requireContext,{ _, year,monthOfYear, dayOfMonth ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(year,monthOfYear,dayOfMonth)
             setDate(selectedDate)
         },
-            year,
+            years,
             month-1,
             days
         )

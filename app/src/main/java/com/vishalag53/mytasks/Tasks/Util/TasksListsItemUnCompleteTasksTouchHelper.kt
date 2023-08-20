@@ -12,26 +12,26 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.vishalag53.mytasks.Tasks.Adapters.TasksAdapter
-import com.vishalag53.mytasks.Tasks.Repository.TasksRepository
-import com.vishalag53.mytasks.Tasks.TasksFragment.TasksViewModel
-import com.vishalag53.mytasks.Tasks.data.NameList
+import com.vishalag53.mytasks.Tasks.Adapters.TasksListsUnCompletedTasksAdapter
+import com.vishalag53.mytasks.Tasks.Repository.TasksListRepository
+import com.vishalag53.mytasks.Tasks.TasksListsFragment.TasksListsViewModel
+import com.vishalag53.mytasks.Tasks.data.TasksList
 
 @Suppress("DEPRECATION")
-class TasksItemTouchHelper(
+class TasksListsItemUnCompleteTasksTouchHelper(
     private val requireContext: Context,
-    private val tasksAdapter: TasksAdapter,
-    private val tasksViewModel: TasksViewModel,
+    private val tasksListsUnCompletedTasksAdapter: TasksListsUnCompletedTasksAdapter,
+    private val tasksListsViewModel: TasksListsViewModel,
     private val deleteIcon: Drawable,
     viewLifecycleOwner: LifecycleOwner,
-    private val tasksRepository: TasksRepository,
+    private val tasksListsRepository: TasksListRepository,
     private val requireActivity: FragmentActivity
 ) : ItemTouchHelper.Callback() {
 
-    private lateinit var mutableNameList: List<NameList>
+    private lateinit var mutableNameList: List<TasksList>
 
     init {
-        tasksViewModel.data.observe(viewLifecycleOwner, Observer {
+        tasksListsViewModel.data.observe(viewLifecycleOwner, Observer {
             it?.let {
                 mutableNameList = it.reversed()
             }
@@ -40,45 +40,36 @@ class TasksItemTouchHelper(
 
     private val background = ColorDrawable(Color.RED)
 
-    override fun isLongPressDragEnabled(): Boolean {
-        return true
-    }
-
     override fun isItemViewSwipeEnabled(): Boolean {
         return true
     }
 
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-//        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
         val swipeFlags = ItemTouchHelper.LEFT
         return makeMovementFlags(0,swipeFlags)
     }
 
-    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-//        val fromPosition = viewHolder.adapterPosition - 1
-//        val toPosition = target.adapterPosition - 1
-//
-//        Log.d("VISHAL AGRAWAL","${fromPosition} + ${toPosition}")
-//
-//        if(toPosition >= 0 && toPosition < mutableNameList.size && fromPosition >= 0 && fromPosition < mutableNameList.size)
-//            Collections.swap(mutableNameList,fromPosition,toPosition)
-//        tasksAdapter.notifyItemMoved(fromPosition,toPosition)
-//        if(toPosition >= 0 && toPosition < mutableNameList.size && fromPosition >= 0 && fromPosition < mutableNameList.size) tasksRepository.itemPositionChangedInFirebase(fromPosition,toPosition)
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
         return false
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
         val position = viewHolder.adapterPosition
-        val removedItem = mutableNameList[position].listNameName
-        tasksRepository.deleteTask(mutableNameList[position])
+        val removedItem = mutableNameList[position]
+        tasksListsRepository.deleteTask(mutableNameList[position])
         val rootView = requireActivity.findViewById<View>(android.R.id.content)
-        val snackbar = Snackbar.make(rootView,"Do you want to Undo?",Snackbar.LENGTH_LONG)
+        val snackbar = Snackbar.make(rootView,"Do you want to Undo?", Snackbar.LENGTH_LONG)
         snackbar.setAction("Undo"){
-            tasksRepository.addInFirebase(removedItem)
+            tasksListsRepository.addInFirebase(removedItem)
         }
         snackbar.show()
-
     }
 
     override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
@@ -106,5 +97,4 @@ class TasksItemTouchHelper(
         background.draw(c)
         deleteIcon.draw(c)
     }
-
 }

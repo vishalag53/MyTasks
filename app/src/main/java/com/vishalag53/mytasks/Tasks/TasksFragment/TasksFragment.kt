@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.vishalag53.mytasks.R
-import com.vishalag53.mytasks.Tasks.Adapters.TasksFragmentAdapter
+import com.vishalag53.mytasks.Tasks.Adapters.TasksAdapter
 import com.vishalag53.mytasks.Tasks.Repository.TasksRepository
 import com.vishalag53.mytasks.Tasks.Util.TasksItemTouchHelper
 import com.vishalag53.mytasks.Tasks.data.NameList
@@ -37,7 +37,7 @@ class TasksFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var databaseReference: DatabaseReference
     private lateinit var navController: NavController
-    private lateinit var tasksAdapter: TasksFragmentAdapter
+    private lateinit var tasksAdapter: TasksAdapter
     private lateinit var mutableNameList: List<NameList>
     private lateinit var tasksViewModel: TasksViewModel
     private lateinit var tasksRepository: TasksRepository
@@ -78,11 +78,11 @@ class TasksFragment : Fragment() {
             it?.let {
                 mutableNameList = it
                 mutableNameList = mutableNameList.reversed()
-                tasksAdapter.addHeaderAndSubmitList(mutableNameList)
+                tasksAdapter.submitList(mutableNameList)
             }
         })
 
-        tasksAdapter = TasksFragmentAdapter(::taskClickListener)
+        tasksAdapter = TasksAdapter(::taskClickListener)
         binding.rvTasks.adapter = tasksAdapter
 
         val deleteIcon = ContextCompat.getDrawable(requireContext(),R.drawable.baseline_delete_24)!!
@@ -105,16 +105,18 @@ class TasksFragment : Fragment() {
         })
 
         tasksViewModel.sortType.observe(viewLifecycleOwner, Observer { type ->
-            if(type == "Name ASC"){
-                val tmpMutableNameList = mutableNameList.sortedBy {list -> list.listNameName }
-                tasksAdapter.addHeaderAndSubmitList(tmpMutableNameList)
-            }
-            else if( type == "Name DESC"){
-                val tmpMutableNameList = mutableNameList.sortedByDescending {list -> list.listNameName }
-                tasksAdapter.addHeaderAndSubmitList(tmpMutableNameList)
-            }
-            else if(type == "Default"){
-                tasksAdapter.addHeaderAndSubmitList(mutableNameList)
+            when (type) {
+                "Name ASC" -> {
+                    val tmpMutableNameList = mutableNameList.sortedBy {list -> list.listNameName }
+                    tasksAdapter.submitList(tmpMutableNameList)
+                }
+                "Name DESC" -> {
+                    val tmpMutableNameList = mutableNameList.sortedByDescending {list -> list.listNameName }
+                    tasksAdapter.submitList(tmpMutableNameList)
+                }
+                "Default" -> {
+                    tasksAdapter.submitList(mutableNameList)
+                }
             }
         })
 
@@ -127,7 +129,7 @@ class TasksFragment : Fragment() {
 
         tasksViewModel.getNameList().observe(viewLifecycleOwner, Observer {
             it?.let{
-                tasksAdapter.addHeaderAndSubmitList(it.reversed())
+                tasksAdapter.submitList(it.reversed())
             }
         })
 
@@ -162,11 +164,13 @@ class TasksFragment : Fragment() {
         startActivity(intent)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_overflow_tasks,menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.defaultSort -> {

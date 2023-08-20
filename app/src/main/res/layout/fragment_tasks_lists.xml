@@ -6,7 +6,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        style="@style/white_black"
         tools:context=".Tasks.TasksListsFragment.TasksListsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvInCompleteTasks"
+                android:id="@+id/rvUnCompleteTasks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -36,7 +36,7 @@
                 app:layout_constraintBottom_toTopOf="@id/rvCompleteTasks"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvInCompleteTasks">
+                app:layout_constraintTop_toBottomOf="@id/rvUnCompleteTasks">
 
                 <ImageView
                     android:id="@+id/iconUpDown"

@@ -196,7 +196,7 @@ class TasksRepository(
     // again added in the firebase after the deleted
 
     fun addInFirebase(removedItem: String){
-        databaseReference.push().setValue(removedItem).addOnCompleteListener {
+        databaseReference.push().child("Tasks Name").setValue(removedItem).addOnCompleteListener {
             if(it.isSuccessful){
                 Toast.makeText(requireContext,"Delete item again added",Toast.LENGTH_SHORT).show()
             }

@@ -32,5 +32,9 @@
         android:id="@+id/tasksListDetailsFragment"
         android:name="com.vishalag53.mytasks.Tasks.TasksListsDetailsFragment.TasksListsDetailsFragment"
         android:label="Tasks List Details"
-        tools:layout="@layout/fragment_tasks_lists_details" />
+        tools:layout="@layout/fragment_tasks_lists_details">
+        <argument
+            android:name="tasksList"
+            app:argType="com.vishalag53.mytasks.Tasks.data.TasksList"/>
+    </fragment>
 </navigation>

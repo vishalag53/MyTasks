@@ -27,7 +27,8 @@
                 android:src="@drawable/baseline_format_list_bulleted_24"
                 app:layout_constraintBottom_toBottomOf="@id/clImport4"
                 app:layout_constraintStart_toStartOf="@id/clImport4"
-                app:layout_constraintTop_toTopOf="@id/clImport4" />
+                app:layout_constraintTop_toTopOf="@id/clImport4"
+                android:importantForAccessibility="no" />
 
             <TextView
                 android:id="@+id/textViewTitle3"
@@ -51,7 +52,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
-                android:text="8"
+                android:text="@string/_8"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"
