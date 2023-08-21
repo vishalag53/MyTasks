@@ -55,11 +55,42 @@ class TasksListCreateButtonAction(
     private lateinit var setDueDateBtn : ConstraintLayout
     private lateinit var iconRemindBtn : Button
 
+    private lateinit var dialog: Dialog
+    private lateinit var addNumber: EditText
+    private lateinit var selectMonthBtn : TextView
+    private lateinit var sundayBtn : AppCompatButton
+    private lateinit var mondayBtn : AppCompatButton
+    private lateinit var tuesdayBtn : AppCompatButton
+    private lateinit var wednesdayBtn : AppCompatButton
+    private lateinit var thursdayBtn : AppCompatButton
+    private lateinit var fridayBtn : AppCompatButton
+    private lateinit var saturdayBtn : AppCompatButton
+    private lateinit var doneBtn: TextView
+    private lateinit var cancelBtn: TextView
+
+    private var selectTimeInterval = "weeks"
+
+    private var sunday = false
+    private var monday = false
+    private var tuesday = false
+    private var wednesday = false
+    private var thursday = false
+    private var friday = false
+    private var saturday = false
+
+    private var flagSunday = true
+    private var flagMonday = true
+    private var flagTuesday = true
+    private var flagWednesday = true
+    private var flagThursday = true
+    private var flagFriday = true
+    private var flagSaturday = true
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun createTask(){
         var flagImportant = true
         var flagDetail = true
-        val dialog = dialog()
+        dialog = dialog()
         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
         val addImportant = dialog.findViewById<Button>(R.id.addImportant)
         val addDetail = dialog.findViewById<EditText>(R.id.addDetails)
@@ -140,7 +171,20 @@ class TasksListCreateButtonAction(
 
         showRepeat.setOnClickListener { showRepeatDialog() }
         insideRepeat.setOnClickListener {
-            showRepeatDialog()
+            val textRepeat = showRepeatDetail.text.toString()
+            val text = textRepeat.split(" ")
+            when (text[0].trim()){
+                "Weekly" -> showRepeatWeeksDialog(1,text)
+                "Yearly" -> showRepeatDialog(1,"year")
+                "Monthly" -> showRepeatDialog(1,"month")
+                "Daily" -> showRepeatDialog(1,"day")
+            }
+            if (text.size >= 3 ) when (text[2].trim()) {
+                "years" -> showRepeatDialog(text[1].trim().toInt(), "year")
+                "months" -> showRepeatDialog(text[1].trim().toInt(), "month")
+                "days" -> showRepeatDialog(text[1].trim().toInt(), "day")
+                "week" -> showRepeatWeeksDialog(text[1].trim().toInt(), text)
+            }
         }
         cancelRepeatBtn.setOnClickListener {
             showRepeatDetail.text = null
@@ -237,7 +281,7 @@ class TasksListCreateButtonAction(
     }
 
     private fun dialog(): Dialog {
-        val dialog = Dialog(requireContext)
+        dialog = Dialog(requireContext)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.create_dialog_box)
         dialog.findViewById<EditText>(R.id.addDetails).visibility = View.GONE
@@ -346,72 +390,160 @@ class TasksListCreateButtonAction(
     }
 
     private fun showRepeatDialog() {
-        val dialog = Dialog(requireContext)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.repeat)
-        dialog.show()
+        dialog = dialogRepeat()
+        selectTimeInterval = "weeks"
+        dialogRepeat1(dialog)
+    }
 
+    private fun showRepeatDialog(number: Int,timeInterval: String){
+        dialog = dialogRepeat()
+        dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.GONE
+        initializedTimeInterValAndNumber()
+        addNumber.setText("$number")
+
+        when (timeInterval) {
+            "day" -> {
+                selectMonthBtn.setText(R.string.days)
+                selectTimeInterval = "days"
+            }
+            "month" -> {
+                selectMonthBtn.setText(R.string.months)
+                selectTimeInterval = "months"
+            }
+            "year" -> {
+                selectMonthBtn.setText(R.string.years)
+                selectTimeInterval = "years"
+            }
+        }
+        dialogRepeat1(dialog)
+    }
+
+    private fun showRepeatWeeksDialog(number: Int, days: List<String>) {
+        dialog = dialogRepeat()
+        dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.VISIBLE
+        initializedTimeInterValAndNumber()
+        initializedDaysButton()
+
+        addNumber.setText("$number")
+        selectMonthBtn.setText(R.string.weeks)
+
+        val days1 : String
+        val days2 : String
+        val days3 : String
+        val days4 : String
+        val days5 : String
+        val days6 : String
+        val days7 : String
+
+        if(days[0] == "Weekly"){
+            days1 = days[1].trim()
+            days2 = if(days.size >= 3)   days[2].trim()  else ""
+            days3 = if(days.size >= 4)   days[3].trim()  else ""
+            days4 = if(days.size >= 5)   days[4].trim()  else ""
+            days5 = if(days.size >= 6)   days[5].trim()  else ""
+            days6 = if(days.size >= 7)   days[6].trim()  else ""
+            days7 = if(days.size == 8)   days[7].trim()  else ""
+        }
+        else{
+            days1 = days[3].trim()
+            days2 = if(days.size >= 5)   days[4].trim()  else ""
+            days3 = if(days.size >= 6)   days[5].trim()  else ""
+            days4 = if(days.size >= 7)   days[6].trim()  else ""
+            days5 = if(days.size >= 8)   days[7].trim()  else ""
+            days6 = if(days.size >= 9)   days[8].trim()  else ""
+            days7 = if(days.size == 10)  days[9].trim()  else ""
+        }
+
+        if(days1 == "SUN") showSelectedSundayBtn()
+
+        when ("MON"){
+            days1 -> showSelectedMondayBtn()
+            days2 -> showSelectedMondayBtn()
+        }
+
+        when ("TUE"){
+            days1 -> showSelectedTuesdayBtn()
+            days2 -> showSelectedTuesdayBtn()
+            days3 -> showSelectedTuesdayBtn()
+        }
+
+        when ("WED"){
+            days1 -> showSelectedWednesdayBtn()
+            days2 -> showSelectedWednesdayBtn()
+            days3 -> showSelectedWednesdayBtn()
+            days4 -> showSelectedWednesdayBtn()
+        }
+
+        when ("THU"){
+            days1 -> showSelectedThursdayBtn()
+            days2 -> showSelectedThursdayBtn()
+            days3 -> showSelectedThursdayBtn()
+            days4 -> showSelectedThursdayBtn()
+            days5 -> showSelectedThursdayBtn()
+        }
+
+        when ("FRI"){
+            days1 -> showSelectedFridayBtn()
+            days2 -> showSelectedFridayBtn()
+            days3 -> showSelectedFridayBtn()
+            days4 -> showSelectedFridayBtn()
+            days5 -> showSelectedFridayBtn()
+            days6 -> showSelectedFridayBtn()
+        }
+
+        when ("SAT"){
+            days1 -> showSelectedSaturdayBtn()
+            days2 -> showSelectedSaturdayBtn()
+            days3 -> showSelectedSaturdayBtn()
+            days4 -> showSelectedSaturdayBtn()
+            days5 -> showSelectedSaturdayBtn()
+            days6 -> showSelectedSaturdayBtn()
+            days7 -> showSelectedSaturdayBtn()
+        }
+
+        selectTimeInterval = "weeks"
+        dialogRepeat1(dialog)
+    }
+
+    private fun repeat(dialog: Dialog) {
         val selectBtn = dialog.findViewById<ConstraintLayout>(R.id.select)
-        val selectMonthBtn = dialog.findViewById<TextView>(R.id.selectTimeIntervals)
-        val addNumber = dialog.findViewById<EditText>(R.id.number)
-        val weeks = dialog.findViewById<ConstraintLayout>(R.id.weeks)
-        val sundayBtn = dialog.findViewById<AppCompatButton>(R.id.sunday)
-        val mondayBtn = dialog.findViewById<AppCompatButton>(R.id.monday)
-        val tuesdayBtn = dialog.findViewById<AppCompatButton>(R.id.tuesday)
-        val wednesdayBtn = dialog.findViewById<AppCompatButton>(R.id.wednesday)
-        val thursdayBtn = dialog.findViewById<AppCompatButton>(R.id.thursday)
-        val fridayBtn = dialog.findViewById<AppCompatButton>(R.id.friday)
-        val saturdayBtn = dialog.findViewById<AppCompatButton>(R.id.saturday)
-        val cancelBtn = dialog.findViewById<TextView>(R.id.cancel)
-        val doneBtn = dialog.findViewById<TextView>(R.id.done)
+        val days = dialog.findViewById<ConstraintLayout>(R.id.days)
+        cancelBtn = dialog.findViewById(R.id.cancel)
+        doneBtn = dialog.findViewById(R.id.done)
 
-        var selectTimeInterval = "weeks"
-        var sunday = false
-        var monday = false
-        var tuesday = false
-        var wednesday = false
-        var thursday = false
-        var friday = false
-        var saturday = false
-
-        var flagSunday = true
-        var flagMonday = true
-        var flagTuesday = true
-        var flagWednesday = true
-        var flagThursday = true
-        var flagFriday = true
-        var flagSaturday = true
+        initializedTimeInterValAndNumber()
+        initializedDaysButton()
 
         selectBtn.setOnClickListener {
-            val popupMenu = PopupMenu(requireContext,it)
+            val popupMenu = PopupMenu(requireContext, it)
             val inflater: MenuInflater = popupMenu.menuInflater
 
-            inflater.inflate(R.menu.menu_time_intervals,popupMenu.menu)
+            inflater.inflate(R.menu.menu_time_intervals, popupMenu.menu)
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId){
+                when (menuItem.itemId) {
                     R.id.daysMenu -> {
                         selectTimeInterval = requireContext.getString(R.string.days)
                         selectMonthBtn.text = selectTimeInterval
-                        weeks.visibility = View.GONE
+                        days.visibility = View.GONE
                         true
                     }
                     R.id.weeksMenu -> {
                         selectTimeInterval = requireContext.getString(R.string.weeks)
                         selectMonthBtn.text = selectTimeInterval
-                        weeks.visibility = View.VISIBLE
+                        days.visibility = View.VISIBLE
                         true
                     }
                     R.id.monthsMenu -> {
                         selectTimeInterval = requireContext.getString(R.string.months)
                         selectMonthBtn.text = selectTimeInterval
-                        weeks.visibility = View.GONE
+                        days.visibility = View.GONE
                         true
                     }
-                    R.id.yearsMenu ->{
+                    R.id.yearsMenu -> {
                         selectTimeInterval = requireContext.getString(R.string.years)
                         selectMonthBtn.text = selectTimeInterval
-                        weeks.visibility = View.GONE
+                        days.visibility = View.GONE
                         true
                     }
                     else -> false
@@ -423,26 +555,25 @@ class TasksListCreateButtonAction(
 
         sundayBtn.setOnClickListener {
             val configuration = requireContext.resources.configuration
-            if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                flagSunday = if(flagSunday){
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagSunday = if (flagSunday) {
                     sunday = true
                     sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
                     sundayBtn.setTextColor(Color.parseColor("#FF000000"))
                     false
-                } else{
+                } else {
                     sunday = false
                     sundayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
                     sundayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
                     true
                 }
-            }
-            else if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO){
-                flagSunday = if(flagSunday){
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagSunday = if (flagSunday) {
                     sunday = true
                     sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
                     sundayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
                     false
-                } else{
+                } else {
                     sunday = false
                     sundayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
                     sundayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
@@ -453,26 +584,25 @@ class TasksListCreateButtonAction(
 
         mondayBtn.setOnClickListener {
             val configuration = requireContext.resources.configuration
-            if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                flagMonday = if(flagMonday){
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagMonday = if (flagMonday) {
                     monday = true
                     mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
                     mondayBtn.setTextColor(Color.parseColor("#FF000000"))
                     false
-                } else{
+                } else {
                     monday = false
                     mondayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
                     mondayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
                     true
                 }
-            }
-            else if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO){
-                flagMonday = if(flagMonday){
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagMonday = if (flagMonday) {
                     monday = true
                     mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
                     mondayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
                     false
-                } else{
+                } else {
                     monday = false
                     mondayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
                     mondayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
@@ -483,26 +613,25 @@ class TasksListCreateButtonAction(
 
         tuesdayBtn.setOnClickListener {
             val configuration = requireContext.resources.configuration
-            if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                flagTuesday = if(flagTuesday){
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagTuesday = if (flagTuesday) {
                     tuesday = true
                     tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
                     tuesdayBtn.setTextColor(Color.parseColor("#FF000000"))
                     false
-                } else{
+                } else {
                     tuesday = false
                     tuesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
                     tuesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
                     true
                 }
-            }
-            else if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO){
-                flagTuesday = if(flagTuesday){
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagTuesday = if (flagTuesday) {
                     tuesday = true
                     tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
                     tuesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
                     false
-                } else{
+                } else {
                     tuesday = false
                     tuesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
                     tuesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
@@ -513,26 +642,25 @@ class TasksListCreateButtonAction(
 
         wednesdayBtn.setOnClickListener {
             val configuration = requireContext.resources.configuration
-            if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                flagWednesday = if(flagWednesday){
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagWednesday = if (flagWednesday) {
                     wednesday = true
                     wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
                     wednesdayBtn.setTextColor(Color.parseColor("#FF000000"))
                     false
-                } else{
+                } else {
                     wednesday = false
                     wednesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
                     wednesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
                     true
                 }
-            }
-            else if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO){
-                flagWednesday = if(flagWednesday){
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagWednesday = if (flagWednesday) {
                     wednesday = true
                     wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
                     wednesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
                     false
-                } else{
+                } else {
                     wednesday = false
                     wednesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
                     wednesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
@@ -543,26 +671,25 @@ class TasksListCreateButtonAction(
 
         thursdayBtn.setOnClickListener {
             val configuration = requireContext.resources.configuration
-            if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                flagThursday = if(flagThursday){
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagThursday = if (flagThursday) {
                     thursday = true
                     thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
                     thursdayBtn.setTextColor(Color.parseColor("#FF000000"))
                     false
-                } else{
+                } else {
                     thursday = false
                     thursdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
                     thursdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
                     true
                 }
-            }
-            else if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO){
-                flagThursday = if(flagThursday){
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagThursday = if (flagThursday) {
                     thursday = true
                     thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
                     thursdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
                     false
-                } else{
+                } else {
                     thursday = false
                     thursdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
                     thursdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
@@ -573,26 +700,25 @@ class TasksListCreateButtonAction(
 
         fridayBtn.setOnClickListener {
             val configuration = requireContext.resources.configuration
-            if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                flagFriday = if(flagFriday){
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagFriday = if (flagFriday) {
                     friday = true
                     fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
                     fridayBtn.setTextColor(Color.parseColor("#FF000000"))
                     false
-                } else{
+                } else {
                     friday = false
                     fridayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
                     fridayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
                     true
                 }
-            }
-            else if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO){
-                flagFriday = if(flagFriday){
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagFriday = if (flagFriday) {
                     friday = true
                     fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
                     fridayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
                     false
-                } else{
+                } else {
                     friday = false
                     fridayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
                     fridayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
@@ -603,26 +729,25 @@ class TasksListCreateButtonAction(
 
         saturdayBtn.setOnClickListener {
             val configuration = requireContext.resources.configuration
-            if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                flagSaturday = if(flagSaturday){
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagSaturday = if (flagSaturday) {
                     saturday = true
                     saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
                     saturdayBtn.setTextColor(Color.parseColor("#FF000000"))
                     false
-                } else{
+                } else {
                     saturday = false
                     saturdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
                     saturdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
                     true
                 }
-            }
-            else if(configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO){
-                flagSaturday = if(flagSaturday){
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagSaturday = if (flagSaturday) {
                     saturday = true
                     saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
                     saturdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
                     false
-                } else{
+                } else {
                     saturday = false
                     saturdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
                     saturdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
@@ -631,65 +756,175 @@ class TasksListCreateButtonAction(
             }
         }
 
-
         doneBtn.setOnClickListener {
             val number = addNumber.text.toString()
-            if(number.isNotEmpty() ){
-                if(selectTimeInterval == "weeks"){
-                    if(sunday || monday || tuesday || wednesday || thursday || friday || saturday){
-                        if(number.toInt() == 1){
-                            repeat = "Weekly \n"
-                            if(sunday)  repeat += " SUN"
-                            if(monday)  repeat += " MON"
-                            if(tuesday)  repeat += " TUE"
-                            if(wednesday)  repeat += " WED"
-                            if(thursday)  repeat += " THU"
-                            if(friday)  repeat += " FRI"
-                            if(saturday)  repeat += " SAT"
+            if (number.isNotEmpty() && number != "0") {
+                if (selectTimeInterval == "weeks") {
+                    if (sunday || monday || tuesday || wednesday || thursday || friday || saturday) {
+                        if (number.toInt() == 1) {
+                            repeat = "Weekly"
+                            if (sunday) repeat += " SUN"
+                            if (monday) repeat += " MON"
+                            if (tuesday) repeat += " TUE"
+                            if (wednesday) repeat += " WED"
+                            if (thursday) repeat += " THU"
+                            if (friday) repeat += " FRI"
+                            if (saturday) repeat += " SAT"
+                        } else {
+                            repeat = "Every $number week"
+                            if (sunday) repeat += " SUN"
+                            if (monday) repeat += " MON"
+                            if (tuesday) repeat += " TUE"
+                            if (wednesday) repeat += " WED"
+                            if (thursday) repeat += " THU"
+                            if (friday) repeat += " FRI"
+                            if (saturday) repeat += " SAT"
                         }
-                        else{
-                            repeat = "Every $number week \n"
-                            if(sunday)  repeat += " SUN"
-                            if(monday)  repeat += " MON"
-                            if(tuesday)  repeat += " TUE"
-                            if(wednesday)  repeat += " WED"
-                            if(thursday)  repeat += " THU"
-                            if(friday)  repeat += " FRI"
-                            if(saturday)  repeat += " SAT"
-                        }
+                    } else {
+                        Toast.makeText(requireContext, "Select minimum one Days", Toast.LENGTH_SHORT).show()
                     }
-                    else{
-                        Toast.makeText(requireContext,"Select minimum one Days",Toast.LENGTH_SHORT).show()
-                    }
-                }
-                else if(selectTimeInterval == "days"){
-                    repeat = if(number.toInt() == 1) "Daily"
+                } else if (selectTimeInterval == "days") {
+                    repeat = if (number.toInt() == 1) "Daily"
                     else "Every $number days"
-                }
-                else if(selectTimeInterval == "months"){
-                    repeat = if(number.toInt() == 1) "Monthly"
+                } else if (selectTimeInterval == "months") {
+                    repeat = if (number.toInt() == 1) "Monthly"
                     else "Every $number months"
-                }
-                else if(selectTimeInterval == "years"){
-                    repeat = if(number.toInt() == 1) "Yearly"
+                } else if (selectTimeInterval == "years") {
+                    repeat = if (number.toInt() == 1) "Yearly"
                     else "Every $number years"
                 }
 
                 insideRepeat.visibility = View.VISIBLE
                 showRepeatDetail.text = repeat
                 dialog.dismiss()
-            }
-            else{
-                Toast.makeText(requireContext,"Enter the number",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext, "Enter the number", Toast.LENGTH_SHORT).show()
             }
         }
 
         cancelBtn.setOnClickListener {
             dialog.cancel()
         }
+    }
 
+    private fun dialogRepeat(): Dialog {
+        dialog = Dialog(requireContext)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.repeat)
+        dialog.show()
+        return dialog
+    }
+
+    private fun dialogRepeat1(dialog: Dialog) {
+        repeat(dialog)
         dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window!!.setGravity(Gravity.CENTER)
+    }
+
+    private fun initializedTimeInterValAndNumber() {
+        addNumber = dialog.findViewById(R.id.number)
+        selectMonthBtn = dialog.findViewById(R.id.selectTimeIntervals)
+    }
+
+    private fun initializedDaysButton(){
+        sundayBtn = dialog.findViewById(R.id.sunday)
+        mondayBtn = dialog.findViewById(R.id.monday)
+        tuesdayBtn = dialog.findViewById(R.id.tuesday)
+        wednesdayBtn = dialog.findViewById(R.id.wednesday)
+        thursdayBtn = dialog.findViewById(R.id.thursday)
+        fridayBtn = dialog.findViewById(R.id.friday)
+        saturdayBtn = dialog.findViewById(R.id.saturday)
+    }
+
+    private fun showSelectedSundayBtn(){
+        val configuration = requireContext.resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            sundayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            sundayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagSunday = false
+        sunday = true
+    }
+
+    private fun showSelectedMondayBtn(){
+        val configuration = requireContext.resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            mondayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            mondayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagMonday = false
+        monday = true
+    }
+
+    private fun showSelectedTuesdayBtn(){
+        val configuration = requireContext.resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            tuesdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            tuesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagTuesday = false
+        tuesday = true
+    }
+
+    private fun showSelectedWednesdayBtn(){
+        val configuration = requireContext.resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            wednesdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            wednesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagWednesday = false
+        wednesday = true
+    }
+
+    private fun showSelectedThursdayBtn(){
+        val configuration = requireContext.resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            thursdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            thursdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagThursday = false
+        thursday = true
+    }
+
+    private fun showSelectedFridayBtn(){
+        val configuration = requireContext.resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            fridayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            fridayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagFriday = false
+        friday = true
+    }
+
+    private fun showSelectedSaturdayBtn(){
+        val configuration = requireContext.resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            saturdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            saturdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagSaturday = false
+        saturday = true
     }
 }

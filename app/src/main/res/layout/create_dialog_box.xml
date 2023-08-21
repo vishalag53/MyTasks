@@ -167,7 +167,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/insideRepeat"
                     app:layout_constraintStart_toStartOf="@id/insideRepeat"
                     app:layout_constraintTop_toTopOf="@id/insideRepeat"
-                    tools:text=" Every 2 days \n Mon, Tue, Wed, Thu, Fri, Sat, Sun" />
+                    tools:text="Every 2 days Mon, Tue, Wed,Thu, Fri, Sat, Sun" />
 
                 <Button
                     android:id="@+id/cancelRepeatBtn"

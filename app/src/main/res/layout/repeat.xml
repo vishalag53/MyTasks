@@ -67,7 +67,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/weeks"
+        android:id="@+id/days"
         style="@style/white_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
         android:textSize="16sp"
         android:layout_marginBottom="12dp"
         app:layout_constraintEnd_toStartOf="@id/done"
-        app:layout_constraintTop_toBottomOf="@id/weeks"
+        app:layout_constraintTop_toBottomOf="@id/days"
         app:layout_constraintBottom_toBottomOf="@id/cl" />
 
     <TextView
@@ -179,6 +179,6 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@id/cl"
         app:layout_constraintBottom_toBottomOf="@id/cl"
-        app:layout_constraintTop_toBottomOf="@id/weeks" />
+        app:layout_constraintTop_toBottomOf="@id/days" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
