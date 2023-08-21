@@ -1,11 +1,13 @@
 package com.vishalag53.mytasks.Tasks.TasksListsFragment
 
 import android.content.res.Configuration
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -29,7 +31,7 @@ import com.vishalag53.mytasks.Tasks.Util.TasksListsItemUnCompleteTasksTouchHelpe
 import com.vishalag53.mytasks.Tasks.data.TasksList
 import com.vishalag53.mytasks.databinding.FragmentTasksListsBinding
 
-
+@Suppress("DEPRECATION")
 class TasksListsFragment : Fragment() {
 
     private lateinit var binding: FragmentTasksListsBinding
@@ -37,6 +39,7 @@ class TasksListsFragment : Fragment() {
     private lateinit var tasksListsViewModel: TasksListsViewModel
     private lateinit var tasksListCreateButtonAction: TasksListCreateButtonAction
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var databaseReferencePrevious: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var tasksListName: String
     private lateinit var tasksListId: String
@@ -53,6 +56,7 @@ class TasksListsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTasksListsBinding.inflate(layoutInflater)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -73,9 +77,11 @@ class TasksListsFragment : Fragment() {
         mutableTasksListUnCompleteTasks = mutableListOf()
         mutableTasksListCompletedTasks = mutableListOf()
 
-        databaseReference = FirebaseDatabase.getInstance()
+        databaseReferencePrevious = FirebaseDatabase.getInstance()
             .reference.child("Tasks")
-            .child((firebaseAuth.currentUser?.uid.toString())).child(tasksListId).child("Tasks Lists")
+            .child((firebaseAuth.currentUser?.uid.toString())).child(tasksListId)
+
+        databaseReference = databaseReferencePrevious.child("Tasks Lists")
 
         tasksListsRepository = TasksListRepository(requireContext(),databaseReference)
         tasksListsViewModel = ViewModelProvider(this,TasksListsViewModelFactory(tasksListsRepository))[TasksListsViewModel::class.java]
@@ -112,7 +118,7 @@ class TasksListsFragment : Fragment() {
 
         // Completed Tasks
 
-        tasksListsCompletedTasksAdapter = TasksListsCompletedTasksAdapter(requireContext(),::tasksListClickListener,::importantCompletedTasksClickListener)
+        tasksListsCompletedTasksAdapter = TasksListsCompletedTasksAdapter(requireContext(),::tasksListClickListener,::importantCompletedTasksClickListener,::unCompleteTasksListener)
         binding.rvCompleteTasks.adapter = tasksListsCompletedTasksAdapter
 
         tasksListsViewModel.dataCompletedTasks.observe(viewLifecycleOwner, Observer {
@@ -122,7 +128,6 @@ class TasksListsFragment : Fragment() {
                     binding.clCompleteTasks.visibility = View.VISIBLE
                 }
                 else{
-                    binding.rvCompleteTasks.visibility = View.GONE
                     binding.clCompleteTasks.visibility = View.GONE
                 }
                 binding.tvCompleteWithNumber.text = "Completed(${mutableTasksListCompletedTasks.size})"
@@ -169,6 +174,29 @@ class TasksListsFragment : Fragment() {
                 }
             }
         }
+
+        tasksListsViewModel.sortType.observe(viewLifecycleOwner, Observer { type ->
+            when (type) {
+                "Name ASC" -> {
+                    val tmpMutableNameList = mutableTasksListUnCompleteTasks.sortedBy {list -> list.title }
+                    tasksListsUnCompletedTasksAdapter.submitList(tmpMutableNameList)
+
+                    val tmpMutableNameList1 = mutableTasksListCompletedTasks.sortedBy { list -> list.title }
+                    tasksListsCompletedTasksAdapter.submitList(tmpMutableNameList1)
+                }
+                "Name DESC" -> {
+                    val tmpMutableNameList = mutableTasksListUnCompleteTasks.sortedByDescending {list -> list.title }
+                    tasksListsUnCompletedTasksAdapter.submitList(tmpMutableNameList)
+
+                    val tmpMutableNameList1 = mutableTasksListCompletedTasks.sortedByDescending { list -> list.title }
+                    tasksListsCompletedTasksAdapter.submitList(tmpMutableNameList1)
+                }
+                "Default" -> {
+                    tasksListsUnCompletedTasksAdapter.submitList(mutableTasksListUnCompleteTasks)
+                    tasksListsCompletedTasksAdapter.submitList(mutableTasksListCompletedTasks)
+                }
+            }
+        })
     }
 
     private fun setActionBarTitle(listNameName: String) {
@@ -190,4 +218,52 @@ class TasksListsFragment : Fragment() {
     private fun importantCompletedTasksClickListener(tasksList: TasksList){
         tasksListsRepository.renameImportantCompletedTasks(tasksList)
     }
+
+    private fun unCompleteTasksListener(tasksList: TasksList){
+        tasksListsRepository.addInUnCompletedTasksListener(tasksList)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_overflow_tasks_list,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.renameList -> {
+                tasksListsRepository.renameList(databaseReferencePrevious)
+                true
+            }
+            R.id.deleteList -> {
+                databaseReferencePrevious.removeValue()
+                true
+            }
+            R.id.deleteCompleteList -> {
+                tasksListsRepository.deleteCompletedList()
+                true
+            }
+            R.id.deleteAllTasks  -> {
+                tasksListsRepository.deleteAllTasks()
+                true
+            }
+            R.id.sendCopy -> {
+
+                true
+            }
+            R.id.defaultSort -> {
+                tasksListsViewModel.getSortType("Default")
+                true
+            }
+            R.id.nameAsc -> {
+                tasksListsViewModel.getSortType("Name ASC")
+                true
+            }
+            R.id.nameDesc -> {
+                tasksListsViewModel.getSortType("Name DESC")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 }

@@ -15,7 +15,8 @@ import com.vishalag53.mytasks.databinding.TasksListItemBinding
 class TasksListsCompletedTasksAdapter (
     private val requireContext: Context,
     private val taskListsClickListener: (TasksList) -> Unit,
-    private val importantClickListener: (TasksList) -> Unit
+    private val importantClickListener: (TasksList) -> Unit,
+    private val unCompleteTasksClickListener : (TasksList) -> Unit
 ) : ListAdapter<TasksList, TasksListsCompletedTasksAdapter.TasksListsViewHolder>(TasksListDiffUtil){
 
     companion object TasksListDiffUtil: DiffUtil.ItemCallback<TasksList>(){
@@ -70,8 +71,9 @@ class TasksListsCompletedTasksAdapter (
             importantClickListener(tasksList)
         }
         holder.binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
-//        holder.binding.checkCompleteButton.setOnClickListener{
-//            completeTasksClickListener(tasksList)
-//        }
+        holder.binding.checkCompleteButton.setOnClickListener{
+            holder.binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)
+            unCompleteTasksClickListener(tasksList)
+        }
     }
 }

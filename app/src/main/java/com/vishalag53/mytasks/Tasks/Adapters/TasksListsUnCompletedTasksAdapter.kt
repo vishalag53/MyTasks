@@ -27,7 +27,6 @@ class TasksListsUnCompletedTasksAdapter (
         override fun areContentsTheSame(oldItem: TasksList, newItem: TasksList): Boolean {
             return oldItem == newItem
         }
-
     }
 
     class TasksListsViewHolder(val binding: TasksListItemBinding): RecyclerView.ViewHolder(binding.root){
@@ -70,6 +69,7 @@ class TasksListsUnCompletedTasksAdapter (
         holder.binding.addImportant.setOnClickListener {
             importantClickListener(tasksList)
         }
+        holder.binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)
         holder.binding.checkCompleteButton.setOnClickListener{
             holder.binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
             completeTasksClickListener(tasksList)

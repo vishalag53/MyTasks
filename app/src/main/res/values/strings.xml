@@ -69,4 +69,7 @@
     <string name="completed_8">Completed(8)</string>
     <string name="_8">8</string>
     <string name="one">1</string>
+    <string name="refresh">Refresh</string>
+    <string name="rename_list">Rename List</string>
+    <string name="send_a_copy">Send a Copy</string>
 </resources>
