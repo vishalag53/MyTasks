@@ -11,4 +11,5 @@ class TasksListsViewModel(
 
     val data: LiveData<List<TasksList>> = tasksListRepository.data
 
+    val dataCompletedTasks: LiveData<List<TasksList>> = tasksListRepository.dataCompleteTasks
 }

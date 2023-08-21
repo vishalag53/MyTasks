@@ -33,9 +33,6 @@ class TasksListCreateButtonAction(
     private val requireContext: Context,
     private val databaseReference: DatabaseReference
 ) {
-
-    private var tasksList : MutableList<String> = mutableListOf()
-
     private var title = ""
     private var details = ""
     private var date = ""
@@ -209,15 +206,7 @@ class TasksListCreateButtonAction(
             title = addTitle.text.toString()
             details = addDetail.text.toString()
 
-            tasksList.clear()
             if(title.isNotEmpty()){
-                tasksList.add(0,title)
-                tasksList.add(1,details)
-                tasksList.add(2,date)
-                tasksList.add(3,time)
-                tasksList.add(4,repeat)
-                tasksList.add(5,isImportant)
-
                 addArrayInFirebase()
 
                 addTitle.text = null
@@ -246,7 +235,13 @@ class TasksListCreateButtonAction(
     }
 
     private fun addArrayInFirebase() {
-        databaseReference.push().child("lists").setValue(tasksList)
+        val key = databaseReference.push()
+        key.child("Title").setValue(title)
+        key.child("Details").setValue(details)
+        key.child("Date").setValue(date)
+        key.child("Time").setValue(time)
+        key.child("Repeat").setValue(repeat)
+        key.child("Important").setValue(isImportant)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

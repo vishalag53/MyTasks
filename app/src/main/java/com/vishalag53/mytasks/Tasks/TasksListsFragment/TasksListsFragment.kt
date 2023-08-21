@@ -1,5 +1,7 @@
 package com.vishalag53.mytasks.Tasks.TasksListsFragment
 
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,9 +20,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.vishalag53.mytasks.R
+import com.vishalag53.mytasks.Tasks.Adapters.TasksListsCompletedTasksAdapter
 import com.vishalag53.mytasks.Tasks.Adapters.TasksListsUnCompletedTasksAdapter
 import com.vishalag53.mytasks.Tasks.Repository.TasksListRepository
 import com.vishalag53.mytasks.Tasks.Util.TasksListCreateButtonAction
+import com.vishalag53.mytasks.Tasks.Util.TasksListsItemCompletedTasksTouchHelper
 import com.vishalag53.mytasks.Tasks.Util.TasksListsItemUnCompleteTasksTouchHelper
 import com.vishalag53.mytasks.Tasks.data.TasksList
 import com.vishalag53.mytasks.databinding.FragmentTasksListsBinding
@@ -38,6 +42,7 @@ class TasksListsFragment : Fragment() {
     private lateinit var tasksListId: String
     private lateinit var navController: NavController
     private lateinit var tasksListsUnCompletedTasksAdapter: TasksListsUnCompletedTasksAdapter
+    private lateinit var tasksListsCompletedTasksAdapter: TasksListsCompletedTasksAdapter
     private lateinit var mutableTasksListUnCompleteTasks: List<TasksList>
     private lateinit var mutableTasksListCompletedTasks: List<TasksList>
     private lateinit var itemUnCompleteTasksTouchHelper: ItemTouchHelper
@@ -78,7 +83,11 @@ class TasksListsFragment : Fragment() {
 
         binding.createBtn.setOnClickListener{ tasksListCreateButtonAction.createTask() }
 
-        tasksListsUnCompletedTasksAdapter = TasksListsUnCompletedTasksAdapter(requireContext(),::tasksListClickListener,::importantClickListener)
+        val deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_delete_24)!!
+
+        // UnComplete Tasks
+
+        tasksListsUnCompletedTasksAdapter = TasksListsUnCompletedTasksAdapter(requireContext(),::tasksListClickListener,::importantClickListener,::completeTasksClickListener)
         binding.rvUnCompleteTasks.adapter = tasksListsUnCompletedTasksAdapter
 
         tasksListsViewModel.data.observe(viewLifecycleOwner, Observer {
@@ -89,11 +98,77 @@ class TasksListsFragment : Fragment() {
             }
         })
 
-        val deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_delete_24)!!
-        val tasksListsItemUnCompleteTasksTouchHelper = TasksListsItemUnCompleteTasksTouchHelper(requireContext(),tasksListsUnCompletedTasksAdapter,tasksListsViewModel,deleteIcon,viewLifecycleOwner,tasksListsRepository,requireActivity())
+        val tasksListsItemUnCompleteTasksTouchHelper = TasksListsItemUnCompleteTasksTouchHelper(
+            requireContext(),
+            tasksListsUnCompletedTasksAdapter,
+            tasksListsViewModel,
+            deleteIcon,
+            viewLifecycleOwner,
+            tasksListsRepository,
+            requireActivity())
 
         itemUnCompleteTasksTouchHelper = ItemTouchHelper(tasksListsItemUnCompleteTasksTouchHelper)
         itemUnCompleteTasksTouchHelper.attachToRecyclerView(binding.rvUnCompleteTasks)
+
+        // Completed Tasks
+
+        tasksListsCompletedTasksAdapter = TasksListsCompletedTasksAdapter(requireContext(),::tasksListClickListener,::importantCompletedTasksClickListener)
+        binding.rvCompleteTasks.adapter = tasksListsCompletedTasksAdapter
+
+        tasksListsViewModel.dataCompletedTasks.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                mutableTasksListCompletedTasks = it
+                if(mutableTasksListCompletedTasks.isNotEmpty()){
+                    binding.clCompleteTasks.visibility = View.VISIBLE
+                }
+                else{
+                    binding.rvCompleteTasks.visibility = View.GONE
+                    binding.clCompleteTasks.visibility = View.GONE
+                }
+                binding.tvCompleteWithNumber.text = "Completed(${mutableTasksListCompletedTasks.size})"
+                mutableTasksListCompletedTasks = mutableTasksListCompletedTasks.reversed()
+                tasksListsCompletedTasksAdapter.submitList(mutableTasksListCompletedTasks)
+            }
+        })
+
+        val tasksListsItemCompletedTasksTouchHelper = TasksListsItemCompletedTasksTouchHelper(
+            requireContext(),
+            tasksListsCompletedTasksAdapter,
+            tasksListsViewModel,
+            deleteIcon,
+            viewLifecycleOwner,
+            tasksListsRepository,
+            requireActivity())
+
+        itemCompletedTasksTouchHelper = ItemTouchHelper(tasksListsItemCompletedTasksTouchHelper)
+        itemCompletedTasksTouchHelper.attachToRecyclerView(binding.rvCompleteTasks)
+
+        var flag = true
+
+        binding.clCompleteTasks.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flag = if (flag) {
+                    binding.rvCompleteTasks.visibility = View.VISIBLE
+                    binding.iconUpDown.setImageResource(R.drawable.baseline_keyboard_arrow_down_24_night)
+                    false
+                } else {
+                    binding.rvCompleteTasks.visibility = View.GONE
+                    binding.iconUpDown.setImageResource(R.drawable.baseline_keyboard_arrow_right_24_night)
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flag = if (flag) {
+                    binding.rvCompleteTasks.visibility = View.VISIBLE
+                    binding.iconUpDown.setImageResource(R.drawable.baseline_keyboard_arrow_down_24_day)
+                    false
+                } else {
+                    binding.rvCompleteTasks.visibility = View.GONE
+                    binding.iconUpDown.setImageResource(R.drawable.baseline_keyboard_arrow_right_24_day)
+                    true
+                }
+            }
+        }
     }
 
     private fun setActionBarTitle(listNameName: String) {
@@ -106,5 +181,13 @@ class TasksListsFragment : Fragment() {
 
     private fun importantClickListener(tasksList: TasksList){
         tasksListsRepository.renameImportant(tasksList)
+    }
+
+    private fun completeTasksClickListener(tasksList: TasksList){
+        tasksListsRepository.addInCompleteTasksList(tasksList)
+    }
+
+    private fun importantCompletedTasksClickListener(tasksList: TasksList){
+        tasksListsRepository.renameImportantCompletedTasks(tasksList)
     }
 }

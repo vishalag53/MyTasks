@@ -12,12 +12,11 @@ import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.Tasks.data.TasksList
 import com.vishalag53.mytasks.databinding.TasksListItemBinding
 
-class TasksListsUnCompletedTasksAdapter (
+class TasksListsCompletedTasksAdapter (
     private val requireContext: Context,
     private val taskListsClickListener: (TasksList) -> Unit,
-    private val importantClickListener: (TasksList) -> Unit,
-    private val completeTasksClickListener: (TasksList) -> Unit
-) : ListAdapter<TasksList, TasksListsUnCompletedTasksAdapter.TasksListsViewHolder>(TasksListDiffUtil){
+    private val importantClickListener: (TasksList) -> Unit
+) : ListAdapter<TasksList, TasksListsCompletedTasksAdapter.TasksListsViewHolder>(TasksListDiffUtil){
 
     companion object TasksListDiffUtil: DiffUtil.ItemCallback<TasksList>(){
         override fun areItemsTheSame(oldItem: TasksList, newItem: TasksList): Boolean {
@@ -62,17 +61,17 @@ class TasksListsUnCompletedTasksAdapter (
             holder.binding.notificationIcon.visibility = View.VISIBLE
         }
         if(tasksList.important == "true"){
-            holder.binding.addImportant.background = ContextCompat.getDrawable(requireContext,R.drawable.baseline_star_24)
+            holder.binding.addImportant.background = ContextCompat.getDrawable(requireContext, R.drawable.baseline_star_24)
         }
         else{
-            holder.binding.addImportant.background = ContextCompat.getDrawable(requireContext,R.drawable.baseline_star_outline_24)
+            holder.binding.addImportant.background = ContextCompat.getDrawable(requireContext, R.drawable.baseline_star_outline_24)
         }
         holder.binding.addImportant.setOnClickListener {
             importantClickListener(tasksList)
         }
-        holder.binding.checkCompleteButton.setOnClickListener{
-            holder.binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
-            completeTasksClickListener(tasksList)
-        }
+        holder.binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
+//        holder.binding.checkCompleteButton.setOnClickListener{
+//            completeTasksClickListener(tasksList)
+//        }
     }
 }
