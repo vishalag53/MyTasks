@@ -10,8 +10,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +32,7 @@ import com.vishalag53.mytasks.Tasks.Util.TasksListsItemCompletedTasksTouchHelper
 import com.vishalag53.mytasks.Tasks.Util.TasksListsItemUnCompleteTasksTouchHelper
 import com.vishalag53.mytasks.Tasks.data.TasksList
 import com.vishalag53.mytasks.databinding.FragmentTasksListsBinding
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 class TasksListsFragment : Fragment() {
@@ -67,10 +70,9 @@ class TasksListsFragment : Fragment() {
         val arguments = TasksListsFragmentArgs.fromBundle(requireArguments()).tasks
         tasksListName = arguments.listNameName
         tasksListId = arguments.listNameId
+        setActionBarTitle(tasksListName)
 
         navController = Navigation.findNavController(view)
-
-        setActionBarTitle(tasksListName)
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -83,9 +85,16 @@ class TasksListsFragment : Fragment() {
 
         databaseReference = databaseReferencePrevious.child("Tasks Lists")
 
-        tasksListsRepository = TasksListRepository(requireContext(),databaseReference)
+        tasksListsRepository = TasksListRepository(requireContext(),databaseReference,databaseReferencePrevious)
         tasksListsViewModel = ViewModelProvider(this,TasksListsViewModelFactory(tasksListsRepository))[TasksListsViewModel::class.java]
         tasksListCreateButtonAction = TasksListCreateButtonAction(requireContext(),databaseReference)
+
+        tasksListsViewModel.tasksName.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setActionBarTitle(it[0])
+            }
+        })
+
 
         binding.createBtn.setOnClickListener{ tasksListCreateButtonAction.createTask() }
 
@@ -130,7 +139,7 @@ class TasksListsFragment : Fragment() {
                 else{
                     binding.clCompleteTasks.visibility = View.GONE
                 }
-                binding.tvCompleteWithNumber.text = "Completed(${mutableTasksListCompletedTasks.size})"
+                binding.tvCompleteWithNumber.text = getString(R.string.completed_tasks,mutableTasksListCompletedTasks.size)  //.text = "Completed(${mutableTasksListCompletedTasks.size})"
                 mutableTasksListCompletedTasks = mutableTasksListCompletedTasks.reversed()
                 tasksListsCompletedTasksAdapter.submitList(mutableTasksListCompletedTasks)
             }
@@ -223,19 +232,40 @@ class TasksListsFragment : Fragment() {
         tasksListsRepository.addInUnCompletedTasksListener(tasksList)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_overflow_tasks_list,menu)
+
+        val searchItem: MenuItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+            }
+
+        })
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
+            R.id.search -> {
+                true
+            }
             R.id.renameList -> {
                 tasksListsRepository.renameList(databaseReferencePrevious)
                 true
             }
             R.id.deleteList -> {
                 databaseReferencePrevious.removeValue()
+                navController.navigate(TasksListsFragmentDirections.actionTasksListsFragmentToTasksFragment())
                 true
             }
             R.id.deleteCompleteList -> {
@@ -244,10 +274,6 @@ class TasksListsFragment : Fragment() {
             }
             R.id.deleteAllTasks  -> {
                 tasksListsRepository.deleteAllTasks()
-                true
-            }
-            R.id.sendCopy -> {
-
                 true
             }
             R.id.defaultSort -> {
@@ -263,6 +289,38 @@ class TasksListsFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun filterList(query: String?){
+        if(query != null){
+            val filteredListUnCompleteTasks = ArrayList<TasksList>()
+            for (i in mutableTasksListUnCompleteTasks){
+                if (i.title.lowercase(Locale.ROOT).contains(query)){
+                    filteredListUnCompleteTasks.add(i)
+                }
+            }
+
+            val filteredListCompleteTasks = ArrayList<TasksList>()
+            for (i in mutableTasksListCompletedTasks){
+                if (i.title.lowercase(Locale.ROOT).contains(query)){
+                    filteredListCompleteTasks.add(i)
+                }
+            }
+
+            if(filteredListUnCompleteTasks.isEmpty()){
+                Toast.makeText(requireContext(),"No Task list found", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                tasksListsUnCompletedTasksAdapter.setFilteredList(filteredListUnCompleteTasks)
+            }
+
+            if(filteredListCompleteTasks.isEmpty()){
+                Toast.makeText(requireContext(),"No Task list found", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                tasksListsCompletedTasksAdapter.setFilteredList(filteredListCompleteTasks)
+            }
         }
     }
 

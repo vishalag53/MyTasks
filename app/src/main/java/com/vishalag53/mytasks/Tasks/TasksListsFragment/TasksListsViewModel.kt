@@ -22,4 +22,7 @@ class TasksListsViewModel(
         _sortType.value = sortType
     }
 
+
+    val tasksName : LiveData<List<String>> = tasksListRepository.dataName
+
 }

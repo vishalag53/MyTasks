@@ -42,7 +42,6 @@ class TasksFragment : Fragment() {
     private lateinit var tasksViewModel: TasksViewModel
     private lateinit var tasksRepository: TasksRepository
     private lateinit var itemTouchHelper: ItemTouchHelper
-    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +64,6 @@ class TasksFragment : Fragment() {
         navController = Navigation.findNavController(view)
         firebaseAuth = FirebaseAuth.getInstance()
         mutableNameList = mutableListOf()
-        searchView = binding.searchView
 
         databaseReference = FirebaseDatabase.getInstance()
             .reference.child("Tasks")
@@ -91,18 +89,6 @@ class TasksFragment : Fragment() {
         itemTouchHelper = ItemTouchHelper(tasksItemTouchHelper)
 
         itemTouchHelper.attachToRecyclerView(binding.rvTasks)
-
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-               filterList(newText)
-                return true
-            }
-
-        })
 
         tasksViewModel.sortType.observe(viewLifecycleOwner, Observer { type ->
             when (type) {
@@ -167,12 +153,31 @@ class TasksFragment : Fragment() {
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_overflow_tasks,menu)
+
+        val searchItem: MenuItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+            }
+
+        })
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
+            R.id.search -> {
+                true
+            }
             R.id.defaultSort -> {
                 tasksViewModel.getSortType("Default")
                 true

@@ -22,17 +22,20 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.values
 import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.Tasks.data.TasksList
 
 class TasksListRepository(
     private val requireContext: Context,
-    private val databaseReference: DatabaseReference
-    ) {
+    private val databaseReference: DatabaseReference,
+    private val databaseReferencePrevious: DatabaseReference
+) {
 
     val data: LiveData<List<TasksList>> = MutableLiveData()
     private var mutableTaskList: MutableList<TasksList> = mutableListOf()
+
+    val dataName : LiveData<List<String>> = MutableLiveData()
+    private val _dataName : MutableList<String> = mutableListOf()
 
     val dataCompleteTasks: LiveData<List<TasksList>> = MutableLiveData()
     private var mutableCompleteTaskList: MutableList<TasksList> = mutableListOf()
@@ -76,8 +79,28 @@ class TasksListRepository(
 
     }
 
+    private val  valueEventListenerData = object : ValueEventListener{
+        override fun onDataChange(snapshot: DataSnapshot) {
+            _dataName.clear()
+            for (taskSnapshot in snapshot.children){
+                if(taskSnapshot.key == "Tasks Name"){
+                    val name = taskSnapshot.value.toString()
+                    _dataName.add(name)
+                    break
+                }
+            }
+            (dataName as MutableLiveData<List<String>>).postValue(_dataName)
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Toast.makeText(requireContext,error.message,Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
     init {
         databaseReference.addValueEventListener(valueEventListener)
+        databaseReferencePrevious.addValueEventListener(valueEventListenerData)
     }
 
     fun renameImportant(tasksList: TasksList){
@@ -152,6 +175,8 @@ class TasksListRepository(
         val dialog = dialog()
 
         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
+
+        addTitle.text = Editable.Factory.getInstance().newEditable(dataName.value?.get(0))
         addTitle.hint = "Rename Task List"
 
         val save = dialog.findViewById<TextView>(R.id.save)
@@ -199,4 +224,5 @@ class TasksListRepository(
         dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
         dialog.window!!.setGravity(Gravity.BOTTOM)
     }
+
 }

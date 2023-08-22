@@ -1,9 +1,13 @@
 package com.vishalag53.mytasks.Tasks.Adapters
 
 import android.content.Context
+import android.os.Build
+import android.text.SpannableString
+import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -44,14 +48,27 @@ class TasksListsCompletedTasksAdapter (
         }
     }
 
+    fun setFilteredList(filteredList: ArrayList<TasksList>){
+        submitList(filteredList)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksListsViewHolder {
         return TasksListsViewHolder.from(parent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: TasksListsViewHolder, position: Int) {
         val tasksList = getItem(position)
         holder.bind()
-        holder.binding.title.text = tasksList.title
+
+        val title = tasksList.title
+        val spannableTitle = SpannableString(title)
+        val strikethroughSpan = StrikethroughSpan()
+        spannableTitle.setSpan(strikethroughSpan,0,title.length,SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        holder.binding.title.text = spannableTitle
+        holder.binding.title.setTextColor(requireContext.getColor(R.color.md_theme_light_outline))
+
         holder.binding.title.setOnClickListener {
             taskListsClickListener(tasksList)
         }

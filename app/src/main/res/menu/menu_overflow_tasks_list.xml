@@ -6,7 +6,8 @@
         android:id="@+id/search"
         android:icon="@drawable/search"
         android:title="@string/search"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
     <item
         android:id="@+id/renameList"
@@ -23,10 +24,6 @@
     <item
         android:id="@+id/deleteAllTasks"
         android:title="@string/delete_all_tasks"/>
-
-    <item
-        android:id="@+id/sendCopy"
-        android:title="@string/send_a_copy"/>
 
     <item
         android:id="@+id/sortBy"

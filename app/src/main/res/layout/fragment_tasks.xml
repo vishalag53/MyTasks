@@ -23,39 +23,17 @@
                 app:layout_constraintStart_toStartOf="@id/cl"
                 app:layout_constraintTop_toTopOf="@id/cl">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cvSearchView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintEnd_toEndOf="@id/cl1"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@id/cl1"
-                    app:layout_constraintTop_toTopOf="@id/cl1">
-
-                    <androidx.appcompat.widget.SearchView
-                        android:id="@+id/searchView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:iconifiedByDefault="false"
-                        app:queryBackground="@android:color/transparent"
-                        app:queryHint="Search here ..." />
-
-                </com.google.android.material.card.MaterialCardView>
-
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTasks"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:clipToPadding="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="@id/cl1"
                     app:layout_constraintEnd_toEndOf="@id/cl1"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="@id/cl1"
-                    app:layout_constraintTop_toBottomOf="@id/cvSearchView"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
                     tools:itemCount="14"
                     tools:listitem="@layout/task_item" />

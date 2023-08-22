@@ -43,6 +43,10 @@ class TasksListsUnCompletedTasksAdapter (
         }
     }
 
+    fun setFilteredList(filteredList: ArrayList<TasksList>){
+        submitList(filteredList)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksListsViewHolder {
         return TasksListsViewHolder.from(parent)
     }

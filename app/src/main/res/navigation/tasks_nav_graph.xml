@@ -27,6 +27,9 @@
             android:id="@+id/action_tasksListsFragment_to_tasksListDetailsFragment"
             app:destination="@id/tasksListDetailsFragment"
             app:popUpTo="@id/tasksListsFragment"/>
+        <action
+            android:id="@+id/action_tasksListsFragment_to_tasksFragment"
+            app:destination="@id/tasksFragment" />
     </fragment>
     <fragment
         android:id="@+id/tasksListDetailsFragment"
@@ -36,5 +39,8 @@
         <argument
             android:name="tasksList"
             app:argType="com.vishalag53.mytasks.Tasks.data.TasksList"/>
+        <action
+            android:id="@+id/action_tasksListDetailsFragment_to_tasksListsFragment"
+            app:destination="@id/tasksListsFragment" />
     </fragment>
 </navigation>
