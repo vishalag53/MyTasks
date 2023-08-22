@@ -71,5 +71,6 @@
     <string name="one">1</string>
     <string name="refresh">Refresh</string>
     <string name="rename_list">Rename List</string>
-    <string name="send_a_copy">Send a Copy</string>
+    <string name="completed_tasks">Completed(%d)</string>
+    <string name="reorder_tasks">Reorder tasks</string>
 </resources>

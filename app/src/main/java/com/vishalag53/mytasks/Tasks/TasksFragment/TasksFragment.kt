@@ -175,6 +175,10 @@ class TasksFragment : Fragment() {
     @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
+            R.id.reorderTasks -> {
+                TODO()
+                true
+            }
             R.id.search -> {
                 true
             }
