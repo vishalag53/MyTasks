@@ -134,7 +134,9 @@ class TasksListCreateButtonAction(
             showTime.visibility = View.VISIBLE
         }
 
-        showCalendar.setOnClickListener { showDatePicker() }
+        showCalendar.setOnClickListener {
+            showDatePicker()
+        }
         insideDate.setOnClickListener {
             val textDate = showDateDetail.text.toString()
             val days = getDay(textDate)

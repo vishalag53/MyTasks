@@ -63,11 +63,11 @@ class TasksListsItemCompletedTasksTouchHelper(
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
         val removedItem = mutableNameList[position]
-        tasksListsRepository.deleteCompletedTask(mutableNameList[position])
+        tasksListsRepository.deleteTask(mutableNameList[position])
         val rootView = requireActivity.findViewById<View>(android.R.id.content)
         val snackbar = Snackbar.make(rootView,"Do you want to Undo?", Snackbar.LENGTH_LONG)
         snackbar.setAction("Undo"){
-            tasksListsRepository.addInCompletedTasksListUndo(removedItem)
+            tasksListsRepository.addInFirebase(removedItem)
         }
         snackbar.show()
     }

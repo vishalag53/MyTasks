@@ -36,12 +36,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="8dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/baseline_arrow_drop_down_32_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/moveTo"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:importantForAccessibility="no" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,16 +73,19 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
+                    android:autofillHints=""
                     android:hint="@string/title"
                     android:inputType="text"
                     android:minHeight="48dp"
+                    android:scrollbars="vertical"
+                    android:textColor="#100808"
+                    android:textColorHint="#858587"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/clImportant"
                     app:layout_constraintStart_toEndOf="@id/checkCompleteButton"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Title"
-                    android:autofillHints="" />
+                    tools:text="Title" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clImportant"
@@ -128,11 +131,11 @@
                     android:id="@+id/image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/menu_28px"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:importantForAccessibility="no" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/addDetails"
@@ -188,6 +191,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="4dp"
                     android:hint="@string/add_date"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:textSize="24sp"
@@ -195,8 +199,45 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/calendarBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Calendar"
-                    android:importantForAutofill="no" />
+                    tools:text="Calendar" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/insideDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rounded_rect"
+                    android:backgroundTint="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/calendarBtn"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/showDateDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@id/insideDate"
+                        app:layout_constraintStart_toStartOf="@id/insideDate"
+                        app:layout_constraintTop_toTopOf="@id/insideDate"
+                        tools:text=" Sat,Aug 21 " />
+
+                    <Button
+                        android:id="@+id/cancelDateBtn"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/baseline_close_24"
+                        android:backgroundTint="@color/bkg_blue"
+                        android:contentDescription="@string/cancel_button"
+                        app:layout_constraintBottom_toBottomOf="@id/insideDate"
+                        app:layout_constraintEnd_toEndOf="@id/insideDate"
+                        app:layout_constraintStart_toEndOf="@id/showDateDetail"
+                        app:layout_constraintTop_toTopOf="@id/insideDate"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -230,6 +271,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="4dp"
                     android:hint="@string/add_time"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:textSize="24sp"
@@ -237,8 +279,45 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/TimeBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Time"
-                    android:importantForAutofill="no" />
+                    tools:text="Time" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/insideTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rounded_rect"
+                    android:backgroundTint="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/TimeBtn"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/showTimeDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@id/insideTime"
+                        app:layout_constraintStart_toStartOf="@id/insideTime"
+                        app:layout_constraintTop_toTopOf="@id/insideTime"
+                        tools:text=" 8:06 AM " />
+
+                    <Button
+                        android:id="@+id/cancelTimeBtn"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/baseline_close_24"
+                        android:backgroundTint="@color/bkg_blue"
+                        android:contentDescription="@string/cancel_button"
+                        app:layout_constraintBottom_toBottomOf="@id/insideTime"
+                        app:layout_constraintEnd_toEndOf="@id/insideTime"
+                        app:layout_constraintStart_toEndOf="@id/showTimeDetail"
+                        app:layout_constraintTop_toTopOf="@id/insideTime"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -273,6 +352,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="4dp"
                     android:hint="@string/repeat"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:textSize="24sp"
@@ -280,8 +360,45 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/RepeatBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Repeat"
-                    android:importantForAutofill="no" />
+                    tools:text="Repeat" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/insideRepeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rounded_rect"
+                    android:backgroundTint="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/RepeatBtn"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/showRepeatDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@id/insideRepeat"
+                        app:layout_constraintStart_toStartOf="@id/insideRepeat"
+                        app:layout_constraintTop_toTopOf="@id/insideRepeat"
+                        tools:text="Every 2 days Mon, Tue,\n Wed,Thu, Fri, Sat, Sun" />
+
+                    <Button
+                        android:id="@+id/cancelRepeatBtn"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/baseline_close_24"
+                        android:backgroundTint="@color/bkg_blue"
+                        android:contentDescription="@string/cancel_button"
+                        app:layout_constraintBottom_toBottomOf="@id/insideRepeat"
+                        app:layout_constraintEnd_toEndOf="@id/insideRepeat"
+                        app:layout_constraintStart_toEndOf="@id/showRepeatDetail"
+                        app:layout_constraintTop_toTopOf="@id/insideRepeat"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

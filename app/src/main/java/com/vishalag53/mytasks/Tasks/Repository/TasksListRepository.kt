@@ -28,7 +28,7 @@ import com.vishalag53.mytasks.Tasks.data.TasksList
 class TasksListRepository(
     private val requireContext: Context,
     private val databaseReference: DatabaseReference,
-    private val databaseReferencePrevious: DatabaseReference
+    databaseReferencePrevious: DatabaseReference
 ) {
 
     val data: LiveData<List<TasksList>> = MutableLiveData()
@@ -46,28 +46,20 @@ class TasksListRepository(
             mutableCompleteTaskList.clear()
             for(taskSnapshot in snapshot.children){
                 val key = taskSnapshot.key!!
-                if(key == "Completed Tasks"){
-                    for(completedTasksSnapshot in snapshot.child("Completed Tasks").children){
-                        val keyCompleted = completedTasksSnapshot.key!!
-                        val title: String = completedTasksSnapshot.child("Title").value.toString()
-                        val detail: String = completedTasksSnapshot.child("Details").value.toString()
-                        val date: String = completedTasksSnapshot.child("Date").value.toString()
-                        val time: String = completedTasksSnapshot.child("Time").value.toString()
-                        val repeat: String = completedTasksSnapshot.child("Repeat").value.toString()
-                        val important: String = completedTasksSnapshot.child("Important").value.toString()
-                        val tasksList = TasksList(keyCompleted,title.trim(),detail.trim(),date.trim(),time.trim(),repeat.trim(),important.trim(),"true")
-                        mutableCompleteTaskList.add(tasksList)
-                    }
-                    continue
+                val title: String = taskSnapshot.child("Title").value.toString().trim()
+                val detail: String = taskSnapshot.child("Details").value.toString().trim()
+                val date: String = taskSnapshot.child("Date").value.toString().trim()
+                val time: String = taskSnapshot.child("Time").value.toString().trim()
+                val repeat: String = taskSnapshot.child("Repeat").value.toString().trim()
+                val important: String = taskSnapshot.child("Important").value.toString().trim()
+                if(taskSnapshot.child("Completed").value.toString() == "true"){
+                    val tasksList = TasksList(key,title,detail,date,time,repeat,important,"true")
+                    mutableCompleteTaskList.add(tasksList)
                 }
-                val title: String = taskSnapshot.child("Title").value.toString()
-                val detail: String = taskSnapshot.child("Details").value.toString()
-                val date: String = taskSnapshot.child("Date").value.toString()
-                val time: String = taskSnapshot.child("Time").value.toString()
-                val repeat: String = taskSnapshot.child("Repeat").value.toString()
-                val important: String = taskSnapshot.child("Important").value.toString()
-                val tasksList = TasksList(key,title.trim(),detail.trim(),date.trim(),time.trim(),repeat.trim(),important.trim(),"false")
-                mutableTaskList.add(tasksList)
+                else {
+                    val tasksList = TasksList(key,title,detail,date,time,repeat,important,"false")
+                    mutableTaskList.add(tasksList)
+                }
             }
             (data as MutableLiveData<List<TasksList>>).postValue(mutableTaskList)
             (dataCompleteTasks as MutableLiveData<List<TasksList>>).postValue(mutableCompleteTaskList)
@@ -123,56 +115,13 @@ class TasksListRepository(
         key.child("Completed").setValue(removedItem.isCompleted)
     }
 
-    fun addInCompleteTasksList(tasksList: TasksList){
-        val key = databaseReference.child("Completed Tasks").push()
-        key.child("Title").setValue(tasksList.title)
-        key.child("Details").setValue(tasksList.details)
-        key.child("Date").setValue(tasksList.date)
-        key.child("Time").setValue(tasksList.time)
-        key.child("Repeat").setValue(tasksList.repeat)
-        key.child("Important").setValue(tasksList.important)
-        key.child("Completed").setValue("true")
-        deleteTask(tasksList)
-    }
-
-    fun deleteCompletedTask(tasksList: TasksList) {
-        databaseReference.child("Completed Tasks").child(tasksList.id).removeValue()
-    }
-
-    fun addInCompletedTasksListUndo(removedItem: TasksList) {
-        val key = databaseReference.child("Completed Tasks").push()
-        key.child("Title").setValue(removedItem.title)
-        key.child("Details").setValue(removedItem.details)
-        key.child("Date").setValue(removedItem.date)
-        key.child("Time").setValue(removedItem.time)
-        key.child("Repeat").setValue(removedItem.repeat)
-        key.child("Important").setValue(removedItem.important)
-        key.child("Completed").setValue("true")
-    }
-
-    fun renameImportantCompletedTasks(tasksList: TasksList){
-        val important = if(tasksList.important == "true"){ "false" }  else{ "true" }
-        databaseReference.child("Completed Tasks").child(tasksList.id).child("Important").setValue(important)
-    }
-
-    fun addInUnCompletedTasksListener(tasksList: TasksList) {
-        val key = databaseReference.push()
-        key.child("Title").setValue(tasksList.title)
-        key.child("Details").setValue(tasksList.details)
-        key.child("Date").setValue(tasksList.date)
-        key.child("Time").setValue(tasksList.time)
-        key.child("Repeat").setValue(tasksList.repeat)
-        key.child("Important").setValue(tasksList.important)
-        key.child("Completed").setValue("false")
-        deleteCompletedTask(tasksList)
+    fun isAddInCompleteTasksList(tasksList: TasksList, flag: String){
+        val key = databaseReference.child(tasksList.id)
+        key.child("Completed").setValue(flag)
     }
 
     fun deleteAllTasks(){
         databaseReference.removeValue()
-    }
-
-    fun deleteCompletedList(){
-        databaseReference.child("Completed Tasks").removeValue()
     }
 
     fun renameList(databaseReferencePrevious: DatabaseReference) {
@@ -226,6 +175,20 @@ class TasksListRepository(
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
         dialog.window!!.setGravity(Gravity.BOTTOM)
+    }
+
+    fun deleteCompletedList() {
+        databaseReference.get().addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                val querySnapshot = task.result
+                for(snapShot in querySnapshot.children){
+                    val key = snapShot.key!!
+                    if(snapShot.child("Completed").value.toString() == "true"){
+                        databaseReference.child(key).removeValue()
+                    }
+                }
+            }
+        }
     }
 
 }

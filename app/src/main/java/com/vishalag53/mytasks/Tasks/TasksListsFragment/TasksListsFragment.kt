@@ -223,15 +223,15 @@ class TasksListsFragment : Fragment() {
     }
 
     private fun completeTasksClickListener(tasksList: TasksList){
-        tasksListsRepository.addInCompleteTasksList(tasksList)
+        tasksListsRepository.isAddInCompleteTasksList(tasksList,"true")
     }
 
     private fun importantCompletedTasksClickListener(tasksList: TasksList){
-        tasksListsRepository.renameImportantCompletedTasks(tasksList)
+        tasksListsRepository.renameImportant(tasksList)
     }
 
     private fun unCompleteTasksListener(tasksList: TasksList){
-        tasksListsRepository.addInUnCompletedTasksListener(tasksList)
+        tasksListsRepository.isAddInCompleteTasksList(tasksList,"false")
     }
 
     @Deprecated("Deprecated in Java")
@@ -260,7 +260,6 @@ class TasksListsFragment : Fragment() {
         return when (item.itemId){
             R.id.reorderTasks -> {
                 TODO()
-                true
             }
             R.id.search -> {
                 true
