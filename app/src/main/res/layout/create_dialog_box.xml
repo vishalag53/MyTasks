@@ -16,18 +16,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:autofillHints="autofill_generic"
+            android:hint="@string/new_list"
+            android:inputType="text"
             android:minHeight="48dp"
             android:textColor="@color/black"
             android:textColorHint="#858587"
             android:textSize="24sp"
-            android:inputType="text"
-            android:maxLines="1"
-            android:maxLength="20"
             app:layout_constraintEnd_toStartOf="@+id/save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:hint="@string/new_list"
-            android:autofillHints="autofill_generic" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/save"
@@ -48,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
+            android:autofillHints="textMultiLine"
             android:hint="@string/add_details"
             android:inputType="textMultiLine"
             android:scrollbars="vertical"
@@ -56,8 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addTitle"
-            tools:ignore="TouchTargetSizeCheck"
-            android:autofillHints="textMultiLine" />
+            tools:ignore="TouchTargetSizeCheck" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/showDateTimeRepeatDetail"
@@ -231,9 +229,9 @@
             android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/addImportant"
             app:layout_constraintTop_toBottomOf="@id/showDateTimeRepeatDetail">
 
@@ -251,15 +249,15 @@
                 android:id="@+id/tvRemind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:gravity="center"
                 android:text="@string/set_due_date"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:gravity="center"
-                android:layout_marginStart="2dp"
-                app:layout_constraintStart_toEndOf="@id/iconRemind"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iconRemind"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -270,9 +268,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:visibility="gone"
             android:background="@drawable/baseline_calendar_month_24"
             android:contentDescription="@string/open_calendar"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/clRemind"
             app:layout_constraintTop_toBottomOf="@id/showDateTimeRepeatDetail"
@@ -286,8 +284,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/time"
-            android:visibility="gone"
             android:contentDescription="@string/open_time"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/showCalendar"
             app:layout_constraintTop_toBottomOf="@id/showDateTimeRepeatDetail"

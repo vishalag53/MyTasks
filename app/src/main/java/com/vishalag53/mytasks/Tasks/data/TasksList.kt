@@ -9,5 +9,6 @@ data class TasksList(
     var date: String?,
     var time: String?,
     var repeat: String?,
-    var important: String
+    var important: String,
+    var isCompleted: String
 ): Serializable

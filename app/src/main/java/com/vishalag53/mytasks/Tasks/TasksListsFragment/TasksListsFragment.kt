@@ -30,6 +30,7 @@ import com.vishalag53.mytasks.Tasks.Repository.TasksListRepository
 import com.vishalag53.mytasks.Tasks.Util.TasksListCreateButtonAction
 import com.vishalag53.mytasks.Tasks.Util.TasksListsItemCompletedTasksTouchHelper
 import com.vishalag53.mytasks.Tasks.Util.TasksListsItemUnCompleteTasksTouchHelper
+import com.vishalag53.mytasks.Tasks.data.NameList
 import com.vishalag53.mytasks.Tasks.data.TasksList
 import com.vishalag53.mytasks.databinding.FragmentTasksListsBinding
 import java.util.Locale
@@ -53,6 +54,7 @@ class TasksListsFragment : Fragment() {
     private lateinit var mutableTasksListCompletedTasks: List<TasksList>
     private lateinit var itemUnCompleteTasksTouchHelper: ItemTouchHelper
     private lateinit var itemCompletedTasksTouchHelper: ItemTouchHelper
+    private lateinit var arguments : NameList
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +69,7 @@ class TasksListsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        val arguments = TasksListsFragmentArgs.fromBundle(requireArguments()).tasks
+        arguments = TasksListsFragmentArgs.fromBundle(requireArguments()).tasks
         tasksListName = arguments.listNameName
         tasksListId = arguments.listNameId
         setActionBarTitle(tasksListName)
@@ -81,7 +83,7 @@ class TasksListsFragment : Fragment() {
 
         databaseReferencePrevious = FirebaseDatabase.getInstance()
             .reference.child("Tasks")
-            .child((firebaseAuth.currentUser?.uid.toString())).child(tasksListId)
+            .child(firebaseAuth.currentUser?.uid.toString()).child(tasksListId)
 
         databaseReference = databaseReferencePrevious.child("Tasks Lists")
 
@@ -139,7 +141,7 @@ class TasksListsFragment : Fragment() {
                 else{
                     binding.clCompleteTasks.visibility = View.GONE
                 }
-                binding.tvCompleteWithNumber.text = getString(R.string.completed_tasks,mutableTasksListCompletedTasks.size)  //.text = "Completed(${mutableTasksListCompletedTasks.size})"
+                binding.tvCompleteWithNumber.text = getString(R.string.completed_tasks,mutableTasksListCompletedTasks.size)
                 mutableTasksListCompletedTasks = mutableTasksListCompletedTasks.reversed()
                 tasksListsCompletedTasksAdapter.submitList(mutableTasksListCompletedTasks)
             }
@@ -213,7 +215,7 @@ class TasksListsFragment : Fragment() {
     }
 
     private fun tasksListClickListener(tasksList: TasksList){
-        navController.navigate(TasksListsFragmentDirections.actionTasksListsFragmentToTasksListDetailsFragment(tasksList))
+        navController.navigate(TasksListsFragmentDirections.actionTasksListsFragmentToTasksListDetailsFragment(tasksList,arguments))
     }
 
     private fun importantClickListener(tasksList: TasksList){

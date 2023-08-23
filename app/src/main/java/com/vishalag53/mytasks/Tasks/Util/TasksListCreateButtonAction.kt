@@ -242,6 +242,7 @@ class TasksListCreateButtonAction(
         key.child("Time").setValue(time)
         key.child("Repeat").setValue(repeat)
         key.child("Important").setValue(isImportant)
+        key.child("Completed").setValue("false")
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

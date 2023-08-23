@@ -55,7 +55,7 @@ class TasksListRepository(
                         val time: String = completedTasksSnapshot.child("Time").value.toString()
                         val repeat: String = completedTasksSnapshot.child("Repeat").value.toString()
                         val important: String = completedTasksSnapshot.child("Important").value.toString()
-                        val tasksList = TasksList(keyCompleted,title.trim(),detail.trim(),date.trim(),time.trim(),repeat.trim(),important.trim())
+                        val tasksList = TasksList(keyCompleted,title.trim(),detail.trim(),date.trim(),time.trim(),repeat.trim(),important.trim(),"true")
                         mutableCompleteTaskList.add(tasksList)
                     }
                     continue
@@ -66,7 +66,7 @@ class TasksListRepository(
                 val time: String = taskSnapshot.child("Time").value.toString()
                 val repeat: String = taskSnapshot.child("Repeat").value.toString()
                 val important: String = taskSnapshot.child("Important").value.toString()
-                val tasksList = TasksList(key,title.trim(),detail.trim(),date.trim(),time.trim(),repeat.trim(),important.trim())
+                val tasksList = TasksList(key,title.trim(),detail.trim(),date.trim(),time.trim(),repeat.trim(),important.trim(),"false")
                 mutableTaskList.add(tasksList)
             }
             (data as MutableLiveData<List<TasksList>>).postValue(mutableTaskList)
@@ -120,6 +120,7 @@ class TasksListRepository(
         key.child("Time").setValue(removedItem.time)
         key.child("Repeat").setValue(removedItem.repeat)
         key.child("Important").setValue(removedItem.important)
+        key.child("Completed").setValue(removedItem.isCompleted)
     }
 
     fun addInCompleteTasksList(tasksList: TasksList){
@@ -130,6 +131,7 @@ class TasksListRepository(
         key.child("Time").setValue(tasksList.time)
         key.child("Repeat").setValue(tasksList.repeat)
         key.child("Important").setValue(tasksList.important)
+        key.child("Completed").setValue("true")
         deleteTask(tasksList)
     }
 
@@ -145,6 +147,7 @@ class TasksListRepository(
         key.child("Time").setValue(removedItem.time)
         key.child("Repeat").setValue(removedItem.repeat)
         key.child("Important").setValue(removedItem.important)
+        key.child("Completed").setValue("true")
     }
 
     fun renameImportantCompletedTasks(tasksList: TasksList){
@@ -160,6 +163,7 @@ class TasksListRepository(
         key.child("Time").setValue(tasksList.time)
         key.child("Repeat").setValue(tasksList.repeat)
         key.child("Important").setValue(tasksList.important)
+        key.child("Completed").setValue("false")
         deleteCompletedTask(tasksList)
     }
 
@@ -173,7 +177,6 @@ class TasksListRepository(
 
     fun renameList(databaseReferencePrevious: DatabaseReference) {
         val dialog = dialog()
-
         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
 
         addTitle.text = Editable.Factory.getInstance().newEditable(dataName.value?.get(0))

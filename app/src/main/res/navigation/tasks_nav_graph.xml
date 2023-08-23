@@ -39,6 +39,9 @@
         <argument
             android:name="tasksList"
             app:argType="com.vishalag53.mytasks.Tasks.data.TasksList"/>
+        <argument
+            android:name="nameList"
+            app:argType="com.vishalag53.mytasks.Tasks.data.NameList"/>
         <action
             android:id="@+id/action_tasksListDetailsFragment_to_tasksListsFragment"
             app:destination="@id/tasksListsFragment" />

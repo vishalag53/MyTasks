@@ -50,7 +50,7 @@
     <string name="open_time">Open Time</string>
     <string name="open_for_repeat">Open For Repeat</string>
     <string name="cancel_button">Cancel button</string>
-    <string name="repeat_every">Repeat every ...</string>
+    <string name="repeat_every">Repeat every …</string>
     <string name="sun">SUN</string>
     <string name="mon">MON</string>
     <string name="tue">TUE</string>
@@ -73,4 +73,9 @@
     <string name="rename_list">Rename List</string>
     <string name="completed_tasks">Completed(%d)</string>
     <string name="reorder_tasks">Reorder tasks</string>
+    <string name="tasks_name">Tasks Name</string>
+    <string name="title">Title</string>
+    <string name="add_date">Add date</string>
+    <string name="add_time">Add time</string>
+    <string name="repeat">Repeat</string>
 </resources>
