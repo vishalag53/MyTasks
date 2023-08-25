@@ -44,4 +44,23 @@ class TasksListsDetailsViewModel(
     fun setNewDate(newDate: String){
         _newDate.value = newDate
     }
+
+    // set time
+    private val _newTime = MutableLiveData<String>()
+    val newTime : LiveData<String>
+        get() = _newTime
+
+    fun setNewTime(newTime: String){
+        _newTime.value = newTime
+    }
+
+    // set repeat
+
+    private val _newRepeat = MutableLiveData<String>()
+    val newRepeat : LiveData<String>
+        get() = _newRepeat
+
+    fun setNewRepeat(newRepeat:String){
+        _newRepeat.value = newRepeat
+    }
 }

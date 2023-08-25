@@ -802,7 +802,6 @@ class TasksListCreateButtonAction(
         }
     }
 
-
     private fun initializedTimeInterValAndNumber() {
         addNumber = dialog.findViewById(R.id.number)
         selectMonthBtn = dialog.findViewById(R.id.selectTimeIntervals)

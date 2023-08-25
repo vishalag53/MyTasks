@@ -1,6 +1,10 @@
 package com.vishalag53.mytasks.Tasks.TasksListsDetailsFragment
 
 import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.TimePickerDialog
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -9,10 +13,17 @@ import android.text.TextWatcher
 import android.text.style.StrikethroughSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.PopupMenu
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +34,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.Tasks.Repository.TasksListDetailsRepository
+import com.vishalag53.mytasks.Tasks.Util.dialogRepeat
+import com.vishalag53.mytasks.Tasks.Util.dialogRepeatBelow
 import com.vishalag53.mytasks.databinding.FragmentTasksListsDetailsBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -45,6 +58,37 @@ class TasksListsDetailsFragment : Fragment() {
     private lateinit var date : String
     private lateinit var time : String
     private lateinit var repeat : String
+
+    private lateinit var dialog: Dialog
+    private lateinit var addNumber: EditText
+    private lateinit var selectMonthBtn : TextView
+    private lateinit var sundayBtn : AppCompatButton
+    private lateinit var mondayBtn : AppCompatButton
+    private lateinit var tuesdayBtn : AppCompatButton
+    private lateinit var wednesdayBtn : AppCompatButton
+    private lateinit var thursdayBtn : AppCompatButton
+    private lateinit var fridayBtn : AppCompatButton
+    private lateinit var saturdayBtn : AppCompatButton
+    private lateinit var doneBtn: TextView
+    private lateinit var cancelBtn: TextView
+
+    private var selectTimeInterval = "weeks"
+
+    private var sunday = false
+    private var monday = false
+    private var tuesday = false
+    private var wednesday = false
+    private var thursday = false
+    private var friday = false
+    private var saturday = false
+
+    private var flagSunday = true
+    private var flagMonday = true
+    private var flagTuesday = true
+    private var flagWednesday = true
+    private var flagThursday = true
+    private var flagFriday = true
+    private var flagSaturday = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -235,11 +279,10 @@ class TasksListsDetailsFragment : Fragment() {
         tasksListsDetailsViewModel.newDate.observe(viewLifecycleOwner, Observer {
             it?.let {
                 date = it
-                argumentsTaskList.date = date
                 databaseReference.child("Date").setValue(date)
                 argumentsTaskList.date = date
                 if(date.isNotEmpty()){
-                    binding.showDateDetail.text = it
+                    binding.showDateDetail.text = date
                     binding.cancelDateBtn.visibility = View.VISIBLE
                     binding.insideDate.visibility = View.VISIBLE
                     binding.calendar.visibility = View.GONE
@@ -275,8 +318,32 @@ class TasksListsDetailsFragment : Fragment() {
             binding.insideTime.visibility = View.GONE
             binding.cancelTimeBtn.visibility = View.GONE
             binding.time.visibility = View.VISIBLE
-            databaseReference.child("Time").setValue(time)
+            tasksListsDetailsViewModel.setNewTime(time)
         }
+
+        binding.clTime.setOnClickListener { timeAction() }
+        binding.TimeBtn.setOnClickListener { timeAction() }
+        binding.time.setOnClickListener { timeAction() }
+        binding.insideTime.setOnClickListener { setTimeOnCalendar() }
+
+        tasksListsDetailsViewModel.newTime.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                time = it
+                databaseReference.child("Time").setValue(time)
+                argumentsTaskList.time = time
+                if(time.isNotEmpty()){
+                    binding.showTimeDetail.text = time
+                    binding.cancelTimeBtn.visibility = View.VISIBLE
+                    binding.insideTime.visibility = View.VISIBLE
+                    binding.time.visibility = View.GONE
+                }
+                else{
+                    binding.insideTime.visibility = View.GONE
+                    binding.cancelTimeBtn.visibility = View.GONE
+                    binding.time.visibility = View.VISIBLE
+                }
+            }
+        })
 
         // repeat
 
@@ -301,16 +368,33 @@ class TasksListsDetailsFragment : Fragment() {
             binding.insideRepeat.visibility = View.GONE
             binding.cancelRepeatBtn.visibility = View.GONE
             binding.repeat.visibility = View.VISIBLE
-
-            databaseReference.child("Repeat").setValue(repeat)
+            tasksListsDetailsViewModel.setNewRepeat(repeat)
         }
 
-    }
+        binding.clRepeat.setOnClickListener { repeatAction() }
+        binding.RepeatBtn.setOnClickListener { repeatAction() }
+        binding.repeat.setOnClickListener { repeatAction() }
+        binding.insideRepeat.setOnClickListener { setRepeat() }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun dateAction() {
-        if (date.isNotEmpty()) setDateOnCalendar()
-        else showDatePicker()
+        tasksListsDetailsViewModel.newRepeat.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                repeat = it
+                databaseReference.child("Repeat").setValue(repeat)
+                argumentsTaskList.repeat = repeat
+                if(repeat.isNotEmpty()){
+                    binding.showRepeatDetail.text = repeat
+                    binding.cancelRepeatBtn.visibility = View.VISIBLE
+                    binding.insideRepeat.visibility = View.VISIBLE
+                    binding.repeat.visibility = View.GONE
+                }
+                else{
+                    binding.insideRepeat.visibility = View.GONE
+                    binding.cancelRepeatBtn.visibility = View.GONE
+                    binding.repeat.visibility = View.VISIBLE
+                }
+            }
+        })
+
     }
 
     private fun setActionBarTitle(taskName: String) {
@@ -318,6 +402,12 @@ class TasksListsDetailsFragment : Fragment() {
     }
 
     // Calendar
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun dateAction() {
+        if (date.isNotEmpty()) setDateOnCalendar()
+        else showDatePicker()
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setDateOnCalendar() {
@@ -397,5 +487,633 @@ class TasksListsDetailsFragment : Fragment() {
         datePicker.show()
     }
 
+    // time
 
+    private fun timeAction(){
+        if(time.isNotEmpty()) setTimeOnCalendar()
+        else showTimePicker()
+    }
+
+    private fun setTimeOnCalendar() {
+        val txtTime = time
+        val hours = getHours(txtTime)
+        val minute = if (hours in 0..9) getMinute(txtTime, false)
+        else getMinute(txtTime, true)
+        val isPM = if (hours in 0..9) getPM(txtTime, false)
+        else getPM(txtTime, true)
+        if (isPM) showTimePickerAtSpecificTime(hours + 12, minute)
+        else showTimePickerAtSpecificTime(hours, minute)
+    }
+
+    private fun getHours(txtTime: String): Int{
+        val a = txtTime.substring(0,2)
+        if(a.isDigitsOnly()) return a.toInt()
+        return txtTime.substring(0,1).toInt()
+    }
+
+    private fun getMinute(txtTime: String, b: Boolean): Int{
+        return when (b){
+            true -> txtTime.substring(3,5).toInt()
+            else -> txtTime.substring(2,4).toInt()
+        }
+    }
+
+    private fun getPM(txtTime: String, b: Boolean): Boolean{
+        return when (b){
+            true -> {
+                txtTime.substring(6,8) == "PM"
+            }
+            else -> txtTime.substring(5,7) == "PM"
+        }
+    }
+
+    private fun showTimePickerAtSpecificTime(hours: Int, minute: Int) {
+        val timePicker = TimePickerDialog(requireContext(),{ _, selectedHour,selectedMinute ->
+            val selectedTime = Calendar.getInstance()
+            selectedTime.set(Calendar.HOUR_OF_DAY,selectedHour)
+            selectedTime.set(Calendar.MINUTE,selectedMinute)
+            getTime(selectedTime)
+        },
+            hours,
+            minute,
+            false
+        )
+        timePicker.show()
+    }
+
+    private fun getTime(selectedDate: Calendar) {
+        time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(selectedDate.time)
+        binding.insideTime.visibility = View.VISIBLE
+        binding.cancelTimeBtn.visibility = View.VISIBLE
+        binding.showTimeDetail.text = time
+        tasksListsDetailsViewModel.setNewTime(time)
+    }
+
+    private fun showTimePicker() {
+        val selectedDate = Calendar.getInstance()
+        val timePicker = TimePickerDialog(requireContext(),{ _, hourOfDay, minute ->
+            selectedDate.set(Calendar.HOUR_OF_DAY,hourOfDay)
+            selectedDate.set(Calendar.MINUTE,minute)
+
+            getTime(selectedDate)
+        },
+            selectedDate.get(Calendar.HOUR_OF_DAY),
+            selectedDate.get(Calendar.MINUTE),
+            false
+        )
+        timePicker.show()
+    }
+
+    // repeat
+
+    private fun repeatAction(){
+        if(repeat.isNotEmpty()) setRepeat()
+        else showRepeatDialog()
+    }
+
+    private fun setRepeat() {
+        val textRepeat = repeat
+        val text = textRepeat.split(" ")
+        when (text[0].trim()) {
+            "Weekly" -> showRepeatWeeksDialog(1, text)
+            "Yearly" -> showRepeatDialog(1, "year")
+            "Monthly" -> showRepeatDialog(1, "month")
+            "Daily" -> showRepeatDialog(1, "day")
+        }
+        if (text.size >= 3) when (text[2].trim()) {
+            "years" -> showRepeatDialog(text[1].trim().toInt(), "year")
+            "months" -> showRepeatDialog(text[1].trim().toInt(), "month")
+            "days" -> showRepeatDialog(text[1].trim().toInt(), "day")
+            "week" -> showRepeatWeeksDialog(text[1].trim().toInt(), text)
+        }
+    }
+
+    private fun showRepeatWeeksDialog(number: Int, days: List<String>) {
+        dialog = dialogRepeat(requireContext())
+        dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.VISIBLE
+        initializedTimeInterValAndNumber()
+        initializedDaysButton()
+
+        addNumber.setText("$number")
+        selectMonthBtn.setText(R.string.weeks)
+
+        val days1 : String
+        val days2 : String
+        val days3 : String
+        val days4 : String
+        val days5 : String
+        val days6 : String
+        val days7 : String
+
+        if(days[0] == "Weekly"){
+            days1 = days[1].trim()
+            days2 = if(days.size >= 3)   days[2].trim()  else ""
+            days3 = if(days.size >= 4)   days[3].trim()  else ""
+            days4 = if(days.size >= 5)   days[4].trim()  else ""
+            days5 = if(days.size >= 6)   days[5].trim()  else ""
+            days6 = if(days.size >= 7)   days[6].trim()  else ""
+            days7 = if(days.size == 8)   days[7].trim()  else ""
+        }
+        else{
+            days1 = days[3].trim()
+            days2 = if(days.size >= 5)   days[4].trim()  else ""
+            days3 = if(days.size >= 6)   days[5].trim()  else ""
+            days4 = if(days.size >= 7)   days[6].trim()  else ""
+            days5 = if(days.size >= 8)   days[7].trim()  else ""
+            days6 = if(days.size >= 9)   days[8].trim()  else ""
+            days7 = if(days.size == 10)  days[9].trim()  else ""
+        }
+
+        if(days1 == "SUN") showSelectedSundayBtn()
+
+        when ("MON"){
+            days1 -> showSelectedMondayBtn()
+            days2 -> showSelectedMondayBtn()
+        }
+
+        when ("TUE"){
+            days1 -> showSelectedTuesdayBtn()
+            days2 -> showSelectedTuesdayBtn()
+            days3 -> showSelectedTuesdayBtn()
+        }
+
+        when ("WED"){
+            days1 -> showSelectedWednesdayBtn()
+            days2 -> showSelectedWednesdayBtn()
+            days3 -> showSelectedWednesdayBtn()
+            days4 -> showSelectedWednesdayBtn()
+        }
+
+        when ("THU"){
+            days1 -> showSelectedThursdayBtn()
+            days2 -> showSelectedThursdayBtn()
+            days3 -> showSelectedThursdayBtn()
+            days4 -> showSelectedThursdayBtn()
+            days5 -> showSelectedThursdayBtn()
+        }
+
+        when ("FRI"){
+            days1 -> showSelectedFridayBtn()
+            days2 -> showSelectedFridayBtn()
+            days3 -> showSelectedFridayBtn()
+            days4 -> showSelectedFridayBtn()
+            days5 -> showSelectedFridayBtn()
+            days6 -> showSelectedFridayBtn()
+        }
+
+        when ("SAT"){
+            days1 -> showSelectedSaturdayBtn()
+            days2 -> showSelectedSaturdayBtn()
+            days3 -> showSelectedSaturdayBtn()
+            days4 -> showSelectedSaturdayBtn()
+            days5 -> showSelectedSaturdayBtn()
+            days6 -> showSelectedSaturdayBtn()
+            days7 -> showSelectedSaturdayBtn()
+        }
+
+        selectTimeInterval = "weeks"
+        repeat(dialog)
+        dialogRepeatBelow(dialog)
+    }
+
+    private fun showRepeatDialog(number: Int,timeInterval: String){
+        dialog = dialogRepeat(requireContext())
+        dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.GONE
+        initializedTimeInterValAndNumber()
+        addNumber.setText("$number")
+
+        when (timeInterval) {
+            "day" -> {
+                selectMonthBtn.setText(R.string.days)
+                selectTimeInterval = "days"
+            }
+            "month" -> {
+                selectMonthBtn.setText(R.string.months)
+                selectTimeInterval = "months"
+            }
+            "year" -> {
+                selectMonthBtn.setText(R.string.years)
+                selectTimeInterval = "years"
+            }
+        }
+        repeat(dialog)
+        dialogRepeatBelow(dialog)
+    }
+
+    private fun showRepeatDialog() {
+        dialog = dialogRepeat(requireContext())
+        selectTimeInterval = "weeks"
+        repeat(dialog)
+        dialogRepeatBelow(dialog)
+    }
+
+    private fun initializedTimeInterValAndNumber() {
+        addNumber = dialog.findViewById(R.id.number)
+        selectMonthBtn = dialog.findViewById(R.id.selectTimeIntervals)
+    }
+
+    private fun initializedDaysButton(){
+        sundayBtn = dialog.findViewById(R.id.sunday)
+        mondayBtn = dialog.findViewById(R.id.monday)
+        tuesdayBtn = dialog.findViewById(R.id.tuesday)
+        wednesdayBtn = dialog.findViewById(R.id.wednesday)
+        thursdayBtn = dialog.findViewById(R.id.thursday)
+        fridayBtn = dialog.findViewById(R.id.friday)
+        saturdayBtn = dialog.findViewById(R.id.saturday)
+    }
+
+    private fun showSelectedSundayBtn(){
+        val configuration = requireContext().resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            sundayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            sundayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagSunday = false
+        sunday = true
+    }
+
+    private fun showSelectedMondayBtn(){
+        val configuration = requireContext().resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            mondayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            mondayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagMonday = false
+        monday = true
+    }
+
+    private fun showSelectedTuesdayBtn(){
+        val configuration = requireContext().resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            tuesdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            tuesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagTuesday = false
+        tuesday = true
+    }
+
+    private fun showSelectedWednesdayBtn(){
+        val configuration = requireContext().resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            wednesdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            wednesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagWednesday = false
+        wednesday = true
+    }
+
+    private fun showSelectedThursdayBtn(){
+        val configuration = requireContext().resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            thursdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            thursdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagThursday = false
+        thursday = true
+    }
+
+    private fun showSelectedFridayBtn(){
+        val configuration = requireContext().resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            fridayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            fridayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagFriday = false
+        friday = true
+    }
+
+    private fun showSelectedSaturdayBtn(){
+        val configuration = requireContext().resources.configuration
+        if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+            saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+            saturdayBtn.setTextColor(Color.parseColor("#FF000000"))
+        } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+            saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+            saturdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+        }
+        flagSaturday = false
+        saturday = true
+    }
+
+    private fun repeat(dialog: Dialog) {
+        val selectBtn = dialog.findViewById<ConstraintLayout>(R.id.select)
+        val days = dialog.findViewById<ConstraintLayout>(R.id.days)
+        cancelBtn = dialog.findViewById(R.id.cancel)
+        doneBtn = dialog.findViewById(R.id.done)
+
+        initializedTimeInterValAndNumber()
+        initializedDaysButton()
+
+        selectBtn.setOnClickListener {
+            val popupMenu = PopupMenu(requireContext(), it)
+            val inflater: MenuInflater = popupMenu.menuInflater
+
+            inflater.inflate(R.menu.menu_time_intervals, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.daysMenu -> {
+                        selectTimeInterval = requireContext().getString(R.string.days)
+                        selectMonthBtn.text = selectTimeInterval
+                        days.visibility = View.GONE
+                        true
+                    }
+                    R.id.weeksMenu -> {
+                        selectTimeInterval = requireContext().getString(R.string.weeks)
+                        selectMonthBtn.text = selectTimeInterval
+                        days.visibility = View.VISIBLE
+                        true
+                    }
+                    R.id.monthsMenu -> {
+                        selectTimeInterval = requireContext().getString(R.string.months)
+                        selectMonthBtn.text = selectTimeInterval
+                        days.visibility = View.GONE
+                        true
+                    }
+                    R.id.yearsMenu -> {
+                        selectTimeInterval = requireContext().getString(R.string.years)
+                        selectMonthBtn.text = selectTimeInterval
+                        days.visibility = View.GONE
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
+        }
+
+        sundayBtn.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagSunday = if (flagSunday) {
+                    sunday = true
+                    sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+                    sundayBtn.setTextColor(Color.parseColor("#FF000000"))
+                    false
+                } else {
+                    sunday = false
+                    sundayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
+                    sundayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagSunday = if (flagSunday) {
+                    sunday = true
+                    sundayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+                    sundayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+                    false
+                } else {
+                    sunday = false
+                    sundayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
+                    sundayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            }
+        }
+
+        mondayBtn.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagMonday = if (flagMonday) {
+                    monday = true
+                    mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+                    mondayBtn.setTextColor(Color.parseColor("#FF000000"))
+                    false
+                } else {
+                    monday = false
+                    mondayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
+                    mondayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagMonday = if (flagMonday) {
+                    monday = true
+                    mondayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+                    mondayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+                    false
+                } else {
+                    monday = false
+                    mondayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
+                    mondayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            }
+        }
+
+        tuesdayBtn.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagTuesday = if (flagTuesday) {
+                    tuesday = true
+                    tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+                    tuesdayBtn.setTextColor(Color.parseColor("#FF000000"))
+                    false
+                } else {
+                    tuesday = false
+                    tuesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
+                    tuesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagTuesday = if (flagTuesday) {
+                    tuesday = true
+                    tuesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+                    tuesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+                    false
+                } else {
+                    tuesday = false
+                    tuesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
+                    tuesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            }
+        }
+
+        wednesdayBtn.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagWednesday = if (flagWednesday) {
+                    wednesday = true
+                    wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+                    wednesdayBtn.setTextColor(Color.parseColor("#FF000000"))
+                    false
+                } else {
+                    wednesday = false
+                    wednesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
+                    wednesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagWednesday = if (flagWednesday) {
+                    wednesday = true
+                    wednesdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+                    wednesdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+                    false
+                } else {
+                    wednesday = false
+                    wednesdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
+                    wednesdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            }
+        }
+
+        thursdayBtn.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagThursday = if (flagThursday) {
+                    thursday = true
+                    thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+                    thursdayBtn.setTextColor(Color.parseColor("#FF000000"))
+                    false
+                } else {
+                    thursday = false
+                    thursdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
+                    thursdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagThursday = if (flagThursday) {
+                    thursday = true
+                    thursdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+                    thursdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+                    false
+                } else {
+                    thursday = false
+                    thursdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
+                    thursdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            }
+        }
+
+        fridayBtn.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagFriday = if (flagFriday) {
+                    friday = true
+                    fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+                    fridayBtn.setTextColor(Color.parseColor("#FF000000"))
+                    false
+                } else {
+                    friday = false
+                    fridayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
+                    fridayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagFriday = if (flagFriday) {
+                    friday = true
+                    fridayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+                    fridayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+                    false
+                } else {
+                    friday = false
+                    fridayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
+                    fridayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            }
+        }
+
+        saturdayBtn.setOnClickListener {
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                flagSaturday = if (flagSaturday) {
+                    saturday = true
+                    saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_white)
+                    saturdayBtn.setTextColor(Color.parseColor("#FF000000"))
+                    false
+                } else {
+                    saturday = false
+                    saturdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_night)
+                    saturdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            } else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                flagSaturday = if (flagSaturday) {
+                    saturday = true
+                    saturdayBtn.setBackgroundResource(R.drawable.rounded_bg_oval_blue)
+                    saturdayBtn.setTextColor(Color.parseColor("#FFFFFFFF"))
+                    false
+                } else {
+                    saturday = false
+                    saturdayBtn.setBackgroundResource(R.drawable.weeks_rounded_btn_day)
+                    saturdayBtn.setTextColor(Color.parseColor("#FF9C9C9C"))
+                    true
+                }
+            }
+        }
+
+        doneBtn.setOnClickListener {
+            val number = addNumber.text.toString()
+            if (number.isNotEmpty() && number != "0") {
+                if (selectTimeInterval == "weeks") {
+                    if (sunday || monday || tuesday || wednesday || thursday || friday || saturday) {
+                        if (number.toInt() == 1) {
+                            repeat = "Weekly"
+                            if (sunday) repeat += " SUN"
+                            if (monday) repeat += " MON"
+                            if (tuesday) repeat += " TUE"
+                            if (wednesday) repeat += " WED"
+                            if (thursday) repeat += " THU"
+                            if (friday) repeat += " FRI"
+                            if (saturday) repeat += " SAT"
+                        } else {
+                            repeat = "Every $number week"
+                            if (sunday) repeat += " SUN"
+                            if (monday) repeat += " MON"
+                            if (tuesday) repeat += " TUE"
+                            if (wednesday) repeat += " WED"
+                            if (thursday) repeat += " THU"
+                            if (friday) repeat += " FRI"
+                            if (saturday) repeat += " SAT"
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Select minimum one Days", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (selectTimeInterval == "days") {
+                    repeat = if (number.toInt() == 1) "Daily"
+                    else "Every $number days"
+                } else if (selectTimeInterval == "months") {
+                    repeat = if (number.toInt() == 1) "Monthly"
+                    else "Every $number months"
+                } else if (selectTimeInterval == "years") {
+                    repeat = if (number.toInt() == 1) "Yearly"
+                    else "Every $number years"
+                }
+
+                binding.insideRepeat.visibility = View.VISIBLE
+                binding.cancelRepeatBtn.visibility = View.VISIBLE
+                binding.showRepeatDetail.text = repeat
+                tasksListsDetailsViewModel.setNewRepeat(repeat)
+                dialog.dismiss()
+            } else {
+                Toast.makeText(requireContext(), "Enter the number", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        cancelBtn.setOnClickListener {
+            dialog.cancel()
+        }
+    }
 }
