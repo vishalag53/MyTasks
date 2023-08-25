@@ -264,7 +264,7 @@ class TasksListCreateButtonAction(
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun setDateOnCalendar() {
+    private fun setDateOnCalendar() {
         val textDate = date
         val days = getDay(textDate)
         val year = if (days in 0..9) getYear(textDate, false)
@@ -303,7 +303,6 @@ class TasksListCreateButtonAction(
             else -> 0
         }
     }
-
 
     private fun showTimePicker() {
         val selectedDate = Calendar.getInstance()

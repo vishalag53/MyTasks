@@ -9,6 +9,7 @@ class TasksListsDetailsViewModel(
     private val tasksListDetailsRepository: TasksListDetailsRepository
 ) : ViewModel(){
 
+    // set title
     private val _newTitle = MutableLiveData<String>()
     val newTitle : LiveData<String>
         get() = _newTitle
@@ -17,6 +18,7 @@ class TasksListsDetailsViewModel(
         _newTitle.value = newTitle
     }
 
+    // set details
     private val _newDetails = MutableLiveData<String>()
     val newDetails: LiveData<String>
         get() = _newDetails
@@ -25,6 +27,7 @@ class TasksListsDetailsViewModel(
         _newDetails.value = newDetails
     }
 
+    // get All
     val title : LiveData<List<String>> = tasksListDetailsRepository.title
     val details : LiveData<List<String>> = tasksListDetailsRepository.details
     val date : LiveData<List<String>> = tasksListDetailsRepository.date
@@ -33,4 +36,12 @@ class TasksListsDetailsViewModel(
     val important : LiveData<List<String>> = tasksListDetailsRepository.important
     val completed : LiveData<List<String>> = tasksListDetailsRepository.completed
 
+    // set date
+    private val _newDate = MutableLiveData<String>()
+    val newDate : LiveData<String>
+        get() = _newDate
+
+    fun setNewDate(newDate: String){
+        _newDate.value = newDate
+    }
 }

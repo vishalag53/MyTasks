@@ -183,23 +183,22 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
 
-                <EditText
+                <TextView
                     android:id="@+id/calendar"
                     style="@style/NoEditTextBorder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="4dp"
-                    android:hint="@string/add_date"
                     android:importantForAutofill="no"
-                    android:inputType="text"
                     android:minHeight="48dp"
                     android:textSize="24sp"
+                    android:textColor="@color/md_theme_light_outline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/calendarBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Calendar" />
+                    android:text="@string/add_date" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/insideDate"
@@ -263,7 +262,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TouchTargetSizeCheck" />
 
-                <EditText
+                <TextView
                     android:id="@+id/time"
                     style="@style/NoEditTextBorder"
                     android:layout_width="0dp"
@@ -272,14 +271,14 @@
                     android:layout_marginEnd="4dp"
                     android:hint="@string/add_time"
                     android:importantForAutofill="no"
-                    android:inputType="text"
                     android:minHeight="48dp"
                     android:textSize="24sp"
+                    android:textColor="@color/md_theme_light_outline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/TimeBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Time" />
+                    android:text="@string/add_time" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/insideTime"
@@ -344,23 +343,22 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TouchTargetSizeCheck" />
 
-                <EditText
+                <TextView
                     android:id="@+id/repeat"
                     style="@style/NoEditTextBorder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="4dp"
-                    android:hint="@string/repeat"
                     android:importantForAutofill="no"
-                    android:inputType="text"
                     android:minHeight="48dp"
                     android:textSize="24sp"
+                    android:textColor="@color/md_theme_light_outline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/RepeatBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Repeat" />
+                    android:text="@string/repeat" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/insideRepeat"
