@@ -24,4 +24,13 @@ class TasksListsDetailsViewModel(
     fun setNewDetails(newDetails: String){
         _newDetails.value = newDetails
     }
+
+    val title : LiveData<List<String>> = tasksListDetailsRepository.title
+    val details : LiveData<List<String>> = tasksListDetailsRepository.details
+    val date : LiveData<List<String>> = tasksListDetailsRepository.date
+    val time : LiveData<List<String>> = tasksListDetailsRepository.time
+    val repeat : LiveData<List<String>> = tasksListDetailsRepository.repeat
+    val important : LiveData<List<String>> = tasksListDetailsRepository.important
+    val completed : LiveData<List<String>> = tasksListDetailsRepository.completed
+
 }

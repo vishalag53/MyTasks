@@ -6,13 +6,9 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.view.Gravity
 import android.view.MenuInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -87,7 +83,7 @@ class TasksListCreateButtonAction(
     fun createTask(){
         var flagImportant = true
         var flagDetail = true
-        dialog = dialog()
+        dialog = dialogTasks(requireContext)
         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
         val addImportant = dialog.findViewById<Button>(R.id.addImportant)
         val addDetail = dialog.findViewById<EditText>(R.id.addDetails)
@@ -135,56 +131,32 @@ class TasksListCreateButtonAction(
         }
 
         showCalendar.setOnClickListener {
-            showDatePicker()
+            if(date.isNotEmpty()) setDateOnCalendar()
+            else showDatePicker()
         }
-        insideDate.setOnClickListener {
-            val textDate = showDateDetail.text.toString()
-            val days = getDay(textDate)
-            val year = if(days in 0..9) getYear(textDate,false)
-                            else getYear(textDate,true)
-            val month = getMonth(textDate)
-            showDatePickerAtSpecificDate(days,month,year)
-        }
+        insideDate.setOnClickListener { setDateOnCalendar() }
         cancelDateBtn.setOnClickListener {
             showDateDetail.text = null
             insideDate.visibility = View.GONE
             date = ""
         }
 
-        showTime.setOnClickListener { showTimePicker() }
-        insideTime.setOnClickListener {
-            val txtDate = showTimeDetail.text.toString()
-            val hours = getHours(txtDate)
-            val minute = if(hours in 0 .. 9) getMinute(txtDate,false)
-                                else getMinute(txtDate,true)
-            val isPM = if(hours in 0 .. 9) getPM(txtDate,false)
-                                else getPM(txtDate,true)
-            if(isPM) showTimePickerAtSpecificTime(hours + 12 , minute)
-            else showTimePickerAtSpecificTime(hours,minute)
+        showTime.setOnClickListener {
+            if(time.isNotEmpty()) setTimeOnCalendar()
+            else showTimePicker()
         }
+        insideTime.setOnClickListener { setTimeOnCalendar() }
         cancelTimeBtn.setOnClickListener {
             showTimeDetail.text = null
             insideTime.visibility = View.GONE
             time = ""
         }
 
-        showRepeat.setOnClickListener { showRepeatDialog() }
-        insideRepeat.setOnClickListener {
-            val textRepeat = showRepeatDetail.text.toString()
-            val text = textRepeat.split(" ")
-            when (text[0].trim()){
-                "Weekly" -> showRepeatWeeksDialog(1,text)
-                "Yearly" -> showRepeatDialog(1,"year")
-                "Monthly" -> showRepeatDialog(1,"month")
-                "Daily" -> showRepeatDialog(1,"day")
-            }
-            if (text.size >= 3 ) when (text[2].trim()) {
-                "years" -> showRepeatDialog(text[1].trim().toInt(), "year")
-                "months" -> showRepeatDialog(text[1].trim().toInt(), "month")
-                "days" -> showRepeatDialog(text[1].trim().toInt(), "day")
-                "week" -> showRepeatWeeksDialog(text[1].trim().toInt(), text)
-            }
+        showRepeat.setOnClickListener {
+            if(repeat.isNotEmpty()) setRepeat()
+            else showRepeatDialog()
         }
+        insideRepeat.setOnClickListener { setRepeat() }
         cancelRepeatBtn.setOnClickListener {
             showRepeatDetail.text = null
             insideRepeat.visibility = View.GONE
@@ -233,8 +205,37 @@ class TasksListCreateButtonAction(
             }
         }
 
-        dialogExtracted(dialog)
+        dialogTasksBelow(dialog)
     }
+
+    private fun setRepeat() {
+        val textRepeat = repeat
+        val text = textRepeat.split(" ")
+        when (text[0].trim()) {
+            "Weekly" -> showRepeatWeeksDialog(1, text)
+            "Yearly" -> showRepeatDialog(1, "year")
+            "Monthly" -> showRepeatDialog(1, "month")
+            "Daily" -> showRepeatDialog(1, "day")
+        }
+        if (text.size >= 3) when (text[2].trim()) {
+            "years" -> showRepeatDialog(text[1].trim().toInt(), "year")
+            "months" -> showRepeatDialog(text[1].trim().toInt(), "month")
+            "days" -> showRepeatDialog(text[1].trim().toInt(), "day")
+            "week" -> showRepeatWeeksDialog(text[1].trim().toInt(), text)
+        }
+    }
+
+    private fun setTimeOnCalendar() {
+        val txtTime = time
+        val hours = getHours(txtTime)
+        val minute = if (hours in 0..9) getMinute(txtTime, false)
+        else getMinute(txtTime, true)
+        val isPM = if (hours in 0..9) getPM(txtTime, false)
+        else getPM(txtTime, true)
+        if (isPM) showTimePickerAtSpecificTime(hours + 12, minute)
+        else showTimePickerAtSpecificTime(hours, minute)
+    }
+
 
     private fun addArrayInFirebase() {
         val key = databaseReference.push()
@@ -253,8 +254,7 @@ class TasksListCreateButtonAction(
         val datePicker = DatePickerDialog(requireContext,{ _, year, monthOfYear,dayOfMonth ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(year,monthOfYear,dayOfMonth)
-
-            setDate(selectedDate)
+            getDate(selectedDate)
         },
             currentDateTime.get(Calendar.YEAR),
             currentDateTime.get(Calendar.MONTH),
@@ -263,35 +263,14 @@ class TasksListCreateButtonAction(
         datePicker.show()
     }
 
-    private fun showTimePicker() {
-        val selectedDate = Calendar.getInstance()
-        val timePicker = TimePickerDialog(requireContext,{ _, hourOfDay, minute ->
-            selectedDate.set(Calendar.HOUR_OF_DAY,hourOfDay)
-            selectedDate.set(Calendar.MINUTE,minute)
-
-            setTime(selectedDate)
-        },
-            selectedDate.get(Calendar.HOUR_OF_DAY),
-            selectedDate.get(Calendar.MINUTE),
-            false
-        )
-        timePicker.show()
-    }
-
-    private fun dialog(): Dialog {
-        dialog = Dialog(requireContext)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.create_dialog_box)
-        dialog.findViewById<EditText>(R.id.addDetails).visibility = View.GONE
-        return dialog
-    }
-
-    private fun dialogExtracted(dialog: Dialog) {
-        dialog.show()
-        dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
-        dialog.window!!.setGravity(Gravity.BOTTOM)
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun setDateOnCalendar() {
+        val textDate = date
+        val days = getDay(textDate)
+        val year = if (days in 0..9) getYear(textDate, false)
+        else getYear(textDate, true)
+        val month = getMonth(textDate)
+        showDatePickerAtSpecificDate(days, month, year)
     }
 
     private fun getDay(textDate: String): Int {
@@ -325,12 +304,28 @@ class TasksListCreateButtonAction(
         }
     }
 
+
+    private fun showTimePicker() {
+        val selectedDate = Calendar.getInstance()
+        val timePicker = TimePickerDialog(requireContext,{ _, hourOfDay, minute ->
+            selectedDate.set(Calendar.HOUR_OF_DAY,hourOfDay)
+            selectedDate.set(Calendar.MINUTE,minute)
+
+            getTime(selectedDate)
+        },
+            selectedDate.get(Calendar.HOUR_OF_DAY),
+            selectedDate.get(Calendar.MINUTE),
+            false
+        )
+        timePicker.show()
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showDatePickerAtSpecificDate(days: Int, month: Int, years: Int) {
         val datePicker = DatePickerDialog(requireContext,{ _, year,monthOfYear, dayOfMonth ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(year,monthOfYear,dayOfMonth)
-            setDate(selectedDate)
+            getDate(selectedDate)
         },
             years,
             month-1,
@@ -339,7 +334,7 @@ class TasksListCreateButtonAction(
         datePicker.show()
     }
 
-    private fun setDate(selectedDate: Calendar) {
+    private fun getDate(selectedDate: Calendar) {
         date = SimpleDateFormat("E, MMM d, yyyy", Locale.getDefault()).format(selectedDate.time)
         insideDate.visibility = View.VISIBLE
         showDateDetail.text = date
@@ -372,7 +367,7 @@ class TasksListCreateButtonAction(
             val selectedTime = Calendar.getInstance()
             selectedTime.set(Calendar.HOUR_OF_DAY,selectedHour)
             selectedTime.set(Calendar.MINUTE,selectedMinute)
-            setTime(selectedTime)
+            getTime(selectedTime)
         },
             hours,
             minute,
@@ -381,20 +376,21 @@ class TasksListCreateButtonAction(
         timePicker.show()
     }
 
-    private fun setTime(selectedDate: Calendar) {
+    private fun getTime(selectedDate: Calendar) {
         time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(selectedDate.time)
         insideTime.visibility = View.VISIBLE
         showTimeDetail.text = time
     }
 
     private fun showRepeatDialog() {
-        dialog = dialogRepeat()
+        dialog = dialogRepeat(requireContext)
         selectTimeInterval = "weeks"
-        dialogRepeat1(dialog)
+        repeat(dialog)
+        dialogRepeatBelow(dialog)
     }
 
     private fun showRepeatDialog(number: Int,timeInterval: String){
-        dialog = dialogRepeat()
+        dialog = dialogRepeat(requireContext)
         dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.GONE
         initializedTimeInterValAndNumber()
         addNumber.setText("$number")
@@ -413,11 +409,12 @@ class TasksListCreateButtonAction(
                 selectTimeInterval = "years"
             }
         }
-        dialogRepeat1(dialog)
+        repeat(dialog)
+        dialogRepeatBelow(dialog)
     }
 
     private fun showRepeatWeeksDialog(number: Int, days: List<String>) {
-        dialog = dialogRepeat()
+        dialog = dialogRepeat(requireContext)
         dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.VISIBLE
         initializedTimeInterValAndNumber()
         initializedDaysButton()
@@ -500,7 +497,8 @@ class TasksListCreateButtonAction(
         }
 
         selectTimeInterval = "weeks"
-        dialogRepeat1(dialog)
+        repeat(dialog)
+        dialogRepeatBelow(dialog)
     }
 
     private fun repeat(dialog: Dialog) {
@@ -805,20 +803,6 @@ class TasksListCreateButtonAction(
         }
     }
 
-    private fun dialogRepeat(): Dialog {
-        dialog = Dialog(requireContext)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.repeat)
-        dialog.show()
-        return dialog
-    }
-
-    private fun dialogRepeat1(dialog: Dialog) {
-        repeat(dialog)
-        dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window!!.setGravity(Gravity.CENTER)
-    }
 
     private fun initializedTimeInterValAndNumber() {
         addNumber = dialog.findViewById(R.id.number)

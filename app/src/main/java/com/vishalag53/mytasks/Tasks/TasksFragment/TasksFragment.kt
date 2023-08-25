@@ -177,7 +177,6 @@ class TasksFragment : Fragment() {
         return when (item.itemId){
             R.id.reorderTasks -> {
                 TODO()
-                true
             }
             R.id.search -> {
                 true

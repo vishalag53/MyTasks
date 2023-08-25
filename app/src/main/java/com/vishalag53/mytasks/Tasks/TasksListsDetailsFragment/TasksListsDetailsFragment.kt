@@ -32,8 +32,14 @@ class TasksListsDetailsFragment : Fragment() {
     private lateinit var databaseReferencePrevious: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var navController: NavController
-    private lateinit var taskName: String
     private lateinit var taskId: String
+    private lateinit var isCompleted : String
+    private lateinit var title : String
+    private lateinit var details : String
+    private lateinit var isImportant : String
+    private lateinit var date : String
+    private lateinit var time : String
+    private lateinit var repeat : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,9 +55,7 @@ class TasksListsDetailsFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         val argumentsTaskList = TasksListsDetailsFragmentArgs.fromBundle(requireArguments()).tasksList
         val argumentsNameList = TasksListsDetailsFragmentArgs.fromBundle(requireArguments()).nameList
-        taskName = argumentsTaskList.title
         taskId = argumentsTaskList.id
-        setActionBarTitle(taskName)
 
         navController = Navigation.findNavController(view)
 
@@ -70,10 +74,16 @@ class TasksListsDetailsFragment : Fragment() {
 
         // Completed Button
 
+        tasksListsDetailsViewModel.completed.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                isCompleted = it[0]
+            }
+        })
+
         if(argumentsTaskList.isCompleted == "true"){
             binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
 
-            val title = argumentsTaskList.title
+            val title = title
             val spannableTitle = SpannableString(title)
             val strikethroughSpan = StrikethroughSpan()
             spannableTitle.setSpan(strikethroughSpan,0,title.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -86,13 +96,13 @@ class TasksListsDetailsFragment : Fragment() {
         }
 
         binding.checkCompleteButton.setOnClickListener{
-            if(argumentsTaskList.isCompleted == "true"){
+            if(isCompleted == "true"){
                 binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)
                 databaseReference.child("Completed").setValue("false")
+                binding.title.text = Editable.Factory.getInstance().newEditable(title)
             }
             else{
                 binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
-                val title = argumentsTaskList.title
                 val spannableTitle = SpannableString(title)
                 val strikethroughSpan = StrikethroughSpan()
                 spannableTitle.setSpan(strikethroughSpan,0,title.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -120,7 +130,20 @@ class TasksListsDetailsFragment : Fragment() {
             }
         })
 
+        tasksListsDetailsViewModel.title.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                title = it[0]
+                setActionBarTitle(title)
+            }
+        })
+
         // important
+
+        tasksListsDetailsViewModel.important.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                isImportant = it[0]
+            }
+        })
 
         if(argumentsTaskList.important == "true"){
             binding.addImportant.setBackgroundResource(R.drawable.baseline_star_24)
@@ -130,7 +153,7 @@ class TasksListsDetailsFragment : Fragment() {
         }
 
         binding.addImportant.setOnClickListener {
-            if(argumentsTaskList.important == "true"){
+            if(isImportant == "true"){
                 databaseReference.child("Important").setValue("false")
                 binding.addImportant.setBackgroundResource(R.drawable.baseline_star_outline_24)
             }
@@ -141,6 +164,12 @@ class TasksListsDetailsFragment : Fragment() {
         }
 
         // detail
+
+        tasksListsDetailsViewModel.details.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                details = it[0]
+            }
+        })
 
         binding.addDetails.text = Editable.Factory.getInstance().newEditable(argumentsTaskList.details)
         binding.addDetails.addTextChangedListener(object : TextWatcher{
@@ -161,98 +190,60 @@ class TasksListsDetailsFragment : Fragment() {
 
         // date
 
+        tasksListsDetailsViewModel.date.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                date = it[0]
+            }
+        })
+
         binding.calendar.text = Editable.Factory.getInstance().newEditable(argumentsTaskList.date)
 
         if(argumentsTaskList.date!!.isNotEmpty()){
             binding.calendar.visibility = View.GONE
-            binding.clCalendar.setOnClickListener {
 
-            }
-            binding.calendarBtn.setOnClickListener {
-
-            }
-            binding.insideDate.setOnClickListener {
-
-            }
-            binding.cancelDateBtn.setOnClickListener {
-
-            }
         }
         else{
             binding.insideDate.visibility = View.GONE
-            binding.clCalendar.setOnClickListener {
+            binding.cancelDateBtn.visibility = View.GONE
 
-            }
-            binding.calendarBtn.setOnClickListener {
-
-            }
-            binding.calendar.setOnClickListener {
-
-            }
         }
 
         // time
+
+        tasksListsDetailsViewModel.time.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                time = it[0]
+            }
+        })
 
         binding.time.text = Editable.Factory.getInstance().newEditable(argumentsTaskList.time)
 
         if(argumentsTaskList.time!!.isNotEmpty()){
             binding.time.visibility = View.GONE
-            binding.clTime.setOnClickListener {
 
-            }
-            binding.TimeBtn.setOnClickListener {
-
-            }
-            binding.insideTime.setOnClickListener {
-
-            }
-            binding.cancelTimeBtn.setOnClickListener {
-
-            }
         }
         else{
             binding.insideTime.visibility = View.GONE
-            binding.clTime.setOnClickListener {
-
-            }
-            binding.TimeBtn.setOnClickListener {
-
-            }
-            binding.time.setOnClickListener {
-
-            }
+            binding.cancelTimeBtn.visibility = View.GONE
         }
 
         // repeat
+
+        tasksListsDetailsViewModel.repeat.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                repeat = it[0]
+            }
+        })
 
         binding.repeat.text = Editable.Factory.getInstance().newEditable(argumentsTaskList.repeat)
 
         if(argumentsTaskList.repeat!!.isNotEmpty()){
             binding.repeat.visibility = View.GONE
-            binding.clRepeat.setOnClickListener {
 
-            }
-            binding.RepeatBtn.setOnClickListener {
-
-            }
-            binding.insideRepeat.setOnClickListener {
-
-            }
-            binding.cancelRepeatBtn.setOnClickListener {
-
-            }
         }
         else{
             binding.insideRepeat.visibility = View.GONE
-            binding.clRepeat.setOnClickListener {
-
-            }
-            binding.RepeatBtn.setOnClickListener {
-
-            }
-            binding.repeat.setOnClickListener {
-
-            }
+            binding.cancelRepeatBtn.visibility = View.GONE
         }
 
     }

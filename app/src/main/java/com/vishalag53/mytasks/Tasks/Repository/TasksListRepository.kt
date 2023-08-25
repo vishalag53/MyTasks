@@ -1,20 +1,11 @@
 package com.vishalag53.mytasks.Tasks.Repository
 
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.text.Editable
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,6 +14,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.vishalag53.mytasks.R
+import com.vishalag53.mytasks.Tasks.Util.dialogTasksLists
+import com.vishalag53.mytasks.Tasks.Util.dialogTasksListsBelow
 import com.vishalag53.mytasks.Tasks.data.TasksList
 
 class TasksListRepository(
@@ -125,7 +118,7 @@ class TasksListRepository(
     }
 
     fun renameList(databaseReferencePrevious: DatabaseReference) {
-        val dialog = dialog()
+        val dialog = dialogTasksLists(requireContext)
         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
 
         addTitle.text = Editable.Factory.getInstance().newEditable(dataName.value?.get(0))
@@ -149,32 +142,7 @@ class TasksListRepository(
                 Toast.makeText(requireContext,"Enter the list name",Toast.LENGTH_SHORT).show()
             }
         }
-        dialogExtracted(dialog)
-    }
-
-    private fun dialog(): Dialog {
-        val dialog = Dialog(requireContext)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.create_dialog_box)
-
-        dialog.findViewById<EditText>(R.id.addDetails).visibility = View.GONE
-        dialog.findViewById<Button>(R.id.showDetailEditText).visibility = View.GONE
-        dialog.findViewById<Button>(R.id.showCalendar).visibility = View.GONE
-        dialog.findViewById<Button>(R.id.showTime).visibility = View.GONE
-        dialog.findViewById<Button>(R.id.showRepeat).visibility = View.GONE
-        dialog.findViewById<Button>(R.id.addImportant).visibility = View.GONE
-        dialog.findViewById<ConstraintLayout>(R.id.showDateTimeRepeatDetail).visibility = View.GONE
-        dialog.findViewById<ConstraintLayout>(R.id.clRemind).visibility = View.GONE
-
-        return dialog
-    }
-
-    private fun dialogExtracted(dialog: Dialog) {
-        dialog.show()
-        dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
-        dialog.window!!.setGravity(Gravity.BOTTOM)
+        dialogTasksListsBelow(dialog)
     }
 
     fun deleteCompletedList() {
