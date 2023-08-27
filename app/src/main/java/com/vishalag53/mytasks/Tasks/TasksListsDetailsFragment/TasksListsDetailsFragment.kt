@@ -13,7 +13,9 @@ import android.text.TextWatcher
 import android.text.style.StrikethroughSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -34,13 +36,18 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.vishalag53.mytasks.R
 import com.vishalag53.mytasks.Tasks.Repository.TasksListDetailsRepository
+import com.vishalag53.mytasks.Tasks.TasksFragment.TasksFragmentDirections
+import com.vishalag53.mytasks.Tasks.Util.MoveTasksList
 import com.vishalag53.mytasks.Tasks.Util.dialogRepeat
 import com.vishalag53.mytasks.Tasks.Util.dialogRepeatBelow
+import com.vishalag53.mytasks.Tasks.data.NameList
+import com.vishalag53.mytasks.Tasks.data.TasksList
 import com.vishalag53.mytasks.databinding.FragmentTasksListsDetailsBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+@Suppress("DEPRECATION", "PackageName")
 class TasksListsDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentTasksListsDetailsBinding
@@ -48,7 +55,12 @@ class TasksListsDetailsFragment : Fragment() {
     private lateinit var tasksListsDetailsViewModel: TasksListsDetailsViewModel
     private lateinit var databaseReference: DatabaseReference
     private lateinit var databaseReferencePrevious: DatabaseReference
+    private lateinit var databaseReferenceStarting: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var moveTasksList: MoveTasksList
+    private lateinit var argumentsTaskList : TasksList
+    private lateinit var argumentsNameList : NameList
+    private lateinit var argumentsTasksListName : MutableList<NameList>
     private lateinit var navController: NavController
     private lateinit var taskId: String
     private lateinit var isCompleted : String
@@ -95,6 +107,7 @@ class TasksListsDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTasksListsDetailsBinding.inflate(layoutInflater)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -102,17 +115,20 @@ class TasksListsDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        val argumentsTaskList = TasksListsDetailsFragmentArgs.fromBundle(requireArguments()).tasksList
-        val argumentsNameList = TasksListsDetailsFragmentArgs.fromBundle(requireArguments()).nameList
+        argumentsTaskList = TasksListsDetailsFragmentArgs.fromBundle(requireArguments()).tasksList
+        argumentsNameList = TasksListsDetailsFragmentArgs.fromBundle(requireArguments()).nameList
+        argumentsTasksListName = TasksListsDetailsFragmentArgs.fromBundle(requireArguments()).tasksListsName.toMutableList()
         taskId = argumentsTaskList.id
 
         navController = Navigation.findNavController(view)
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        databaseReferencePrevious = FirebaseDatabase.getInstance()
+        databaseReferenceStarting = FirebaseDatabase.getInstance()
             .reference.child("Tasks")
             .child(firebaseAuth.currentUser?.uid.toString())
+
+        databaseReferencePrevious = databaseReferenceStarting
             .child(argumentsNameList.listNameId)
             .child("Tasks Lists")
 
@@ -121,19 +137,27 @@ class TasksListsDetailsFragment : Fragment() {
         tasksListDetailsRepository = TasksListDetailsRepository(requireContext(),databaseReferencePrevious,databaseReference)
         tasksListsDetailsViewModel = ViewModelProvider(this,TasksListsDetailsViewModelFactory(tasksListDetailsRepository))[TasksListsDetailsViewModel::class.java]
 
+        moveTasksList = MoveTasksList(argumentsTasksListName,requireContext(),argumentsNameList.listNameName,databaseReferenceStarting,argumentsTaskList,argumentsNameList,navController,argumentsTasksListName)
+        binding.moveTo.text = argumentsNameList.listNameName
+        binding.moveTo.setOnClickListener { moveTasksList.moveTasksList() }
+        binding.clMoveTO.setOnClickListener { moveTasksList.moveTasksList() }
+        binding.ivMoveTO.setOnClickListener { moveTasksList.moveTasksList() }
+
+
         // Completed Button
 
         tasksListsDetailsViewModel.completed.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                argumentsTaskList.isCompleted = it[0]
-                isCompleted = it[0]
+            if(it.isNotEmpty()){
+                it?.let {
+                    argumentsTaskList.isCompleted = it[0]
+                    isCompleted = it[0]
+                }
             }
         })
 
         if(argumentsTaskList.isCompleted == "true"){
             binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
-
-            val title = title
+            val title = argumentsTaskList.title
             val spannableTitle = SpannableString(title)
             val strikethroughSpan = StrikethroughSpan()
             spannableTitle.setSpan(strikethroughSpan,0,title.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -142,7 +166,6 @@ class TasksListsDetailsFragment : Fragment() {
         }
         else{
             binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)
-            binding.title.setTextColor(requireContext().getColor(R.color.black))
             binding.title.text = Editable.Factory.getInstance().newEditable(argumentsTaskList.title)
         }
 
@@ -150,7 +173,6 @@ class TasksListsDetailsFragment : Fragment() {
             if(isCompleted == "true"){
                 binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)
                 databaseReference.child("Completed").setValue("false")
-                binding.title.setTextColor(requireContext().getColor(R.color.black))
                 binding.title.text = Editable.Factory.getInstance().newEditable(title)
             }
             else{
@@ -169,7 +191,6 @@ class TasksListsDetailsFragment : Fragment() {
         binding.title.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
                 val newTitle = s.toString()
                 tasksListsDetailsViewModel.setNewTitle(newTitle)
@@ -184,19 +205,23 @@ class TasksListsDetailsFragment : Fragment() {
         })
 
         tasksListsDetailsViewModel.title.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                title = it[0]
-                argumentsTaskList.title = title
-                setActionBarTitle(title)
+            if(it.isNotEmpty()){
+                it?.let {
+                    title = it[0]
+                    argumentsTaskList.title = title
+                    setActionBarTitle(title)
+                }
             }
         })
 
         // important
 
         tasksListsDetailsViewModel.important.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                isImportant = it[0]
-                argumentsTaskList.important = isImportant
+            if(it.isNotEmpty()){
+                it?.let {
+                    isImportant = it[0]
+                    argumentsTaskList.important = isImportant
+                }
             }
         })
 
@@ -221,9 +246,11 @@ class TasksListsDetailsFragment : Fragment() {
         // detail
 
         tasksListsDetailsViewModel.details.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                details = it[0]
-                argumentsTaskList.details = details
+            if(it.isNotEmpty()){
+                it?.let {
+                    details = it[0]
+                    argumentsTaskList.details = details
+                }
             }
         })
 
@@ -231,7 +258,6 @@ class TasksListsDetailsFragment : Fragment() {
         binding.addDetails.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
                 val details = s.toString()
                 tasksListsDetailsViewModel.setNewDetails(details)
@@ -248,9 +274,11 @@ class TasksListsDetailsFragment : Fragment() {
         // date
 
         tasksListsDetailsViewModel.date.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                date = it[0]
-                argumentsTaskList.date = date
+            if(it.isNotEmpty()){
+                it?.let {
+                    date = it[0]
+                    argumentsTaskList.date = date
+                }
             }
         })
 
@@ -259,14 +287,14 @@ class TasksListsDetailsFragment : Fragment() {
             binding.showDateDetail.text = argumentsTaskList.date
         }
         else{
-            binding.insideDate.visibility = View.GONE
             binding.cancelDateBtn.visibility = View.GONE
         }
 
         binding.cancelDateBtn.setOnClickListener {
             date = ""
-            binding.insideDate.visibility = View.GONE
             binding.cancelDateBtn.visibility = View.GONE
+            binding.showDateDetail.visibility = View.GONE
+            binding.showDateDetail.text = date
             binding.calendar.visibility = View.VISIBLE
             tasksListsDetailsViewModel.setNewDate(date)
         }
@@ -274,7 +302,6 @@ class TasksListsDetailsFragment : Fragment() {
         binding.clCalendar.setOnClickListener { dateAction() }
         binding.calendarBtn.setOnClickListener { dateAction() }
         binding.calendar.setOnClickListener { dateAction() }
-        binding.insideDate.setOnClickListener { setDateOnCalendar() }
 
         tasksListsDetailsViewModel.newDate.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -284,11 +311,9 @@ class TasksListsDetailsFragment : Fragment() {
                 if(date.isNotEmpty()){
                     binding.showDateDetail.text = date
                     binding.cancelDateBtn.visibility = View.VISIBLE
-                    binding.insideDate.visibility = View.VISIBLE
                     binding.calendar.visibility = View.GONE
                 }
                 else{
-                    binding.insideDate.visibility = View.GONE
                     binding.cancelDateBtn.visibility = View.GONE
                     binding.calendar.visibility = View.VISIBLE
                 }
@@ -298,9 +323,11 @@ class TasksListsDetailsFragment : Fragment() {
         // time
 
         tasksListsDetailsViewModel.time.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                time = it[0]
-                argumentsTaskList.time = time
+            if(it.isNotEmpty()){
+                it?.let {
+                    time = it[0]
+                    argumentsTaskList.time = time
+                }
             }
         })
 
@@ -309,14 +336,14 @@ class TasksListsDetailsFragment : Fragment() {
             binding.showTimeDetail.text = argumentsTaskList.time
         }
         else{
-            binding.insideTime.visibility = View.GONE
             binding.cancelTimeBtn.visibility = View.GONE
         }
 
         binding.cancelTimeBtn.setOnClickListener {
             time = ""
-            binding.insideTime.visibility = View.GONE
             binding.cancelTimeBtn.visibility = View.GONE
+            binding.showTimeDetail.visibility = View.GONE
+            binding.showTimeDetail.text = time
             binding.time.visibility = View.VISIBLE
             tasksListsDetailsViewModel.setNewTime(time)
         }
@@ -324,7 +351,6 @@ class TasksListsDetailsFragment : Fragment() {
         binding.clTime.setOnClickListener { timeAction() }
         binding.TimeBtn.setOnClickListener { timeAction() }
         binding.time.setOnClickListener { timeAction() }
-        binding.insideTime.setOnClickListener { setTimeOnCalendar() }
 
         tasksListsDetailsViewModel.newTime.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -334,11 +360,9 @@ class TasksListsDetailsFragment : Fragment() {
                 if(time.isNotEmpty()){
                     binding.showTimeDetail.text = time
                     binding.cancelTimeBtn.visibility = View.VISIBLE
-                    binding.insideTime.visibility = View.VISIBLE
                     binding.time.visibility = View.GONE
                 }
                 else{
-                    binding.insideTime.visibility = View.GONE
                     binding.cancelTimeBtn.visibility = View.GONE
                     binding.time.visibility = View.VISIBLE
                 }
@@ -348,33 +372,39 @@ class TasksListsDetailsFragment : Fragment() {
         // repeat
 
         tasksListsDetailsViewModel.repeat.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                repeat = it[0]
-                argumentsTaskList.repeat = repeat
+            if(it.isNotEmpty()){
+                it?.let {
+                    repeat = it[0]
+                    argumentsTaskList.repeat = repeat
+                    if(repeat.isEmpty()){
+                        initializedVariable()
+                    }
+                }
             }
         })
 
         if(argumentsTaskList.repeat!!.isNotEmpty()){
             binding.repeat.visibility = View.GONE
+            binding.showRepeatDetail.visibility = View.VISIBLE
             binding.showRepeatDetail.text = argumentsTaskList.repeat
         }
         else{
-            binding.insideRepeat.visibility = View.GONE
             binding.cancelRepeatBtn.visibility = View.GONE
         }
 
         binding.cancelRepeatBtn.setOnClickListener {
             repeat = ""
-            binding.insideRepeat.visibility = View.GONE
             binding.cancelRepeatBtn.visibility = View.GONE
+            binding.showRepeatDetail.visibility = View.GONE
+            binding.showRepeatDetail.text = repeat
             binding.repeat.visibility = View.VISIBLE
             tasksListsDetailsViewModel.setNewRepeat(repeat)
+            initializedVariable()
         }
 
         binding.clRepeat.setOnClickListener { repeatAction() }
         binding.RepeatBtn.setOnClickListener { repeatAction() }
         binding.repeat.setOnClickListener { repeatAction() }
-        binding.insideRepeat.setOnClickListener { setRepeat() }
 
         tasksListsDetailsViewModel.newRepeat.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -382,13 +412,12 @@ class TasksListsDetailsFragment : Fragment() {
                 databaseReference.child("Repeat").setValue(repeat)
                 argumentsTaskList.repeat = repeat
                 if(repeat.isNotEmpty()){
+                    binding.showRepeatDetail.visibility = View.VISIBLE
                     binding.showRepeatDetail.text = repeat
                     binding.cancelRepeatBtn.visibility = View.VISIBLE
-                    binding.insideRepeat.visibility = View.VISIBLE
                     binding.repeat.visibility = View.GONE
                 }
                 else{
-                    binding.insideRepeat.visibility = View.GONE
                     binding.cancelRepeatBtn.visibility = View.GONE
                     binding.repeat.visibility = View.VISIBLE
                 }
@@ -399,6 +428,25 @@ class TasksListsDetailsFragment : Fragment() {
 
     private fun setActionBarTitle(taskName: String) {
         (activity as AppCompatActivity).supportActionBar?.title = taskName
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_overflow_tasks_list_details,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.delete -> {
+                databaseReference.removeValue()
+                navController.navigate(TasksListsDetailsFragmentDirections.actionTasksListDetailsFragmentToTasksFragment2())
+                navController.navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment(argumentsNameList,argumentsTasksListName.toTypedArray()))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     // Calendar
@@ -466,8 +514,8 @@ class TasksListsDetailsFragment : Fragment() {
 
     private fun getDate(selectedDate: Calendar) {
         date = SimpleDateFormat("E, MMM d, yyyy", Locale.getDefault()).format(selectedDate.time)
-        binding.insideDate.visibility = View.VISIBLE
         binding.cancelDateBtn.visibility = View.VISIBLE
+        binding.showDateDetail.visibility = View.VISIBLE
         binding.showDateDetail.text = date
         tasksListsDetailsViewModel.setNewDate(date)
     }
@@ -543,8 +591,8 @@ class TasksListsDetailsFragment : Fragment() {
 
     private fun getTime(selectedDate: Calendar) {
         time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(selectedDate.time)
-        binding.insideTime.visibility = View.VISIBLE
         binding.cancelTimeBtn.visibility = View.VISIBLE
+        binding.showTimeDetail.visibility = View.VISIBLE
         binding.showTimeDetail.text = time
         tasksListsDetailsViewModel.setNewTime(time)
     }
@@ -1102,8 +1150,8 @@ class TasksListsDetailsFragment : Fragment() {
                     else "Every $number years"
                 }
 
-                binding.insideRepeat.visibility = View.VISIBLE
                 binding.cancelRepeatBtn.visibility = View.VISIBLE
+                binding.showRepeatDetail.visibility = View.VISIBLE
                 binding.showRepeatDetail.text = repeat
                 tasksListsDetailsViewModel.setNewRepeat(repeat)
                 dialog.dismiss()
@@ -1115,5 +1163,23 @@ class TasksListsDetailsFragment : Fragment() {
         cancelBtn.setOnClickListener {
             dialog.cancel()
         }
+    }
+
+    private fun initializedVariable(){
+        sunday = false
+        monday = false
+        tuesday = false
+        wednesday = false
+        thursday = false
+        friday = false
+        saturday = false
+
+        flagSunday = true
+        flagMonday = true
+        flagTuesday = true
+        flagWednesday = true
+        flagThursday = true
+        flagFriday = true
+        flagSaturday = true
     }
 }

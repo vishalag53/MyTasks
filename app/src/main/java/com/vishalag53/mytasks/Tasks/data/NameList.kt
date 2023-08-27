@@ -1,8 +1,10 @@
 package com.vishalag53.mytasks.Tasks.data
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class NameList(
     val listNameId: String,
     val listNameName: String
-): Serializable
+): Parcelable

@@ -122,7 +122,7 @@ class TasksFragment : Fragment() {
     }
 
     private fun taskClickListener(nameList: NameList){
-        navController.navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment(nameList))
+        navController.navigate(TasksFragmentDirections.actionTasksFragmentToTasksListsFragment(nameList, mutableNameList.toTypedArray()))
     }
 
     private fun filterList(query: String?){

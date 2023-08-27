@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        style="@style/white_black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/white_black"
         tools:context=".Tasks.TasksListsFragment.TasksListsFragment">
 
         <androidx.core.widget.NestedScrollView
@@ -37,6 +37,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:visibility="visible"
+                    style="@style/white_black"
                     app:layout_constraintBottom_toTopOf="@id/rvCompleteTasks"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -47,11 +48,11 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginStart="16dp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/baseline_keyboard_arrow_right_24_day"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:importantForAccessibility="no" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tvCompleteWithNumber"

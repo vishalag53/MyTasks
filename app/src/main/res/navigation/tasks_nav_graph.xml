@@ -23,6 +23,9 @@
         <argument
             android:name="tasks"
             app:argType="com.vishalag53.mytasks.Tasks.data.NameList"/>
+        <argument
+            android:name="tasksLists"
+            app:argType="com.vishalag53.mytasks.Tasks.data.NameList[]"/>
         <action
             android:id="@+id/action_tasksListsFragment_to_tasksListDetailsFragment"
             app:destination="@id/tasksListDetailsFragment"
@@ -42,8 +45,11 @@
         <argument
             android:name="nameList"
             app:argType="com.vishalag53.mytasks.Tasks.data.NameList"/>
+        <argument
+            android:name="tasksListsName"
+            app:argType="com.vishalag53.mytasks.Tasks.data.NameList[]"/>
         <action
-            android:id="@+id/action_tasksListDetailsFragment_to_tasksListsFragment"
-            app:destination="@id/tasksListsFragment" />
+            android:id="@+id/action_tasksListDetailsFragment_to_tasksFragment2"
+            app:destination="@id/tasksFragment" />
     </fragment>
 </navigation>

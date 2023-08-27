@@ -6,7 +6,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#7E5C5C"
+        android:background="@drawable/bkg_img"
         tools:context=".login.LogInActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout

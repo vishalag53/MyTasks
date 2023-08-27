@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.MyTasks" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MyTasks" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -11,7 +11,7 @@
         <item name="android:statusBarColor">@color/primary</item>
     </style>
 
-    <style name="Theme.Tasks" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Tasks" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -50,9 +50,9 @@
         <item name="android:layout_marginStart">2dp</item>
     </style>
 
-    <style name="weeks">
+    <style name="days">
         <item name="android:background">@drawable/weeks_rounded_btn_day</item>
-        <item name="android:textColor">#9C9C9C</item>
+        <item name="android:textColor">#757575</item>
         <item name="android:padding">2dp</item>
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:textSize">14sp</item>
@@ -72,5 +72,23 @@
         <item name="android:textColor">@color/lavender</item>
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="listImage">
+        <item name="android:src">@drawable/baseline_format_list_bulleted_24_day</item>
+    </style>
+
+    <style name="dialogBox">
+        <item name="android:background">@drawable/dialog_box_bg_day</item>
+    </style>
+
+    <style name="dialogBoxEdittext">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="dialogCL">
+        <item name="android:background">@drawable/rounded_rect_day_white</item>
+    </style>
+
 
 </resources>

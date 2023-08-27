@@ -55,6 +55,7 @@ class TasksListsFragment : Fragment() {
     private lateinit var itemUnCompleteTasksTouchHelper: ItemTouchHelper
     private lateinit var itemCompletedTasksTouchHelper: ItemTouchHelper
     private lateinit var arguments : NameList
+    private lateinit var argumentsTasksListName : MutableList<NameList>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +71,7 @@ class TasksListsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         arguments = TasksListsFragmentArgs.fromBundle(requireArguments()).tasks
+        argumentsTasksListName = TasksListsFragmentArgs.fromBundle(requireArguments()).tasksLists.toMutableList()
         tasksListName = arguments.listNameName
         tasksListId = arguments.listNameId
         setActionBarTitle(tasksListName)
@@ -96,7 +98,6 @@ class TasksListsFragment : Fragment() {
                 setActionBarTitle(it[0])
             }
         })
-
 
         binding.createBtn.setOnClickListener{ tasksListCreateButtonAction.createTask() }
 
@@ -215,7 +216,7 @@ class TasksListsFragment : Fragment() {
     }
 
     private fun tasksListClickListener(tasksList: TasksList){
-        navController.navigate(TasksListsFragmentDirections.actionTasksListsFragmentToTasksListDetailsFragment(tasksList,arguments))
+        navController.navigate(TasksListsFragmentDirections.actionTasksListsFragmentToTasksListDetailsFragment(tasksList,arguments,argumentsTasksListName.toTypedArray()))
     }
 
     private fun importantClickListener(tasksList: TasksList){

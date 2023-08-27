@@ -160,6 +160,7 @@ class TasksListCreateButtonAction(
         cancelRepeatBtn.setOnClickListener {
             showRepeatDetail.text = null
             insideRepeat.visibility = View.GONE
+            initializedVariable()
             repeat = ""
         }
 
@@ -798,6 +799,7 @@ class TasksListCreateButtonAction(
         }
 
         cancelBtn.setOnClickListener {
+            initializedVariable()
             dialog.cancel()
         }
     }
@@ -906,5 +908,23 @@ class TasksListCreateButtonAction(
         }
         flagSaturday = false
         saturday = true
+    }
+
+    private fun initializedVariable(){
+        sunday = false
+        monday = false
+        tuesday = false
+        wednesday = false
+        thursday = false
+        friday = false
+        saturday = false
+
+        flagSunday = true
+        flagMonday = true
+        flagTuesday = true
+        flagWednesday = true
+        flagThursday = true
+        flagFriday = true
+        flagSaturday = true
     }
 }

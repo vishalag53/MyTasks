@@ -6,7 +6,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        style="@style/white_black"
         tools:context=".Tasks.TasksFragment.TasksFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +49,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@drawable/rounded_rect"
+            style="@style/imageBtn"
             android:contentDescription="@string/click_for_create_new_task_list"
             android:src="@drawable/baseline_add_40" />
 

@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
+        style="@style/white_black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Tasks.TasksListsDetailsFragment.TasksListsDetailsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/white_black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clMoveTO"
+                style="@style/white_black"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginStart="24dp"
@@ -32,6 +35,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
+                    android:id="@+id/ivMoveTO"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -47,6 +51,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clTitle"
+                style="@style/white_black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -69,17 +74,16 @@
 
                 <EditText
                     android:id="@+id/title"
-                    style="@style/NoEditTextBorder"
+                    style="@style/dialogBoxEdittext"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
                     android:layout_marginEnd="4dp"
-                    android:autofillHints=""
+                    android:autofillHints="textMultiLine"
                     android:hint="@string/title"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:minHeight="48dp"
                     android:scrollbars="vertical"
-                    android:textColor="#100808"
-                    android:textColorHint="#858587"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/clImportant"
@@ -89,6 +93,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clImportant"
+                    style="@style/white_black"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginEnd="4dp"
@@ -117,6 +122,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clAddDetails"
+                style="@style/white_black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
@@ -139,7 +145,7 @@
 
                 <EditText
                     android:id="@+id/addDetails"
-                    style="@style/NoEditTextBorder"
+                    style="@style/dialogBoxEdittext"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -149,8 +155,6 @@
                     android:inputType="textMultiLine"
                     android:minHeight="48dp"
                     android:scrollbars="vertical"
-                    android:textColor="#100808"
-                    android:textColorHint="#858587"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -162,11 +166,12 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clCalendar"
+                style="@style/white_black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="24dp"
+                android:paddingEnd="2dp"
                 android:paddingBottom="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +186,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/calendar"
@@ -189,64 +194,57 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="4dp"
                     android:importantForAutofill="no"
                     android:minHeight="48dp"
-                    android:textSize="24sp"
+                    android:text="@string/add_date"
                     android:textColor="@color/md_theme_light_outline"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/calendarBtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/add_date" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/insideDate"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/showDateDetail"
+                    style="@style/textColor"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:background="@drawable/rounded_rect"
-                    android:backgroundTint="#000000"
+                    android:gravity="center_vertical"
+                    android:importantForAutofill="no"
+                    android:minHeight="48dp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/cancelDateBtn"
                     app:layout_constraintStart_toEndOf="@id/calendarBtn"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Sat, Aug 21, 2023" />
 
-                    <TextView
-                        android:id="@+id/showDateDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="@id/insideDate"
-                        app:layout_constraintStart_toStartOf="@id/insideDate"
-                        app:layout_constraintTop_toTopOf="@id/insideDate"
-                        tools:text=" Sat,Aug 21 " />
-
-                    <Button
-                        android:id="@+id/cancelDateBtn"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/baseline_close_24"
-                        android:backgroundTint="@color/bkg_blue"
-                        android:contentDescription="@string/cancel_button"
-                        app:layout_constraintBottom_toBottomOf="@id/insideDate"
-                        app:layout_constraintEnd_toEndOf="@id/insideDate"
-                        app:layout_constraintStart_toEndOf="@id/showDateDetail"
-                        app:layout_constraintTop_toTopOf="@id/insideDate"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/cancelDateBtn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/baseline_close_24"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/cancel_button"
+                    android:minHeight="48dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/showDateDetail"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clTime"
+                style="@style/dialogCL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="24dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clCalendar">
@@ -268,65 +266,56 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="4dp"
-                    android:hint="@string/add_time"
                     android:importantForAutofill="no"
                     android:minHeight="48dp"
-                    android:textSize="24sp"
+                    android:text="@string/add_time"
                     android:textColor="@color/md_theme_light_outline"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/TimeBtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/add_time" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/insideTime"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/showTimeDetail"
+                    style="@style/textColor"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:background="@drawable/rounded_rect"
-                    android:backgroundTint="#000000"
+                    android:gravity="center_vertical"
+                    android:importantForAutofill="no"
+                    android:minHeight="48dp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/cancelTimeBtn"
                     app:layout_constraintStart_toEndOf="@id/TimeBtn"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text=" 8:06 AM " />
 
-                    <TextView
-                        android:id="@+id/showTimeDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="@id/insideTime"
-                        app:layout_constraintStart_toStartOf="@id/insideTime"
-                        app:layout_constraintTop_toTopOf="@id/insideTime"
-                        tools:text=" 8:06 AM " />
-
-                    <Button
-                        android:id="@+id/cancelTimeBtn"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/baseline_close_24"
-                        android:backgroundTint="@color/bkg_blue"
-                        android:contentDescription="@string/cancel_button"
-                        app:layout_constraintBottom_toBottomOf="@id/insideTime"
-                        app:layout_constraintEnd_toEndOf="@id/insideTime"
-                        app:layout_constraintStart_toEndOf="@id/showTimeDetail"
-                        app:layout_constraintTop_toTopOf="@id/insideTime"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/cancelTimeBtn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/baseline_close_24"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/cancel_button"
+                    android:minHeight="48dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/showTimeDetail"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clRepeat"
+                style="@style/white_black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="24dp"
+                android:paddingEnd="2dp"
                 android:paddingBottom="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -349,54 +338,45 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="4dp"
                     android:importantForAutofill="no"
                     android:minHeight="48dp"
-                    android:textSize="24sp"
+                    android:text="@string/repeat"
                     android:textColor="@color/md_theme_light_outline"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/RepeatBtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/repeat" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/insideRepeat"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/showRepeatDetail"
+                    style="@style/textColor"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:background="@drawable/rounded_rect"
-                    android:backgroundTint="#000000"
+                    android:gravity="center_vertical"
+                    android:importantForAutofill="no"
+                    android:minHeight="48dp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/cancelRepeatBtn"
                     app:layout_constraintStart_toEndOf="@id/RepeatBtn"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Every 2 days Mon, Tue, Wed,Thu, Fri, Sat, Sun" />
 
-                    <TextView
-                        android:id="@+id/showRepeatDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="@id/insideRepeat"
-                        app:layout_constraintStart_toStartOf="@id/insideRepeat"
-                        app:layout_constraintTop_toTopOf="@id/insideRepeat"
-                        tools:text="Every 2 days Mon, Tue,\n Wed,Thu, Fri, Sat, Sun" />
-
-                    <Button
-                        android:id="@+id/cancelRepeatBtn"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/baseline_close_24"
-                        android:backgroundTint="@color/bkg_blue"
-                        android:contentDescription="@string/cancel_button"
-                        app:layout_constraintBottom_toBottomOf="@id/insideRepeat"
-                        app:layout_constraintEnd_toEndOf="@id/insideRepeat"
-                        app:layout_constraintStart_toEndOf="@id/showRepeatDetail"
-                        app:layout_constraintTop_toTopOf="@id/insideRepeat"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/cancelRepeatBtn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/baseline_close_24"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/cancel_button"
+                    android:minHeight="48dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/showRepeatDetail"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
