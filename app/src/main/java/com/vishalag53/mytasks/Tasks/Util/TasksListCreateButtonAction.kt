@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
+import android.text.Editable
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Button
@@ -87,6 +88,7 @@ class TasksListCreateButtonAction(
         val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
         val addImportant = dialog.findViewById<Button>(R.id.addImportant)
         val addDetail = dialog.findViewById<EditText>(R.id.addDetails)
+        val cancelDetailBtn = dialog.findViewById<Button>(R.id.cancelDetailBtn)
         val showDetail = dialog.findViewById<Button>(R.id.showDetailEditText)
         val showCalendar = dialog.findViewById<Button>(R.id.showCalendar)
         val showTime =  dialog.findViewById<Button>(R.id.showTime)
@@ -110,12 +112,19 @@ class TasksListCreateButtonAction(
         showDetail.setOnClickListener {
             if(flagDetail){
                 addDetail.visibility = View.VISIBLE
+                cancelDetailBtn.visibility = View.VISIBLE
                 flagDetail = false
             }
             else{
                 addDetail.visibility = View.GONE
+                cancelDetailBtn.visibility = View.GONE
                 flagDetail = true
             }
+        }
+
+        cancelDetailBtn.setOnClickListener {
+            details = ""
+            addDetail.text = Editable.Factory.getInstance().newEditable(details)
         }
 
         setDueDateBtn.setOnClickListener {
@@ -183,6 +192,7 @@ class TasksListCreateButtonAction(
 
             if(title.isNotEmpty()){
                 addArrayInFirebase()
+                dialog.dismiss()
 
                 addTitle.text = null
                 addDetail.text = null

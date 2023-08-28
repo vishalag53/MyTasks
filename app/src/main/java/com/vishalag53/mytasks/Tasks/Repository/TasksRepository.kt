@@ -35,7 +35,8 @@ class TasksRepository(
             for (taskSnapshot   in snapshot.children) {
                 val taskList = taskSnapshot.key?.let {
                     val name = taskSnapshot.child("Tasks Name").value.toString()
-                    NameList(it, name)
+                    val totalTasks = taskSnapshot.child("Tasks Lists").children.count()
+                    NameList(it, name, totalTasks)
                 }
 
                 if (taskList != null) {
@@ -80,6 +81,7 @@ class TasksRepository(
              else{
                  Toast.makeText(requireContext,"Enter the list name",Toast.LENGTH_SHORT).show()
              }
+             dialog.dismiss()
          }
          dialogTasksListsBelow(dialog)
      }

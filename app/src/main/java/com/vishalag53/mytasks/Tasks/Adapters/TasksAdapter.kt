@@ -35,9 +35,9 @@ class TasksAdapter(
     override fun onBindViewHolder(holder: TasksListViewHolder, position: Int) {
         val nameList = getItem(position)
         holder.bind()
-        holder.binding.textViewTitle3.text = nameList.listNameName
-
-        holder.binding.clImport4.setOnClickListener {
+        holder.binding.tvListName.text = nameList.listNameName
+        holder.binding.tvTotalTasks.text = nameList.totalTasks.toString()
+        holder.binding.clListItem.setOnClickListener {
             taskClickListener(nameList)
         }
 

@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -139,9 +140,17 @@ class TasksListsDetailsFragment : Fragment() {
 
         moveTasksList = MoveTasksList(argumentsTasksListName,requireContext(),argumentsNameList.listNameName,databaseReferenceStarting,argumentsTaskList,argumentsNameList,navController,argumentsTasksListName)
         binding.moveTo.text = argumentsNameList.listNameName
-        binding.moveTo.setOnClickListener { moveTasksList.moveTasksList() }
-        binding.clMoveTO.setOnClickListener { moveTasksList.moveTasksList() }
-        binding.ivMoveTO.setOnClickListener { moveTasksList.moveTasksList() }
+        if(argumentsTasksListName.size > 1){
+            binding.moveTo.setOnClickListener { moveTasksList.moveTasksList() }
+            binding.clMoveTO.setOnClickListener { moveTasksList.moveTasksList() }
+            binding.ivMoveTO.setOnClickListener { moveTasksList.moveTasksList() }
+            binding.ivMoveTO.setImageResource(R.drawable.baseline_arrow_drop_down_32_blue)
+            binding.moveTo.setTextColor(ContextCompat.getColor(requireContext(),R.color.bkg_blue))
+        }
+        else{
+            binding.moveTo.setTextColor(ContextCompat.getColor(requireContext(),R.color.md_theme_light_outline))
+            binding.ivMoveTO.setImageResource(R.drawable.baseline_arrow_drop_down_32_)
+        }
 
 
         // Completed Button
@@ -167,6 +176,13 @@ class TasksListsDetailsFragment : Fragment() {
         else{
             binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)
             binding.title.text = Editable.Factory.getInstance().newEditable(argumentsTaskList.title)
+            val configuration = requireContext().resources.configuration
+            if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                binding.title.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            }
+            else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                binding.title.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+            }
         }
 
         binding.checkCompleteButton.setOnClickListener{
@@ -174,6 +190,13 @@ class TasksListsDetailsFragment : Fragment() {
                 binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)
                 databaseReference.child("Completed").setValue("false")
                 binding.title.text = Editable.Factory.getInstance().newEditable(title)
+                val configuration = requireContext().resources.configuration
+                if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                    binding.title.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                }
+                else if (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO) {
+                    binding.title.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                }
             }
             else{
                 binding.checkCompleteButton.setButtonDrawable(R.drawable.check_circle_32px)
@@ -255,6 +278,12 @@ class TasksListsDetailsFragment : Fragment() {
         })
 
         binding.addDetails.text = Editable.Factory.getInstance().newEditable(argumentsTaskList.details)
+        if(argumentsTaskList.details!!.isEmpty()) {
+            binding.cancelDetailBtn.visibility = View.GONE
+        }
+        else{
+            binding.cancelDetailBtn.visibility = View.VISIBLE
+        }
         binding.addDetails.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -266,10 +295,25 @@ class TasksListsDetailsFragment : Fragment() {
 
         tasksListsDetailsViewModel.newDetails.observe(viewLifecycleOwner, Observer {
             it?.let {
-                databaseReference.child("Details").setValue(it)
+                details = it
+                databaseReference.child("Details").setValue(details)
                 argumentsTaskList.details = details
+                if(details.isEmpty()){
+                    binding.cancelDetailBtn.visibility = View.GONE
+                }
+                else{
+                    binding.cancelDetailBtn.visibility = View.VISIBLE
+                }
             }
         })
+
+        binding.cancelDetailBtn.setOnClickListener {
+            details = ""
+            argumentsTaskList.details = details
+            tasksListsDetailsViewModel.setNewDetails(details)
+            binding.cancelDetailBtn.visibility = View.GONE
+            binding.addDetails.text = Editable.Factory.getInstance().newEditable(details)
+        }
 
         // date
 
@@ -283,7 +327,6 @@ class TasksListsDetailsFragment : Fragment() {
         })
 
         if(argumentsTaskList.date!!.isNotEmpty()){
-            binding.calendar.visibility = View.GONE
             binding.showDateDetail.text = argumentsTaskList.date
         }
         else{
@@ -293,15 +336,12 @@ class TasksListsDetailsFragment : Fragment() {
         binding.cancelDateBtn.setOnClickListener {
             date = ""
             binding.cancelDateBtn.visibility = View.GONE
-            binding.showDateDetail.visibility = View.GONE
             binding.showDateDetail.text = date
-            binding.calendar.visibility = View.VISIBLE
             tasksListsDetailsViewModel.setNewDate(date)
         }
 
         binding.clCalendar.setOnClickListener { dateAction() }
         binding.calendarBtn.setOnClickListener { dateAction() }
-        binding.calendar.setOnClickListener { dateAction() }
 
         tasksListsDetailsViewModel.newDate.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -311,11 +351,9 @@ class TasksListsDetailsFragment : Fragment() {
                 if(date.isNotEmpty()){
                     binding.showDateDetail.text = date
                     binding.cancelDateBtn.visibility = View.VISIBLE
-                    binding.calendar.visibility = View.GONE
                 }
                 else{
                     binding.cancelDateBtn.visibility = View.GONE
-                    binding.calendar.visibility = View.VISIBLE
                 }
             }
         })
@@ -332,7 +370,6 @@ class TasksListsDetailsFragment : Fragment() {
         })
 
         if(argumentsTaskList.time!!.isNotEmpty()){
-            binding.time.visibility = View.GONE
             binding.showTimeDetail.text = argumentsTaskList.time
         }
         else{
@@ -342,15 +379,12 @@ class TasksListsDetailsFragment : Fragment() {
         binding.cancelTimeBtn.setOnClickListener {
             time = ""
             binding.cancelTimeBtn.visibility = View.GONE
-            binding.showTimeDetail.visibility = View.GONE
             binding.showTimeDetail.text = time
-            binding.time.visibility = View.VISIBLE
             tasksListsDetailsViewModel.setNewTime(time)
         }
 
         binding.clTime.setOnClickListener { timeAction() }
         binding.TimeBtn.setOnClickListener { timeAction() }
-        binding.time.setOnClickListener { timeAction() }
 
         tasksListsDetailsViewModel.newTime.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -360,11 +394,9 @@ class TasksListsDetailsFragment : Fragment() {
                 if(time.isNotEmpty()){
                     binding.showTimeDetail.text = time
                     binding.cancelTimeBtn.visibility = View.VISIBLE
-                    binding.time.visibility = View.GONE
                 }
                 else{
                     binding.cancelTimeBtn.visibility = View.GONE
-                    binding.time.visibility = View.VISIBLE
                 }
             }
         })
@@ -384,7 +416,6 @@ class TasksListsDetailsFragment : Fragment() {
         })
 
         if(argumentsTaskList.repeat!!.isNotEmpty()){
-            binding.repeat.visibility = View.GONE
             binding.showRepeatDetail.visibility = View.VISIBLE
             binding.showRepeatDetail.text = argumentsTaskList.repeat
         }
@@ -395,16 +426,13 @@ class TasksListsDetailsFragment : Fragment() {
         binding.cancelRepeatBtn.setOnClickListener {
             repeat = ""
             binding.cancelRepeatBtn.visibility = View.GONE
-            binding.showRepeatDetail.visibility = View.GONE
             binding.showRepeatDetail.text = repeat
-            binding.repeat.visibility = View.VISIBLE
             tasksListsDetailsViewModel.setNewRepeat(repeat)
             initializedVariable()
         }
 
         binding.clRepeat.setOnClickListener { repeatAction() }
         binding.RepeatBtn.setOnClickListener { repeatAction() }
-        binding.repeat.setOnClickListener { repeatAction() }
 
         tasksListsDetailsViewModel.newRepeat.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -415,11 +443,9 @@ class TasksListsDetailsFragment : Fragment() {
                     binding.showRepeatDetail.visibility = View.VISIBLE
                     binding.showRepeatDetail.text = repeat
                     binding.cancelRepeatBtn.visibility = View.VISIBLE
-                    binding.repeat.visibility = View.GONE
                 }
                 else{
                     binding.cancelRepeatBtn.visibility = View.GONE
-                    binding.repeat.visibility = View.VISIBLE
                 }
             }
         })

@@ -6,5 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class NameList(
     val listNameId: String,
-    val listNameName: String
+    val listNameName: String,
+    val totalTasks: Int
 ): Parcelable

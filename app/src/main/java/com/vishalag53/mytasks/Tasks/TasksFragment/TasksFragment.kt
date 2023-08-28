@@ -176,9 +176,14 @@ class TasksFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.reorderTasks -> {
-                TODO()
+
+                true
             }
             R.id.search -> {
+                true
+            }
+            R.id.deleteAllLists -> {
+                databaseReference.removeValue()
                 true
             }
             R.id.defaultSort -> {

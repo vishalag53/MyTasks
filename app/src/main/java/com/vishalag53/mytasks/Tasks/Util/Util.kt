@@ -25,6 +25,7 @@ fun dialogTasksLists(requireContext: Context): Dialog {
     dialog.findViewById<Button>(R.id.showTime).visibility = View.GONE
     dialog.findViewById<Button>(R.id.showRepeat).visibility = View.GONE
     dialog.findViewById<Button>(R.id.addImportant).visibility = View.GONE
+    dialog.findViewById<Button>(R.id.cancelDetailBtn).visibility = View.GONE
     dialog.findViewById<ConstraintLayout>(R.id.showDateTimeRepeatDetail).visibility = View.GONE
     dialog.findViewById<ConstraintLayout>(R.id.clRemind).visibility = View.GONE
 
@@ -46,6 +47,7 @@ fun dialogTasks(requireContext: Context): Dialog {
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setContentView(R.layout.create_dialog_box)
     dialog.findViewById<EditText>(R.id.addDetails).visibility = View.GONE
+    dialog.findViewById<Button>(R.id.cancelDetailBtn).visibility = View.GONE
     return dialog
 }
 

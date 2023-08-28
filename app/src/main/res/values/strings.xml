@@ -80,4 +80,6 @@
     <string name="repeat">Repeat</string>
     <string name="delete">Delete</string>
     <string name="move_task_to">Move task to</string>
+    <string name="add_repeat">Add repeat</string>
+    <string name="delete_all_tasks_lists">Delete all tasks lists</string>
 </resources>
