@@ -64,7 +64,7 @@
     <string name="week">week</string>
     <string name="months">months</string>
     <string name="years">years</string>
-    <string name="set_due_date">Set due Date</string>
+    <string name="set_due_date">Set due date</string>
     <string name="select_time_intervals">Select time intervals</string>
     <string name="completed_8">Completed(8)</string>
     <string name="_8">8</string>
@@ -82,4 +82,10 @@
     <string name="move_task_to">Move task to</string>
     <string name="add_repeat">Add repeat</string>
     <string name="delete_all_tasks_lists">Delete all tasks lists</string>
+    <string name="date">DATE</string>
+    <string name="time">TIME</string>
+    <string name="set_time">Set time</string>
+    <string name="remind_me">Remind me</string>
+    <string name="timee">Time</string>
+    <string name="setTime">%1$d:%2$s %3$s</string>
 </resources>

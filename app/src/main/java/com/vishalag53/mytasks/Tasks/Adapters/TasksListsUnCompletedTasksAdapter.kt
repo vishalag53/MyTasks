@@ -65,12 +65,12 @@ class TasksListsUnCompletedTasksAdapter (
             holder.binding.notificationIcon.visibility = View.VISIBLE
         }
         if(tasksList.important == "true"){
-            holder.binding.addImportant.background = ContextCompat.getDrawable(requireContext,R.drawable.baseline_star_24)
+            holder.binding.addImportants.background = ContextCompat.getDrawable(requireContext,R.drawable.baseline_star_24)
         }
         else{
-            holder.binding.addImportant.background = ContextCompat.getDrawable(requireContext,R.drawable.baseline_star_outline_24)
+            holder.binding.addImportants.background = ContextCompat.getDrawable(requireContext,R.drawable.baseline_star_outline_24)
         }
-        holder.binding.addImportant.setOnClickListener {
+        holder.binding.addImportants.setOnClickListener {
             importantClickListener(tasksList)
         }
         holder.binding.checkCompleteButton.setButtonDrawable(R.drawable.radio_button_unchecked_32px)

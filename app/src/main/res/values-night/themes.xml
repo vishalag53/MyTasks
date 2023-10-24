@@ -90,5 +90,12 @@
         <item name="android:background">@drawable/rounded_rect_night_black</item>
     </style>
 
+    <style name="clBkg">
+        <item name="android:background">@drawable/rounded_bg_1</item>
+    </style>
+    
+    <style name="white_other">
+        <item name="android:background">@color/md_theme_dark_surfaceVariant</item>
+    </style>
 
 </resources>

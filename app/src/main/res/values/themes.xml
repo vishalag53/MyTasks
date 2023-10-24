@@ -90,5 +90,12 @@
         <item name="android:background">@drawable/rounded_rect_day_white</item>
     </style>
 
+    <style name="clBkg">
+        <item name="android:background">@drawable/rounded_bg</item>
+    </style>
+
+    <style name="white_other">
+        <item name="android:background">@color/white</item>
+    </style>
 
 </resources>

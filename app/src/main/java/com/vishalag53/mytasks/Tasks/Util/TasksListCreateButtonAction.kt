@@ -1,8 +1,6 @@
 package com.vishalag53.mytasks.Tasks.Util
 
-import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
@@ -11,25 +9,26 @@ import android.text.Editable
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Button
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.text.isDigitsOnly
 import com.google.firebase.database.DatabaseReference
 import com.vishalag53.mytasks.R
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
+
 
 class TasksListCreateButtonAction(
     private val requireContext: Context,
     private val databaseReference: DatabaseReference
 ) {
+    // show task data
     private var title = ""
     private var details = ""
     private var date = ""
@@ -37,33 +36,42 @@ class TasksListCreateButtonAction(
     private var repeat = ""
     private var isImportant = "false"
 
-    private lateinit var insideDate : ConstraintLayout
-    private lateinit var insideTime : ConstraintLayout
-    private lateinit var insideRepeat : ConstraintLayout
-    private lateinit var showDateDetail : TextView
-    private lateinit var showTimeDetail : TextView
-    private lateinit var showRepeatDetail : TextView
-    private lateinit var cancelDateBtn : Button
-    private lateinit var cancelTimeBtn : Button
-    private lateinit var cancelRepeatBtn : Button
-    private lateinit var setDueDateBtn : ConstraintLayout
-    private lateinit var iconRemindBtn : Button
+    // dialog create
+    private lateinit var dialogCreate: Dialog
+    private lateinit var insideRemindMe: ConstraintLayout
+    private lateinit var showRemindMeDetail: TextView
+    private lateinit var cancelRemindMeBtn: Button
+    private lateinit var iconRemindMeBtn: Button
 
-    private lateinit var dialog: Dialog
+    // dialog remind me
+    private lateinit var dialogRemindMe: Dialog
+    private lateinit var clickTime: ConstraintLayout
+    private lateinit var showTime: Button
+    private lateinit var clickRepeat: ConstraintLayout
+    private lateinit var showRepeat: Button
+    private lateinit var datePicker: DatePicker
+    private lateinit var setTime: TextView
+    private lateinit var cancelTimeBtn: Button
+    private lateinit var cancelRepeatBtn: Button
+    private lateinit var setRepeat: TextView
+
+    // dialog time
+    private lateinit var dialogTime: Dialog
+
+    // dialog repeat
+    private lateinit var dialogRepeat: Dialog
+    private lateinit var doneRepeatBtn: TextView
     private lateinit var addNumber: EditText
-    private lateinit var selectMonthBtn : TextView
-    private lateinit var sundayBtn : AppCompatButton
-    private lateinit var mondayBtn : AppCompatButton
-    private lateinit var tuesdayBtn : AppCompatButton
-    private lateinit var wednesdayBtn : AppCompatButton
-    private lateinit var thursdayBtn : AppCompatButton
-    private lateinit var fridayBtn : AppCompatButton
-    private lateinit var saturdayBtn : AppCompatButton
-    private lateinit var doneBtn: TextView
-    private lateinit var cancelBtn: TextView
-
+    private lateinit var selectMonthBtn: TextView
+    private lateinit var cancelRepeat: TextView
+    private lateinit var sundayBtn: AppCompatButton
+    private lateinit var mondayBtn: AppCompatButton
+    private lateinit var tuesdayBtn: AppCompatButton
+    private lateinit var wednesdayBtn: AppCompatButton
+    private lateinit var thursdayBtn: AppCompatButton
+    private lateinit var fridayBtn: AppCompatButton
+    private lateinit var saturdayBtn: AppCompatButton
     private var selectTimeInterval = "weeks"
-
     private var sunday = false
     private var monday = false
     private var tuesday = false
@@ -71,7 +79,6 @@ class TasksListCreateButtonAction(
     private var thursday = false
     private var friday = false
     private var saturday = false
-
     private var flagSunday = true
     private var flagMonday = true
     private var flagTuesday = true
@@ -80,32 +87,23 @@ class TasksListCreateButtonAction(
     private var flagFriday = true
     private var flagSaturday = true
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun createTask(){
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createTask() {
         var flagImportant = true
         var flagDetail = true
-        dialog = dialogTasks(requireContext)
-        val addTitle = dialog.findViewById<EditText>(R.id.addTitle)
-        val addImportant = dialog.findViewById<Button>(R.id.addImportant)
-        val addDetail = dialog.findViewById<EditText>(R.id.addDetails)
-        val cancelDetailBtn = dialog.findViewById<Button>(R.id.cancelDetailBtn)
-        val showDetail = dialog.findViewById<Button>(R.id.showDetailEditText)
-        val showCalendar = dialog.findViewById<Button>(R.id.showCalendar)
-        val showTime =  dialog.findViewById<Button>(R.id.showTime)
-        val showRepeat = dialog.findViewById<Button>(R.id.showRepeat)
-        val saveBtn = dialog.findViewById<Button>(R.id.save)
+        dialogCreate = dialogTasks(requireContext)
+        val addTitle = dialogCreate.findViewById<EditText>(R.id.addTitle)!!
+        val addImportant = dialogCreate.findViewById<Button>(R.id.addImportant)!!
+        val addDetail = dialogCreate.findViewById<EditText>(R.id.addDetails)!!
+        val cancelDetailBtn = dialogCreate.findViewById<Button>(R.id.cancelDetailBtn)!!
+        val showDetail = dialogCreate.findViewById<Button>(R.id.showDetailEditText)!!
+        val saveBtn = dialogCreate.findViewById<Button>(R.id.save)!!
 
-        insideDate = dialog.findViewById(R.id.insideDate)
-        insideTime = dialog.findViewById(R.id.insideTime)
-        insideRepeat = dialog.findViewById(R.id.insideRepeat)
-        showDateDetail = dialog.findViewById(R.id.showDateDetail)
-        showTimeDetail = dialog.findViewById(R.id.showTimeDetail)
-        showRepeatDetail = dialog.findViewById(R.id.showRepeatDetail)
-        cancelDateBtn = dialog.findViewById(R.id.cancelDateBtn)
-        cancelTimeBtn = dialog.findViewById(R.id.cancelTimeBtn)
-        cancelRepeatBtn = dialog.findViewById(R.id.cancelRepeatBtn)
-        setDueDateBtn = dialog.findViewById(R.id.clRemind)
-        iconRemindBtn = dialog.findViewById(R.id.iconRemind)
+        insideRemindMe = dialogCreate.findViewById(R.id.insideRemindMe)
+        showRemindMeDetail = dialogCreate.findViewById(R.id.showRemindMe)
+        cancelRemindMeBtn = dialogCreate.findViewById(R.id.cancelRemindMeDetailBtn)
+        iconRemindMeBtn = dialogCreate.findViewById(R.id.iconRemind)
 
         addTitle.hint = "New Task"
 
@@ -127,49 +125,19 @@ class TasksListCreateButtonAction(
             addDetail.text = Editable.Factory.getInstance().newEditable(details)
         }
 
-        setDueDateBtn.setOnClickListener {
-            setDueDateBtn.visibility = View.GONE
-            showCalendar.visibility = View.VISIBLE
-            showTime.visibility = View.VISIBLE
+        iconRemindMeBtn.setOnClickListener {
+            openRemindMeDialogBox()
         }
 
-        iconRemindBtn.setOnClickListener {
-            setDueDateBtn.visibility = View.GONE
-            showCalendar.visibility = View.VISIBLE
-            showTime.visibility = View.VISIBLE
+        showRemindMeDetail.setOnClickListener {
+            openRemindMeDialogBox()
         }
 
-        showCalendar.setOnClickListener {
-            if(date.isNotEmpty()) setDateOnCalendar()
-            else showDatePicker()
-        }
-        insideDate.setOnClickListener { setDateOnCalendar() }
-        cancelDateBtn.setOnClickListener {
-            showDateDetail.text = null
-            insideDate.visibility = View.GONE
-            date = ""
-        }
-
-        showTime.setOnClickListener {
-            if(time.isNotEmpty()) setTimeOnCalendar()
-            else showTimePicker()
-        }
-        insideTime.setOnClickListener { setTimeOnCalendar() }
-        cancelTimeBtn.setOnClickListener {
-            showTimeDetail.text = null
-            insideTime.visibility = View.GONE
+        cancelRemindMeBtn.setOnClickListener {
+            showRemindMeDetail.text = null
+            insideRemindMe.visibility = View.GONE
             time = ""
-        }
-
-        showRepeat.setOnClickListener {
-            if(repeat.isNotEmpty()) setRepeat()
-            else showRepeatDialog()
-        }
-        insideRepeat.setOnClickListener { setRepeat() }
-        cancelRepeatBtn.setOnClickListener {
-            showRepeatDetail.text = null
-            insideRepeat.visibility = View.GONE
-            initializedVariable()
+            date = ""
             repeat = ""
         }
 
@@ -186,19 +154,24 @@ class TasksListCreateButtonAction(
             }
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //createNotificationChannel()
+        }
+
         saveBtn.setOnClickListener {
             title = addTitle.text.toString()
             details = addDetail.text.toString()
 
             if(title.isNotEmpty()){
-                addArrayInFirebase()
-                dialog.dismiss()
+                addInFirebase()
+                dialogCreate.dismiss()
+                if(date.isNotEmpty() && time.isNotEmpty()){
+                    //scheduleNotification()
+                }
 
                 addTitle.text = null
                 addDetail.text = null
-                showDateDetail.text = null
-                showTimeDetail.text = null
-                showRepeatDetail.text = null
+                showRemindMeDetail.text = null
                 title = ""
                 details = ""
                 date = ""
@@ -206,49 +179,19 @@ class TasksListCreateButtonAction(
                 repeat = ""
                 isImportant = "false"
                 addImportant.background = ContextCompat.getDrawable(requireContext, R.drawable.baseline_star_outline_24)
-
-                insideDate.visibility = View.GONE
-                insideTime.visibility = View.GONE
-                insideRepeat.visibility = View.GONE
+                insideRemindMe.visibility = View.GONE
             }
             else{
-                Toast.makeText(requireContext,"Enter the task name!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext,"Enter the task name!", Toast.LENGTH_SHORT).show()
             }
         }
 
-        dialogTasksBelow(dialog)
-    }
-
-    private fun setRepeat() {
-        val textRepeat = repeat
-        val text = textRepeat.split(" ")
-        when (text[0].trim()) {
-            "Weekly" -> showRepeatWeeksDialog(1, text)
-            "Yearly" -> showRepeatDialog(1, "year")
-            "Monthly" -> showRepeatDialog(1, "month")
-            "Daily" -> showRepeatDialog(1, "day")
-        }
-        if (text.size >= 3) when (text[2].trim()) {
-            "years" -> showRepeatDialog(text[1].trim().toInt(), "year")
-            "months" -> showRepeatDialog(text[1].trim().toInt(), "month")
-            "days" -> showRepeatDialog(text[1].trim().toInt(), "day")
-            "week" -> showRepeatWeeksDialog(text[1].trim().toInt(), text)
-        }
-    }
-
-    private fun setTimeOnCalendar() {
-        val txtTime = time
-        val hours = getHours(txtTime)
-        val minute = if (hours in 0..9) getMinute(txtTime, false)
-        else getMinute(txtTime, true)
-        val isPM = if (hours in 0..9) getPM(txtTime, false)
-        else getPM(txtTime, true)
-        if (isPM) showTimePickerAtSpecificTime(hours + 12, minute)
-        else showTimePickerAtSpecificTime(hours, minute)
+        dialogTasksBelow(dialogCreate)
     }
 
 
-    private fun addArrayInFirebase() {
+    // add in firebase
+    private fun addInFirebase() {
         val key = databaseReference.push()
         key.child("Title").setValue(title)
         key.child("Details").setValue(details)
@@ -259,266 +202,316 @@ class TasksListCreateButtonAction(
         key.child("Completed").setValue("false")
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun showDatePicker() {
-        val currentDateTime = Calendar.getInstance()
-        val datePicker = DatePickerDialog(requireContext,{ _, year, monthOfYear,dayOfMonth ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year,monthOfYear,dayOfMonth)
-            getDate(selectedDate)
-        },
-            currentDateTime.get(Calendar.YEAR),
-            currentDateTime.get(Calendar.MONTH),
-            currentDateTime.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
+    // Remind me
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun openRemindMeDialogBox(){
+        dialogRemindMe = dialogRemindMe(requireContext)
+        clickTime = dialogRemindMe.findViewById(R.id.clickTime)
+        showTime = dialogRemindMe.findViewById(R.id.showTime)
+        clickRepeat = dialogRemindMe.findViewById(R.id.clickRepeat)
+        showRepeat = dialogRemindMe.findViewById(R.id.showRepeat)
+        datePicker = dialogRemindMe.findViewById(R.id.datePicker)
+        setTime = dialogRemindMe.findViewById(R.id.setTime)
+        cancelTimeBtn = dialogRemindMe.findViewById(R.id.cancelTimeBtn)
+        setRepeat = dialogRemindMe.findViewById(R.id.setRepeat)
+        cancelRepeatBtn = dialogRemindMe.findViewById(R.id.cancelRepeatBtn)
+
+        val cancelRemindMe = dialogRemindMe.findViewById<TextView>(R.id.cancelRemindMe)!!
+        val doneRemindMe = dialogRemindMe.findViewById<TextView>(R.id.doneRemindMe)!!
+
+        if(showRemindMeDetail.text != ""){
+            val remindMeDetail = showRemindMeDetail.text.toString()
+            val details = remindMeDetail.split('\n')
+
+            val date = details[0]
+            var time  = ""
+            var repeat = ""
+
+            if(details.size > 1){
+                if(details.size == 2){
+                    val ch = details[1][0]
+                    if(ch == 'W' || ch == 'E' || ch == 'Y' || ch == 'M' || ch == 'D'){
+                        repeat = details[1]
+                    } else{
+                        time = details[1]
+                    }
+                }
+                else if(details.size == 3){
+                    time = details[1]
+                    repeat = details[2]
+                }
+            }
+
+            if(time != ""){
+                setTime.text = time
+                cancelTimeBtn.visibility = View.VISIBLE
+            }
+            if(repeat != ""){
+                setRepeat.text = repeat
+                cancelRepeatBtn.visibility = View.VISIBLE
+            }
+
+            val days: Int
+            val month: Int
+            val year : Int
+
+            if (date[10] == ','){
+                days =  date.substring(9,10).toInt()
+                year = date.substring(12,16).toInt()
+            }
+            else {
+                days = date.substring(9, 11).toInt()
+                year = date.substring(13, 17).toInt()
+            }
+
+            val months = date.substring(5,8)
+            month = getMonthInt(months)
+
+            datePicker.updateDate(year, month, days)
+        }
+
+        clickTime.setOnClickListener {
+            openTimeDialog()
+        }
+        showTime.setOnClickListener {
+            openTimeDialog()
+        }
+
+        cancelTimeBtn.setOnClickListener {
+            setTime.setText(R.string.timee)
+            cancelTimeBtn.visibility = View.GONE
+            time = ""
+        }
+
+        clickRepeat.setOnClickListener {
+            openRepeatDialog()
+        }
+
+        showRepeat.setOnClickListener {
+            openRepeatDialog()
+        }
+
+        cancelRepeatBtn.setOnClickListener {
+            setRepeat.setText(R.string.repeat)
+            cancelRepeatBtn.visibility = View.GONE
+            repeat = ""
+        }
+
+        var months: Int
+        var dayOfMonth: Int
+        var year: Int
+
+        doneRemindMe.setOnClickListener {
+            insideRemindMe.visibility = View.VISIBLE
+            months = datePicker.month
+            dayOfMonth = datePicker.dayOfMonth
+            year = datePicker.year
+
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, months)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            val days : String = when(calendar.get(Calendar.DAY_OF_WEEK)) {
+                Calendar.SUNDAY -> "SUN"
+                Calendar.MONDAY -> "MON"
+                Calendar.TUESDAY -> "TUE"
+                Calendar.WEDNESDAY -> "WED"
+                Calendar.THURSDAY -> "THU"
+                Calendar.FRIDAY -> "FRI"
+                Calendar.SATURDAY -> "SAT"
+                else -> ""
+            }
+            val month = getMonth(months)
+
+            time = setTime.text.toString()
+            repeat = setRepeat.text.toString()
+
+            var remindMeDetail = "$days, $month $dayOfMonth, $year"
+            date = remindMeDetail
+            if (time == "Time" && repeat == "Repeat"){
+                showRemindMeDetail.text = remindMeDetail
+            }
+            else if (time != "Time" && repeat == "Repeat"){
+                remindMeDetail += "\n$time"
+                showRemindMeDetail.text = remindMeDetail
+            }
+            else if (time == "Time" && repeat != "Repeat"){
+                remindMeDetail += "\n$repeat"
+                showRemindMeDetail.text = remindMeDetail
+            }
+            else{
+                remindMeDetail += "\n$time\n$repeat"
+                showRemindMeDetail.text = remindMeDetail
+            }
+            dialogRemindMe.dismiss()
+        }
+
+        cancelRemindMe.setOnClickListener {
+            dialogRemindMe.dismiss()
+        }
+
+        dialogRemindMeBelow(dialogRemindMe)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun setDateOnCalendar() {
-        val textDate = date
-        val days = getDay(textDate)
-        val year = if (days in 0..9) getYear(textDate, false)
-        else getYear(textDate, true)
-        val month = getMonth(textDate)
-        showDatePickerAtSpecificDate(days, month, year)
-    }
-
-    private fun getDay(textDate: String): Int {
-        val a = textDate.substring(9, 11)
-        if (a.isDigitsOnly()) return a.toInt()
-        return textDate.substring(9, 10).toInt()
-    }
-
-    private fun getYear(textDate: String, b: Boolean): Int {
-        return when (b){
-            true -> textDate.substring(13,17).toInt()
-            else -> textDate.substring(12,16).toInt()
+    private fun getMonth(month: Int): String {
+        return when (month){
+            0 -> "Jan"
+            1 -> "Feb"
+            2 -> "Mar"
+            3 -> "Apr"
+            4 -> "May"
+            5 -> "Jun"
+            6 -> "Jul"
+            7 -> "Aug"
+            8 -> "Sep"
+            9 -> "Oct"
+            10 -> "Nov"
+            11 -> "Dec"
+            else -> ""
         }
     }
 
-    private fun getMonth(textDate: String):Int {
-        return when (textDate.substring(5,8)){
-            "Jan" -> 1
-            "Feb" -> 2
-            "Mar" -> 3
-            "Apr" -> 4
-            "May" -> 5
-            "Jun" -> 6
-            "Jul" -> 7
-            "Aug" -> 8
-            "Sep" -> 9
-            "Oct" -> 10
-            "Nov" -> 11
-            "Dec" -> 12
+    private fun getMonthInt(months: String): Int {
+        return when (months){
+            "Jan" -> 0
+            "Feb" -> 1
+            "Mar" -> 2
+            "Apr" -> 3
+            "May" -> 4
+            "Jun" -> 5
+            "Jul" -> 6
+            "Aug" -> 7
+            "Sep" -> 8
+            "Oct" -> 9
+            "Nov" -> 10
+            "Dec" -> 11
             else -> 0
         }
     }
 
-    private fun showTimePicker() {
-        val selectedDate = Calendar.getInstance()
-        val timePicker = TimePickerDialog(requireContext,{ _, hourOfDay, minute ->
-            selectedDate.set(Calendar.HOUR_OF_DAY,hourOfDay)
-            selectedDate.set(Calendar.MINUTE,minute)
+    // Time
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun openTimeDialog(){
+        dialogTime = dialogTime(requireContext)
+        val cancelBtn = dialogTime.findViewById<TextView>(R.id.cancelBtn)
+        val doneBtn = dialogTime.findViewById<TextView>(R.id.doneBtn)
+        val timePicker = dialogTime.findViewById<TimePicker>(R.id.timePicker)
+        val is12HoursFormat = !timePicker.is24HourView
+        var hours: Int
+        var minutes: Int
+        var amPM: String
 
-            getTime(selectedDate)
-        },
-            selectedDate.get(Calendar.HOUR_OF_DAY),
-            selectedDate.get(Calendar.MINUTE),
-            false
-        )
-        timePicker.show()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun showDatePickerAtSpecificDate(days: Int, month: Int, years: Int) {
-        val datePicker = DatePickerDialog(requireContext,{ _, year,monthOfYear, dayOfMonth ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year,monthOfYear,dayOfMonth)
-            getDate(selectedDate)
-        },
-            years,
-            month-1,
-            days
-        )
-        datePicker.show()
-    }
-
-    private fun getDate(selectedDate: Calendar) {
-        date = SimpleDateFormat("E, MMM d, yyyy", Locale.getDefault()).format(selectedDate.time)
-        insideDate.visibility = View.VISIBLE
-        showDateDetail.text = date
-    }
-
-    private fun getHours(txtTime: String): Int{
-        val a = txtTime.substring(0,2)
-        if(a.isDigitsOnly()) return a.toInt()
-        return txtTime.substring(0,1).toInt()
-    }
-
-    private fun getMinute(txtTime: String, b: Boolean): Int{
-        return when (b){
-            true -> txtTime.substring(3,5).toInt()
-            else -> txtTime.substring(2,4).toInt()
-        }
-    }
-
-    private fun getPM(txtTime: String, b: Boolean): Boolean{
-        return when (b){
-            true -> {
-                txtTime.substring(6,8) == "PM"
+        if(setTime.text != "Time"){
+            val timeAt = setTime.text.toString()
+            hours = if( timeAt[1] == ':'){
+                timeAt.subSequence(0,1).toString().toInt()  
             }
-            else -> txtTime.substring(5,7) == "PM"
+            else{
+                timeAt.subSequence(0,2).toString().toInt()
+            }
+
+            minutes = if( timeAt[1] == ':'){
+                timeAt.subSequence(2,4).toString().toInt()
+            }
+            else{
+                timeAt.subSequence(3,5).toString().toInt()
+            }
+
+            amPM = if( timeAt[1] == ':'){
+                timeAt.subSequence(5,7).toString()
+            }
+            else{
+                timeAt.subSequence(6,8).toString()
+            }
+
+            if(amPM == "PM"){
+                hours += 12
+            }
+
+            timePicker.hour = hours
+            timePicker.minute = minutes
         }
+
+        doneBtn.setOnClickListener {
+            hours = timePicker.hour
+            minutes = timePicker.minute
+
+            amPM = if (is12HoursFormat){
+                if (hours < 12){
+                    "AM"
+                }
+                else {
+                    "PM"
+                }
+            }
+            else{
+                ""
+            }.toString()
+
+            if(hours >= 12){
+                hours -= 12
+            }
+
+            val minute = if(minutes < 10){
+                "0$minutes"
+            }
+            else{
+                "$minutes"
+            }.toString()
+
+            cancelTimeBtn.visibility = View.VISIBLE
+            setTime.text = requireContext.getString(R.string.setTime, hours, minute, amPM)
+            dialogTime.dismiss()
+        }
+
+        cancelBtn.setOnClickListener {
+            if(setTime.text == "Time"){
+                cancelTimeBtn.visibility = View.GONE
+            }
+            else{
+                cancelTimeBtn.visibility = View.VISIBLE
+            }
+            dialogTime.dismiss()
+        }
+
+        dialogTimeBelow(dialogTime)
     }
 
-    private fun showTimePickerAtSpecificTime(hours: Int, minute: Int) {
-        val timePicker = TimePickerDialog(requireContext,{ _, selectedHour,selectedMinute ->
-            val selectedTime = Calendar.getInstance()
-            selectedTime.set(Calendar.HOUR_OF_DAY,selectedHour)
-            selectedTime.set(Calendar.MINUTE,selectedMinute)
-            getTime(selectedTime)
-        },
-            hours,
-            minute,
-            false
-        )
-        timePicker.show()
-    }
-
-    private fun getTime(selectedDate: Calendar) {
-        time = SimpleDateFormat("h:mm a", Locale.getDefault()).format(selectedDate.time)
-        insideTime.visibility = View.VISIBLE
-        showTimeDetail.text = time
-    }
-
-    private fun showRepeatDialog() {
-        dialog = dialogRepeat(requireContext)
+    // Repeat
+    private fun openRepeatDialog(){
+        dialogRepeat = dialogRepeat(requireContext)
         selectTimeInterval = "weeks"
-        repeat(dialog)
-        dialogRepeatBelow(dialog)
+        repeat(dialogRepeat)
+        dialogRepeatBelow(dialogRepeat)
     }
 
-    private fun showRepeatDialog(number: Int,timeInterval: String){
-        dialog = dialogRepeat(requireContext)
-        dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.GONE
-        initializedTimeInterValAndNumber()
-        addNumber.setText("$number")
+    private fun repeat(dialogRepeat: Dialog) {
+        val selectBtn = dialogRepeat.findViewById<ConstraintLayout>(R.id.select)
+        val days = dialogRepeat.findViewById<ConstraintLayout>(R.id.days)
+        cancelRepeat = dialogRepeat.findViewById(R.id.cancelRepeat)
+        doneRepeatBtn = dialogRepeat.findViewById(R.id.done)
 
-        when (timeInterval) {
-            "day" -> {
-                selectMonthBtn.setText(R.string.days)
-                selectTimeInterval = "days"
-            }
-            "month" -> {
-                selectMonthBtn.setText(R.string.months)
-                selectTimeInterval = "months"
-            }
-            "year" -> {
-                selectMonthBtn.setText(R.string.years)
-                selectTimeInterval = "years"
-            }
-        }
-        repeat(dialog)
-        dialogRepeatBelow(dialog)
-    }
-
-    private fun showRepeatWeeksDialog(number: Int, days: List<String>) {
-        dialog = dialogRepeat(requireContext)
-        dialog.findViewById<ConstraintLayout>(R.id.days).visibility = View.VISIBLE
         initializedTimeInterValAndNumber()
         initializedDaysButton()
 
-        addNumber.setText("$number")
-        selectMonthBtn.setText(R.string.weeks)
-
-        val days1 : String
-        val days2 : String
-        val days3 : String
-        val days4 : String
-        val days5 : String
-        val days6 : String
-        val days7 : String
-
-        if(days[0] == "Weekly"){
-            days1 = days[1].trim()
-            days2 = if(days.size >= 3)   days[2].trim()  else ""
-            days3 = if(days.size >= 4)   days[3].trim()  else ""
-            days4 = if(days.size >= 5)   days[4].trim()  else ""
-            days5 = if(days.size >= 6)   days[5].trim()  else ""
-            days6 = if(days.size >= 7)   days[6].trim()  else ""
-            days7 = if(days.size == 8)   days[7].trim()  else ""
+        if(setRepeat.text != "Repeat"){
+            val txtRepeat = repeat
+            val txt = txtRepeat.split(" ")
+            when (txt[0].trim()) {
+                "Weekly" -> showRepeatWeeksDialog(1, txt)
+                "Yearly" -> showRepeatDialog(1, "year")
+                "Monthly" -> showRepeatDialog(1, "month")
+                "Daily" -> showRepeatDialog(1, "day")
+            }
+            if (txt.size >= 3) when (txt[2].trim()) {
+                "years" -> showRepeatDialog(txt[1].trim().toInt(), "year")
+                "months" -> showRepeatDialog(txt[1].trim().toInt(), "month")
+                "days" -> showRepeatDialog(txt[1].trim().toInt(), "day")
+                "week" -> showRepeatWeeksDialog(txt[1].trim().toInt(), txt)
+            }
         }
-        else{
-            days1 = days[3].trim()
-            days2 = if(days.size >= 5)   days[4].trim()  else ""
-            days3 = if(days.size >= 6)   days[5].trim()  else ""
-            days4 = if(days.size >= 7)   days[6].trim()  else ""
-            days5 = if(days.size >= 8)   days[7].trim()  else ""
-            days6 = if(days.size >= 9)   days[8].trim()  else ""
-            days7 = if(days.size == 10)  days[9].trim()  else ""
-        }
-
-        if(days1 == "SUN") showSelectedSundayBtn()
-
-        when ("MON"){
-            days1 -> showSelectedMondayBtn()
-            days2 -> showSelectedMondayBtn()
-        }
-
-        when ("TUE"){
-            days1 -> showSelectedTuesdayBtn()
-            days2 -> showSelectedTuesdayBtn()
-            days3 -> showSelectedTuesdayBtn()
-        }
-
-        when ("WED"){
-            days1 -> showSelectedWednesdayBtn()
-            days2 -> showSelectedWednesdayBtn()
-            days3 -> showSelectedWednesdayBtn()
-            days4 -> showSelectedWednesdayBtn()
-        }
-
-        when ("THU"){
-            days1 -> showSelectedThursdayBtn()
-            days2 -> showSelectedThursdayBtn()
-            days3 -> showSelectedThursdayBtn()
-            days4 -> showSelectedThursdayBtn()
-            days5 -> showSelectedThursdayBtn()
-        }
-
-        when ("FRI"){
-            days1 -> showSelectedFridayBtn()
-            days2 -> showSelectedFridayBtn()
-            days3 -> showSelectedFridayBtn()
-            days4 -> showSelectedFridayBtn()
-            days5 -> showSelectedFridayBtn()
-            days6 -> showSelectedFridayBtn()
-        }
-
-        when ("SAT"){
-            days1 -> showSelectedSaturdayBtn()
-            days2 -> showSelectedSaturdayBtn()
-            days3 -> showSelectedSaturdayBtn()
-            days4 -> showSelectedSaturdayBtn()
-            days5 -> showSelectedSaturdayBtn()
-            days6 -> showSelectedSaturdayBtn()
-            days7 -> showSelectedSaturdayBtn()
-        }
-
-        selectTimeInterval = "weeks"
-        repeat(dialog)
-        dialogRepeatBelow(dialog)
-    }
-
-    private fun repeat(dialog: Dialog) {
-        val selectBtn = dialog.findViewById<ConstraintLayout>(R.id.select)
-        val days = dialog.findViewById<ConstraintLayout>(R.id.days)
-        cancelBtn = dialog.findViewById(R.id.cancel)
-        doneBtn = dialog.findViewById(R.id.done)
-
-        initializedTimeInterValAndNumber()
-        initializedDaysButton()
 
         selectBtn.setOnClickListener {
             val popupMenu = PopupMenu(requireContext, it)
@@ -762,7 +755,7 @@ class TasksListCreateButtonAction(
             }
         }
 
-        doneBtn.setOnClickListener {
+        doneRepeatBtn.setOnClickListener {
             val number = addNumber.text.toString()
             if (number.isNotEmpty() && number != "0") {
                 if (selectTimeInterval == "weeks") {
@@ -786,47 +779,176 @@ class TasksListCreateButtonAction(
                             if (friday) repeat += " FRI"
                             if (saturday) repeat += " SAT"
                         }
+                        setRepeat.text = repeat
+                        cancelRepeatBtn.visibility = View.VISIBLE
+                        dialogRepeat.dismiss()
                     } else {
                         Toast.makeText(requireContext, "Select minimum one Days", Toast.LENGTH_SHORT).show()
                     }
                 } else if (selectTimeInterval == "days") {
                     repeat = if (number.toInt() == 1) "Daily"
                     else "Every $number days"
+                    setRepeat.text = repeat
+                    cancelRepeatBtn.visibility = View.VISIBLE
+                    dialogRepeat.dismiss()
                 } else if (selectTimeInterval == "months") {
                     repeat = if (number.toInt() == 1) "Monthly"
                     else "Every $number months"
+                    setRepeat.text = repeat
+                    cancelRepeatBtn.visibility = View.VISIBLE
+                    dialogRepeat.dismiss()
                 } else if (selectTimeInterval == "years") {
                     repeat = if (number.toInt() == 1) "Yearly"
                     else "Every $number years"
+                    setRepeat.text = repeat
+                    cancelRepeatBtn.visibility = View.VISIBLE
+                    dialogRepeat.dismiss()
                 }
-
-                insideRepeat.visibility = View.VISIBLE
-                showRepeatDetail.text = repeat
-                dialog.dismiss()
             } else {
                 Toast.makeText(requireContext, "Enter the number", Toast.LENGTH_SHORT).show()
             }
         }
 
-        cancelBtn.setOnClickListener {
+        cancelRepeat.setOnClickListener {
             initializedVariable()
-            dialog.cancel()
+            if(setRepeat.text == "Repeat")  cancelRepeatBtn.visibility = View.GONE
+            else cancelRepeatBtn.visibility = View.VISIBLE
+            dialogRepeat.dismiss()
         }
     }
 
     private fun initializedTimeInterValAndNumber() {
-        addNumber = dialog.findViewById(R.id.number)
-        selectMonthBtn = dialog.findViewById(R.id.selectTimeIntervals)
+        addNumber = dialogRepeat.findViewById(R.id.number)
+        selectMonthBtn = dialogRepeat.findViewById(R.id.selectTimeIntervals)
     }
 
     private fun initializedDaysButton(){
-        sundayBtn = dialog.findViewById(R.id.sunday)
-        mondayBtn = dialog.findViewById(R.id.monday)
-        tuesdayBtn = dialog.findViewById(R.id.tuesday)
-        wednesdayBtn = dialog.findViewById(R.id.wednesday)
-        thursdayBtn = dialog.findViewById(R.id.thursday)
-        fridayBtn = dialog.findViewById(R.id.friday)
-        saturdayBtn = dialog.findViewById(R.id.saturday)
+        sundayBtn = dialogRepeat.findViewById(R.id.sunday)
+        mondayBtn = dialogRepeat.findViewById(R.id.monday)
+        tuesdayBtn = dialogRepeat.findViewById(R.id.tuesday)
+        wednesdayBtn = dialogRepeat.findViewById(R.id.wednesday)
+        thursdayBtn = dialogRepeat.findViewById(R.id.thursday)
+        fridayBtn = dialogRepeat.findViewById(R.id.friday)
+        saturdayBtn = dialogRepeat.findViewById(R.id.saturday)
+    }
+
+    private fun initializedVariable(){
+        sunday = false
+        monday = false
+        tuesday = false
+        wednesday = false
+        thursday = false
+        friday = false
+        saturday = false
+
+        flagSunday = true
+        flagMonday = true
+        flagTuesday = true
+        flagWednesday = true
+        flagThursday = true
+        flagFriday = true
+        flagSaturday = true
+    }
+
+    private fun showRepeatDialog(number: Int,timeInterval: String){
+        dialogRepeat.findViewById<ConstraintLayout>(R.id.days).visibility = View.GONE
+        addNumber.setText("$number")
+
+        when (timeInterval) {
+            "day" -> {
+                selectMonthBtn.setText(R.string.days)
+                selectTimeInterval = "days"
+            }
+            "month" -> {
+                selectMonthBtn.setText(R.string.months)
+                selectTimeInterval = "months"
+            }
+            "year" -> {
+                selectMonthBtn.setText(R.string.years)
+                selectTimeInterval = "years"
+            }
+        }
+    }
+
+    private fun showRepeatWeeksDialog(number: Int, days: List<String>) {
+        dialogRepeat.findViewById<ConstraintLayout>(R.id.days).visibility = View.VISIBLE
+        addNumber.setText("$number")
+        selectMonthBtn.setText(R.string.weeks)
+
+        val days1 : String
+        val days2 : String
+        val days3 : String
+        val days4 : String
+        val days5 : String
+        val days6 : String
+        val days7 : String
+
+        if(days[0] == "Weekly"){
+            days1 = days[1].trim()
+            days2 = if(days.size >= 3)   days[2].trim()  else ""
+            days3 = if(days.size >= 4)   days[3].trim()  else ""
+            days4 = if(days.size >= 5)   days[4].trim()  else ""
+            days5 = if(days.size >= 6)   days[5].trim()  else ""
+            days6 = if(days.size >= 7)   days[6].trim()  else ""
+            days7 = if(days.size == 8)   days[7].trim()  else ""
+        }
+        else{
+            days1 = days[3].trim()
+            days2 = if(days.size >= 5)   days[4].trim()  else ""
+            days3 = if(days.size >= 6)   days[5].trim()  else ""
+            days4 = if(days.size >= 7)   days[6].trim()  else ""
+            days5 = if(days.size >= 8)   days[7].trim()  else ""
+            days6 = if(days.size >= 9)   days[8].trim()  else ""
+            days7 = if(days.size == 10)  days[9].trim()  else ""
+        }
+
+        if(days1 == "SUN") showSelectedSundayBtn()
+
+        when ("MON"){
+            days1 -> showSelectedMondayBtn()
+            days2 -> showSelectedMondayBtn()
+        }
+
+        when ("TUE"){
+            days1 -> showSelectedTuesdayBtn()
+            days2 -> showSelectedTuesdayBtn()
+            days3 -> showSelectedTuesdayBtn()
+        }
+
+        when ("WED"){
+            days1 -> showSelectedWednesdayBtn()
+            days2 -> showSelectedWednesdayBtn()
+            days3 -> showSelectedWednesdayBtn()
+            days4 -> showSelectedWednesdayBtn()
+        }
+
+        when ("THU"){
+            days1 -> showSelectedThursdayBtn()
+            days2 -> showSelectedThursdayBtn()
+            days3 -> showSelectedThursdayBtn()
+            days4 -> showSelectedThursdayBtn()
+            days5 -> showSelectedThursdayBtn()
+        }
+
+        when ("FRI"){
+            days1 -> showSelectedFridayBtn()
+            days2 -> showSelectedFridayBtn()
+            days3 -> showSelectedFridayBtn()
+            days4 -> showSelectedFridayBtn()
+            days5 -> showSelectedFridayBtn()
+            days6 -> showSelectedFridayBtn()
+        }
+
+        when ("SAT"){
+            days1 -> showSelectedSaturdayBtn()
+            days2 -> showSelectedSaturdayBtn()
+            days3 -> showSelectedSaturdayBtn()
+            days4 -> showSelectedSaturdayBtn()
+            days5 -> showSelectedSaturdayBtn()
+            days6 -> showSelectedSaturdayBtn()
+            days7 -> showSelectedSaturdayBtn()
+        }
+        selectTimeInterval = "weeks"
     }
 
     private fun showSelectedSundayBtn(){
@@ -920,21 +1042,4 @@ class TasksListCreateButtonAction(
         saturday = true
     }
 
-    private fun initializedVariable(){
-        sunday = false
-        monday = false
-        tuesday = false
-        wednesday = false
-        thursday = false
-        friday = false
-        saturday = false
-
-        flagSunday = true
-        flagMonday = true
-        flagTuesday = true
-        flagWednesday = true
-        flagThursday = true
-        flagFriday = true
-        flagSaturday = true
-    }
 }

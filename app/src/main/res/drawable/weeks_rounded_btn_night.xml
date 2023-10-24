@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/black" /> <!-- Background color of the button -->
+            <solid android:color="@color/md_theme_dark_surfaceVariant" /> <!-- Background color of the button -->
         </shape>
     </item>
     <item

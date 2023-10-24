@@ -102,7 +102,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <Button
-                        android:id="@+id/addImportant"
+                        android:id="@+id/addImportantss"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginStart="16dp"
@@ -144,7 +144,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/addDetails"
+                    android:id="@+id/addDetail"
                     style="@style/dialogBoxEdittext"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -156,12 +156,12 @@
                     android:scrollbars="vertical"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cancelDetailBtn"
+                    app:layout_constraintEnd_toStartOf="@id/cancelDetailBtns"
                     app:layout_constraintStart_toEndOf="@id/image"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/cancelDetailBtn"
+                    android:id="@+id/cancelDetailBtns"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/baseline_close_24"
@@ -170,7 +170,7 @@
                     android:minHeight="48dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/addDetails"
+                    app:layout_constraintStart_toEndOf="@id/addDetail"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck,RedundantDescriptionCheck" />
 
@@ -201,7 +201,7 @@
                     tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
 
                 <TextView
-                    android:id="@+id/showDateDetail"
+                    android:id="@+id/showDueDate1"
                     style="@style/textColor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -212,12 +212,12 @@
                     android:minHeight="48dp"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cancelDateBtn"
+                    app:layout_constraintEnd_toStartOf="@id/cancelDueDateBtn1"
                     app:layout_constraintStart_toEndOf="@id/calendarBtn"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/cancelDateBtn"
+                    android:id="@+id/cancelDueDateBtn1"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/baseline_close_24"
@@ -226,7 +226,7 @@
                     android:minHeight="48dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/showDateDetail"
+                    app:layout_constraintStart_toEndOf="@id/showDueDate1"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
@@ -257,7 +257,7 @@
                     tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
-                    android:id="@+id/showTimeDetail"
+                    android:id="@+id/showRemindMe1"
                     style="@style/textColor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -268,12 +268,12 @@
                     android:minHeight="48dp"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cancelTimeBtn"
+                    app:layout_constraintEnd_toStartOf="@id/cancelRemindMeBtn1"
                     app:layout_constraintStart_toEndOf="@id/TimeBtn"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/cancelTimeBtn"
+                    android:id="@+id/cancelRemindMeBtn1"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/baseline_close_24"
@@ -282,7 +282,7 @@
                     android:minHeight="48dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/showTimeDetail"
+                    app:layout_constraintStart_toEndOf="@id/showRemindMe1"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
@@ -324,12 +324,12 @@
                     android:minHeight="48dp"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cancelRepeatBtn"
+                    app:layout_constraintEnd_toStartOf="@id/cancelRepeatBtn1"
                     app:layout_constraintStart_toEndOf="@id/RepeatBtn"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/cancelRepeatBtn"
+                    android:id="@+id/cancelRepeatBtn1"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/baseline_close_24"

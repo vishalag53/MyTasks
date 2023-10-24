@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl"
-    style="@style/white_black"
+    style="@style/clBkg"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -34,7 +34,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/select"
-        style="@style/white_black"
+        style="@style/white_other"
         android:layout_width="wrap_content"
         android:layout_height="38dp"
         android:layout_marginStart="30dp"
@@ -69,7 +69,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/days"
-        style="@style/white_black"
+        style="@style/white_other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -153,13 +153,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/cancel"
-        style="@style/textRepeat"
+        android:id="@+id/cancelRepeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="12dp"
+        android:textColor="@color/bkg_blue"
         android:backgroundTint="@color/white"
         android:text="@string/cancel"
         android:textSize="16sp"
