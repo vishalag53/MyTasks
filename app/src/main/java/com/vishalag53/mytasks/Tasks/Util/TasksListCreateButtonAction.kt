@@ -337,7 +337,7 @@ class TasksListCreateButtonAction(
                 remindMeDetail += "\n$time"
                 showRemindMeDetail.text = remindMeDetail
             }
-            else if (time == "Time" && repeat != "Repeat"){
+            else if (time == "Time"){
                 remindMeDetail += "\n$repeat"
                 showRemindMeDetail.text = remindMeDetail
             }
